@@ -1,0 +1,362 @@
+.family-content {
+  flex: 1;
+  padding: 1px;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.family-title {
+  text-align: center;
+  font-family: 'Arial Black', sans-serif;
+  color: #333;
+  margin-bottom: 1px;
+  margin-top: 0px;
+}
+
+/* Секция с ладонью */
+.hand-section {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 450px;
+  margin-bottom: 50px;
+}
+
+.hand-container {
+  position: relative;
+  width: 600px;
+}
+
+.hand-bg {
+  width: 250px;
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+  opacity: 0.8;
+}
+
+/* Общие стили для аватарок */
+.avatar-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #eee;
+  overflow: hidden;
+  background: #f9f9f9;
+  margin-bottom: 5px;
+}
+
+.avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Позиционирование вокруг ладони */
+.member-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pos-mother { top: 100px; left: 180px; }
+.pos-father { top: 50px; left: 320px; }
+.pos-me { top: 220px; left: 50px; }
+.pos-grandma { top: 120px; left: 450px; }
+.pos-grandpa { top: 280px; left: 480px; }
+
+/* Надписи и перевод */
+.label-block {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 10px;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.sound-btn-small {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.gray-translate {
+  color: #888;
+  font-size: 12px;
+  display: block;
+}
+
+/* Нижняя сетка */
+.relatives-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+}
+
+.rel-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-wrapper.small {
+  width: 110px;
+  height: 110px;
+}
+
+/* ... (базовые стили остаются) */
+
+.hand-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 550px; /* Увеличили высоту секции */
+  margin-bottom: 40px;
+}
+
+.hand-container {
+  position: relative;
+  width: 700px; /* Увеличили ширину контейнера */
+  height: 500px;
+}
+
+.hand-img {
+  width: 220px; /* Увеличили ладонь */
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Увеличенные аватарки для дерева */
+.main-family-avatar {
+  width: 120px !important; /* Было 100 */
+  height: 120px !important;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 2;
+}
+
+/* Исправленная ДУГА (координаты) */
+.member-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* Идем слева направо по пальцам */
+.pos-me { 
+  top: 230px; 
+  left: 30px; 
+}
+
+.pos-mother { 
+  top: 80px; 
+  left: 140px; 
+}
+
+.pos-father { 
+  top: 20px; 
+  left: 310px; /* Самый высокий палец - центр */
+}
+
+.pos-grandma { 
+  top: 90px; 
+  left: 480px; 
+}
+
+.pos-grandpa { 
+  top: 250px; 
+  left: 550px; 
+}
+
+/* Нижние карточки тоже немного увеличим для баланса */
+.avatar-wrapper.small {
+  width: 130px;
+  height: 130px;
+}
+
+.rel-card {
+  transition: transform 0.2s;
+}
+
+.rel-card:hover {
+  transform: translateY(-5px);
+}
+
+
+/* Контейнер для верхнего баннера всей семьи */
+.family-banner {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+
+.full-family-img {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
+
+.banner-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #d1f3fb; /* Голубой  */
+  padding: 10px 30px;
+  border-radius: 25px;
+  margin-top: -20px;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  font-weight: 500;
+}
+
+/* Сетка карточек для членов семьи */
+.family-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.intro-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.intro-card:hover {
+  transform: translateY(-5px);
+}
+
+.intro-card img {
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+/* Оформление текста внутри карточки */
+.card-text {
+  background-color: #d1f3fb;
+  border-radius: 20px;
+  padding: 12px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kg-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.kg-row p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.ru-text {
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Разделитель секций */
+.section-divider {
+  text-align: center;
+  background-color: #92e3f8;
+  color: #333;
+  padding: 10px;
+  border-radius: 20px;
+  margin: 40px 0 20px;
+  font-size: 1.4rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* Нижний блок "Запомните" */
+.grammar-note-container {
+  margin-top: 50px;
+  padding-bottom: 30px;
+}
+
+.yellow-bg {
+  background-color: #fdf3c0; /* Светло-желтый как на фото */
+  border-radius: 30px;
+  padding: 25px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.grammar-left h3 {
+  margin: 0;
+  color: #333;
+}
+
+.grammar-middle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e67e22; /* Оранжевый акцент */
+}
+
+.suffix-formula {
+  border: 2px dashed #e67e22;
+  padding: 5px 15px;
+  border-radius: 10px;
+}
+
+.grammar-right p {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.grammar-right strong {
+  color: #c0392b; /* Красный для примеров */
+}
+
+/* Кнопка звука */
+.sound-btn-small {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0;
+  filter: grayscale(0.5);
+  transition: filter 0.2s;
+}
+
+.sound-btn-small:hover {
+  filter: grayscale(0);
+}

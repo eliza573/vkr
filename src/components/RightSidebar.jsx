@@ -1,0 +1,40 @@
+import React from 'react';
+import "./RightSidebar.css";
+import { Link } from "react-router-dom";
+
+const RightSidebar = ({ words, exerciseLink }) => {
+
+  if (!words) return null;
+  return (
+    <div className="right-sidebar">
+      <div className="new-words-section">
+        <h2 className="new-words-title">Жаңы сөздөр</h2>
+        <p className="new-words-subtitle">Новые слова</p>
+        
+        <div className="words-list">
+          {words.map((item, index) => (
+            <div key={index} className="word-item-card">
+              <button className="audio-icon-btn">🔊</button>
+              <div className="word-text">
+                <span className="kg-word">{item.kg}</span>
+                <span className="dash"> - </span>
+                <span className="ruu-word">{item.ru}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+{/* Кнопка Көнүгүү */}
+      <Link to={exerciseLink}>
+        <button className="exercise-nav-btn">
+          Көнүгүү
+          <p className="new-words-subtitle">Упражнения</p>
+        </button>
+      </Link>
+
+    </div>
+  );
+};
+
+export default RightSidebar;

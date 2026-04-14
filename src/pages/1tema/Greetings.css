@@ -1,0 +1,204 @@
+/* Основной контейнер страницы */
+.greetings-page {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.layout-wrapper {
+  display: flex;
+  flex: 1;
+}
+
+/* Центральная часть */
+.center-content {
+  flex: 1;
+  padding-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /*  отступ рядов */
+  background-color: #fff;
+}
+ /* саламдашуу*/
+.page-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 1px;
+  text-align: center;
+  margin-top: 0;
+  padding-top: 1px;
+}
+
+/* Группировка рядов */
+.dialogue-group {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 100px; /* Увеличен зазор между персонажами */
+  position: relative;
+  width: 100%;
+  margin-bottom: 90px;
+}
+
+
+
+.person-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.person-box img {
+  height: 270px; /* Базовый размер для идущих мальчиков и девочек */
+  object-fit: contain;
+
+}
+
+/* Специальные размеры для сложных картинок */
+.teacher-img {
+  height: 320px !important; 
+}
+
+/* Общий стиль облачков */
+.bubble {
+  background: #d1e9f0;
+  border: 1px solid #add8e6;
+  border-radius: 20px;
+  padding: 10px 15px;
+  position: absolute;
+  white-space: nowrap;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 10;
+  min-width: 120px;
+}
+
+
+/* Контент внутри облачка */
+.bubble-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.kg-word {
+  font-weight: 500;
+  font-size: 22px;
+  color: #000;
+}
+
+.ru-word {
+  font-size: 15px;
+  color: #757575; /* Серый перевод */
+  margin-top: 2px;
+}
+
+/* --- ТОЧНОЕ ПОЗИЦИОНИРОВАНИЕ --- */
+
+/* Ряд 1: Над головами */
+.pos-top {
+  bottom: 100%;
+  margin-bottom: 20px;
+}
+
+/* Ряд 1: Мальчики идут. Перемещаем облачка сбоку/сзади */
+
+/* Общее обнуление для облачков в первом ряду */
+.dialogue-group:first-of-type .bubble {
+  bottom: auto; /* Убираем позиционирование снизу */
+  margin-bottom: 0;
+  top: 20px; /* Выравниваем по высоте (примерно на уровне плеч/головы) */
+}
+
+/* Облачко Аскара (мальчик слева, идет направо). Размещаем СЛЕВА от него */
+.person-box:has(img[alt="Askar"]) .bubble {
+  right: 100%; /* Прижимаем правую границу облачка к левой границе контейнера */
+  margin-right: 20px; /* Отступ от картинки */
+  left: auto;
+}
+
+/* Облачко Жолдоша (мальчик справа, идет налево). Размещаем СПРАВА от него */
+.person-box:has(img[alt="Joldosh"]) .bubble {
+  left: 100%; /* Прижимаем левую границу облачка к правой границе контейнера */
+  margin-left: 10px; /* Отступ от картинки */
+  right: auto;
+}
+
+
+/* Ряд 2: Рукопожатие (два облачка) */
+.bubble.top-left { 
+  top: -75px; 
+  left: -85px; 
+}
+.bubble.bottom-right { 
+  top: -20px;
+  right: -80px; 
+}
+
+/* Группа девочек (ряд 2 справа) */
+.person-box-small-group {
+  display: flex;
+  gap: 80px;
+    display: flex;
+  margin-left: 130px; /* Сдвигаем всю группу девочек вправо */
+}
+ 
+
+/* Ряд 3: Учитель (разнесены по сторонам) */
+.bubble.teacher-left { 
+  top: -75px; 
+  left: -120px; 
+}
+.bubble.teacher-right { 
+  top: -15px; 
+  right: -110px; 
+}
+
+/* Ряд 3: Бектур и друг */
+.bubble.bektur-left { 
+  top: -90px; 
+  left: -130px; 
+}
+.bubble.bektur-right { 
+  top: -20px; 
+  right: -160px; 
+}
+
+.audio-icon {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+
+/* Ряд 1: Идущие мальчики */
+.person-box:has(img[alt="Askar"]) img,
+.person-box:has(img[alt="Joldosh"]) img {
+  height: 280px; 
+}
+
+/* Ряд 2: Рукопожатие и Девочки */
+.person-box:has(img[alt="Handshake"]) img {
+  height: 300px;
+}
+.person-box-small-group img {
+  height: 270px; /* Девочки (Айжан и Айдай) чуть меньше */
+}
+
+/* Ряд 3: Учитель и Бектур */
+.teacher-img {
+  height: 340px !important;
+}
+.person-box:has(img[alt="Bektur"]) img {
+  height: 280px;
+}
+
+
+/* Находим вторую коробку (Бектура) в последнем ряду */
+.dialogue-group:last-of-type .person-box:last-of-type {
+  margin-left: 160px; /* Прижимаем Бектура и друга ближе к правому краю */
+}

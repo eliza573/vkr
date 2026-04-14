@@ -1,0 +1,122 @@
+.words-content {
+  flex: 1;
+  padding: 30px;
+  background: #fff;
+}
+
+.words-title {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 25px;
+}
+
+.dictionary-section {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40px;
+}
+
+.dict-column p {
+  font-size: 18px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.audio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mini-audio-btn {
+  background: #9b93e2;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.quiz-header {
+  background: #e1f5fe;
+  padding: 12px;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.match-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.quiz-chip {
+  background: #dff1f8;
+  border: 1px solid #b8d9e6;
+  padding: 8px 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  margin: 5px 0;
+  font-size: 15px;
+}
+
+.quiz-chip.selected {
+  background: #bbdefb;
+  border-color: #2196f3;
+}
+
+.kg-sentence span {
+  font-weight: bold;
+  color: #0277bd;
+  border-bottom: 2px dashed #0277bd;
+}
+
+.ru-hint {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.mini-app-card {
+  background: #fdfdfd;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.sentence-display {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0277bd;
+  min-height: 40px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+}
+
+.btn-retry-small {
+  margin-top: 10px;
+  background: #ffecb3;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.feedback-text {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 15px;
+  height: 24px; /* Чтобы контент не прыгал при появлении текста */
+}
+
+.quiz-chip.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+}

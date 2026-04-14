@@ -1,0 +1,277 @@
+.family-ex-container {
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.family-ex-layout {
+  display: flex;
+}
+
+.family-ex-content {
+  flex-grow: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ex-title {
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.ex-card {
+  background: white;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 30px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+  position: relative;
+ 
+}
+
+.ex-progress {
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.ex-progress-fill {
+  height: 100%;
+  background: #27ae60;
+  transition: width 0.3s ease;
+}
+
+.ex-main-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Изображения теперь с радиусом 15px */
+.ex-image-holder img {
+  height: 200px;
+  border-radius: 35px; 
+
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.ex-question-bubble {
+  background-color: #d1f3fb;
+  padding: 15px 40px;
+  border-radius: 50px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.ex-question-bubble h3 { margin: 0; color: #333; }
+.ex-question-bubble p { margin: 0; color: #666; font-size: 0.9rem; }
+
+/* Кнопки выбора (Choice) */
+.ex-options-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.ex-opt-btn {
+  padding: 12px 30px;
+  border-radius: 20px;
+  border: none;
+  background: #e1f5fe;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.ex-opt-btn.selected {
+  background: #4fc3f7;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Сетка сборки слов (Spelling) */
+.ex-spelling-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.spelling-row {
+  display: flex;
+  gap: 5px;
+}
+
+.spelling-cell {
+  width: 35px;
+  height: 35px;
+  background: #d1f3fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.spelling-cell.empty {
+  background: #fff;
+  border: 2px dashed #4fc3f7;
+}
+
+.available-letters {
+  margin-top: 25px;
+  display: flex;
+  gap: 10px;
+}
+
+.letter-chip {
+  padding: 10px 15px;
+  background: white;
+  border: 2px solid #d1f3fb;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #d1f3fb;
+}
+
+/* Инлайн выбор (Inline Select) */
+.sentence-bubble {
+  background: #d1f3fb;
+  padding: 25px 40px;
+  border-radius: 50px;
+}
+
+.sentence-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.custom-select-wrapper {
+  position: relative;
+}
+
+.select-trigger {
+  min-width: 120px;
+  padding: 5px 20px;
+  border: 2px solid #4fc3f7;
+  border-radius: 20px;
+  background: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.select-options-list {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.select-item {
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.select-item:hover { background: #e1f5fe; }
+
+/* Сопоставление (Matching) */
+.translation-grid {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pill-btn {
+  padding: 15px 25px;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pill-btn.active {
+  border-color: #4fc3f7;
+  background-color: #e1f5fe;
+}
+
+.pill-btn.matched {
+  background-color: #c8e6c9;
+  border-color: #27ae60;
+  color: #2e7d32;
+  cursor: default;
+}
+
+/* Футер и Финиш */
+.ex-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.ex-check-btn {
+  background: #bdc3c7;
+  color: white;
+  border: none;
+  padding: 15px 60px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.ex-check-btn:not(:disabled) { background: #27ae60; }
+
+.feedback { margin-bottom: 15px; font-weight: bold; }
+.feedback.pos { color: #27ae60; }
+.feedback.neg { color: #e74c3c; }
+
+.finish-screen {
+  text-align: center;
+  padding: 40px;
+}
+
+.finish-icon { font-size: 4rem; margin-bottom: 20px; }
+
+.finish-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.btn-retry, .btn-home {
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-retry { background: #e1f5fe; color: #0288d1; }
+.btn-home { background: #27ae60; color: white; }

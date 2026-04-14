@@ -1,0 +1,101 @@
+.words-content {
+  flex: 1;
+  padding: 30px;
+  background: #fff;
+}
+
+.words-title {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+.dictionary-section {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.dict-column h3 {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.dict-column p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.audio-vertical .audio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mini-audio-btn {
+  background: #9b93e2;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+/* Стили квиза */
+.quiz-header {
+  background: #e1f5fe;
+  padding: 10px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.match-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.match-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-chip {
+  background: #dff1f8;
+  border: 1px solid #b8d9e6;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  min-width: 120px;
+  transition: 0.3s;
+}
+
+.quiz-chip.selected {
+  background: #bbdefb;
+  border-color: #2196f3;
+}
+
+.match-result-text {
+  text-align: center;
+  height: 30px;
+  font-weight: bold;
+}
+
+.kg-sentence span {
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+  padding: 0 5px;
+}
+
+.options-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+}

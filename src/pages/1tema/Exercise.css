@@ -1,41 +1,27 @@
-/* ============================================
-   ОСНОВНЫЕ КОНТЕЙНЕРЫ И ЛЕЙАУТ
-   ============================================ */
 
-/* Главный контейнер всей страницы упражнения */
 .greetings-container {
   min-height: 100vh;
   background-color: #fff;
 }
 
-/* Лейаут: боковая панель + основной контент */
 .exercise-layout {
   display: flex;
 }
 
-/* Основная область с контентом упражнения */
 .exercise-main-content {
   flex-grow: 1;
-  padding: 5px;
+  padding: 0; 
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Заголовок-баннер для каждого упражнения */
-.header-banner {
-  background-color: #d1f3fb;
-  padding: 5px 20px;
-  border-radius: 40px;
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 5px;
+/* Заголовок темы - установлен размер 30px */
+.ex1-title {
+  font-size: 30px;
+  margin: 1px 0;
   color: #333;
 }
-
-/* ============================================
-   УПРАЖНЕНИЕ 0: MATCHING (ДАЛ КЕЛТИРГИЛЕ)
-   ============================================ */
 
 /* Область для сопоставления (содержит SVG для линий) */
 .matching-area {
@@ -131,9 +117,7 @@
   transition: all 0.2s;
 }
 
-/* ============================================
-   УПРАЖНЕНИЯ 1, 2: DRAG & DROP
-   ============================================ */
+/* УПРАЖНЕНИЯ 1, 2: DRAG & DROP */
 
 /* Общие контейнеры для упражнений с перетаскиванием */
 .step-wrapper,
@@ -156,7 +140,7 @@
 .drop-slot {
   width: 40px;
   height: 40px;
-  border: 1px solid #000;
+  border: 1px solid #d1f3fb;
   background-color: #d1d1d1;
   display: flex;
   justify-content: center;
@@ -179,10 +163,9 @@
 
 /* Стиль для перетаскиваемых фраз (подписей) */
 .drag-item.caption {
-  background: white;
+  background: #d1f3fb;
   padding: 10px 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* Ряд с картинками для упражнения с подписями */
@@ -203,16 +186,16 @@
 
 /* Зеленая зона для перетаскивания подписи */
 .drop-zone-green {
-  width: 180px;
-  height: 35px;
+  width: 240px;
+  height: 45px;
   background-color: #1aff66;
   border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
   color: #333;
   border: 1px dashed rgba(255,255,255,0.5);
+  font-size: 22px;
 }
 
 /* Контейнер с перетаскиваемыми буквами */
@@ -225,10 +208,6 @@
   border-top: 1px solid #eee;
   flex-wrap: wrap;
 }
-
-/* ============================================
-   ФИНАЛЬНЫЙ ЭКРАН
-   ============================================ */
 
 /* Экран завершения всех упражнений */
 .finish-screen {
@@ -270,16 +249,12 @@
   cursor: pointer;
 }
 
-/* ============================================
-   НАВИГАЦИОННЫЕ КНОПКИ
-   ============================================ */
-
 /* Ряд с кнопками навигации */
 .controls-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 15px;
   margin-top: 5px;
   width: 100%;
 }
@@ -288,10 +263,10 @@
 .prev-btn,
 .next-btn,
 .check-btn {
-  padding: 10px 25px;
+  padding: 10px 35px;
   border-radius: 20px;
   border: none;
-  font-size: 1rem;
+  font-size: 22px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
@@ -299,7 +274,7 @@
 
 /* Кнопка "Артка" */
 .prev-btn {
-  background-color: #f0f0f0;
+  background-color: #f1f0f0;
   color: #666;
 }
 
@@ -312,21 +287,14 @@
 /* Кнопка "Кийинки" */
 .next-btn {
   background-color: #e0e0e0;
-  color: #333;
-  margin-top: 0;
+  color: #333
 }
 
 /* Эффект при наведении на кнопки */
-.check-btn:hover,
-.next-btn:hover,
 .prev-btn:not(:disabled):hover {
   filter: brightness(0.9);
   transform: translateY(-2px);
 }
-
-/* ============================================
-   СТИЛИ ДЛЯ ПРОВЕРКИ ПРАВИЛЬНОСТИ
-   ============================================ */
 
 /* Правильная буква в ячейке (зеленый фон) */
 .drop-slot.correct {
@@ -360,8 +328,9 @@
   height: 12px;
   background: #e0f2f1;
   border-radius: 10px;
-  margin: 0 auto 30px;
+  margin: 0 auto 5px;
   overflow: hidden;
+
 }
 
 /* Заполненная часть прогресс-бара */
@@ -370,35 +339,22 @@
   background: linear-gradient(90deg, #2ecc71, #27ae60);
   transition: width 0.4s ease;
 }
-/* ============================================
-   УПРАЖНЕНИЯ 3, 4: QUIZ (ВЫБОР ОТВЕТА)
-   ============================================ */
+
+
+ 
 
 /* Секция с викториной */
 .quiz-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100px;
-  padding: 20px;
+  padding: 4px;
 }
-/* Контент викторины - без белой карточки и рамки */
-.quiz-content {
-  text-align: center;
-  background: transparent; /* Убрали белый фон */
-  border-radius: 0; /* Убрали скругление */
-  padding: 10px; /* Уменьшили отступы */
-  box-shadow: none; /* Убрали тень */
-  width: 100%;
-  max-width: 800px;
-}
-
 /* Вопрос викторины */
 .quiz-question h3 {
   font-size: 25px;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 1px;
 }
 
 /* Контейнер с вариантами ответов */
@@ -411,12 +367,12 @@
   flex-wrap: wrap;
 }
 
-/* Кнопка варианта ответа - БЕЗ РАМКИ */
+
 .quiz-option {
   width: auto !important;
-  min-width: 120px;
+  min-width: 140px;
   padding: 12px 25px;
-  font-size: 18px;
+  font-size: 22px;
   background: #7bc6cf;
   border: none !important;
   border-radius: 50px;
@@ -447,9 +403,18 @@
   color: white !important;
 }
 
-/* Отключенная кнопка (после выбора ответа) */
-.quiz-option.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+
+/* Заголовок-баннер для каждого упражнения */
+.header-banner {
+  background-color: #20b0d1;
+  padding: 5px 20px;
+  border-radius: 30px;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.header-banner h3{
+  font-size: 30px;
 }

@@ -136,9 +136,12 @@ const familyIntro = [
                       <button className="sound-btn-small">🔊</button>
                     </div>
                     <small className="ru-text">{item.ru}</small>
+                    
                   </div>
                 </div>
+                
               ))}
+              
             </div>
           </div>
 

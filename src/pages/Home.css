@@ -1,13 +1,11 @@
-/* Главный контейнер, который делит экран на колонки */
 .layout {
-  display: flex; /* Ставит Sidebar и Content в одну линию */
+  display: flex; 
   min-height: 100vh;
-  background-color: #ffffff; /* Легкий фон для всей страницы */
+  background-color: #ffffff;
 }
-
 /* Основная часть с контентом */
 .content {
-  flex: 1; /* Занимает всё оставшееся пространство справа */
+  flex: 1; 
   padding: 2px;
   display: flex;
   flex-direction: column;
@@ -25,7 +23,7 @@
 
 .images img {
   width: 550px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   
 }
 
@@ -33,12 +31,11 @@
 .topics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 10px;
   width: 100%;
   max-width: 900px;
 }
 
-/* Убираем подчеркивание у ссылок */
 .topics a {
   text-decoration: none;
   color: inherit;
@@ -46,7 +43,7 @@
 
 .topicCard {
   background: #bfe2ec;
-  padding: 20px;
+  padding: 25px;
   border-radius: 15px;
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -61,14 +58,14 @@
 }
 
 .topicCard img {
-  width: 80px;
+  width: 90px;
   margin-bottom: 10px;
   border-radius: 15px;
 }
 
 .topicCard p {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 22px;
   margin: 0;
   color: #333;
 }

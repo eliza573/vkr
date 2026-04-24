@@ -17,8 +17,10 @@ function Sidebar() {
 
   const menuData = [
     { id: 1, title: "Саламдашуу", path: "/salam",  exercise: "/salam-exercise" },
-    { id: 2, title: "Коштошуу", path: "/koshtoshuu", words: "/kosh-words", exercise: "/kosh-exercise" },
+    { id: 2, title: "Коштошуу", path: "/koshtoshuu", words: "/salam-exercise", exercise: "/salam-exercise" },
     { id: 3, title: "Таанышуу", path: "/tanyshuu", words: "/tanyshuu", exercise: "/tany-exercise" },
+    { id: 31, title: "Ким? эмне?", path: "/kim", words: "/tanyshuu", exercise: "/kim-exercise" },
+
     { 
 
       id: 4, 
@@ -27,6 +29,8 @@ function Sidebar() {
       words: "/mektep-words",    // Страница "Жаңы сөздөр"
       exercise: "/mektep-exercise"
     },
+        { id: 41, title: "Окуу куралдары", path: "/okuu", words: "/tanyshuu", exercise: "/okuu-exercise" },
+
     { id: 5, title: "Бул менин классым", path: "/klass", words: "/class-words", exercise: "/klass-exercise" },
         { id: 6, title: " Үй-бүлө", path: "/uibuloo", words: "/uibuloo-words", exercise: "/family-exercise" },
         { id: 7, title: " Мен сүрөт тартып жатам", path: "/surot", words: "/uibuloo-words", exercise: "/family-exercise" },

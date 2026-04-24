@@ -12,7 +12,7 @@ import img3 from "../../assets/2tema/bay3.png";
 import img4 from "../../assets/2tema/bay4.png";
 
 const Koshtoshuu = () => {
-  const newWords = [
+  const wordsForRightMenu = [
     { kg: "Жакшы баргыла", ru: "Счастливо идите (мн.ч)" },
     { kg: "Жакшы калыңыз", ru: "Оставайтесь хорошо (вежл.)" },
     { kg: "Саламатта барыңыз", ru: "До свидания (вежл. идите)" },
@@ -83,7 +83,10 @@ const Koshtoshuu = () => {
           
         </main>
 
-        <RightSidebar words={newWords} />
+         <RightSidebar 
+  words={wordsForRightMenu} 
+  exerciseLink="/salam-exercise" 
+/>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ return(
 
 <div className="topics">
 
-<Link to="/salamdashuu">
+<Link to="/salam">
   <div className="topicCard">
     <img src={book} />
     <p>Саламдашабыз</p>
@@ -50,16 +50,32 @@ return(
 </div>
 </Link>
 
+
+<Link to="/tanyshuu">
 <div className="topicCard">
 <img src={book}/>
 <p>Таанышабыз</p>
 </div>
+</Link>
 
+  <Link to="/kim" >
+    <div className="topicCard">
+      <img src={school_bildung}  />
+      <p>Ким? Эмне?</p>
+    </div>
+  </Link>
 
   <Link to="/mektep" >
     <div className="topicCard">
       <img src={school_bildung}  />
       <p>Мектепке барам</p>
+    </div>
+  </Link>
+
+  <Link to="/okuu" >
+    <div className="topicCard">
+      <img src={school_bildung}  />
+      <p>Окуу куралдары</p>
     </div>
   </Link>
 

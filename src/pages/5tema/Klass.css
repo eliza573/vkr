@@ -10,13 +10,13 @@
 
 .kl-main-content {
   flex: 1;
-  padding: 5px 30px; /* Минимальный отступ сверху */
+  padding: 1px 30px; 
   background-color: #fff;
 }
 
 .kl-title {
   text-align: center;
-  font-size: 34px;
+  font-size: 36px;
   margin-top: 0;
   margin-bottom: 15px;
   color: #333;

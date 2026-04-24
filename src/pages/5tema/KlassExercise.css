@@ -1,7 +1,7 @@
 /* Общий контейнер страницы */
 .exercise-content {
   flex: 1;
-  padding: 40px;
+  padding: 10px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,8 @@
   display: flex;
 flex-direction: row; /* Выстраиваем в ряд */
   flex-wrap: wrap;    /* Разрешаем перенос на новую строку, если кнопок много */
-  justify-content: center; /* Центрируем кнопки */  gap: 12px;
+  justify-content: center; /* Центрируем кнопки */ 
+   gap: 12px;
   width: 100%;
   max-width: 800px;
   margin: 20px auto;

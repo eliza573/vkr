@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./KlassExercise.css"; 
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
+import Character from "../../components/Character";
 
 function KlassExercise() {
   const navigate = useNavigate();
 
-  // --- СОСТОЯНИЯ ---
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedItems, setSelectedItems] = useState([]); 
+  const [characterState, setCharacterState] = useState("idle");
+  const [stepInitialized, setStepInitialized] = useState(false);
+  
   const [inputWord, setInputWord] = useState("");
   const [dropdownAnswers, setDropdownAnswers] = useState({});
-  const [isChecked, setIsChecked] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  
+  const [quizLocked, setQuizLocked] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
-  const [isFinished, setIsFinished] = useState(false);
-
-  const [activeWordId, setActiveWordId] = useState(null);
-  const [matchedPairs, setMatchedPairs] = useState([]);
 
   const pronouns = ["Мен", "Сен", "Сиз", "Ал", "Биз", "Силер", "Сиздер", "Алар"];
 
@@ -26,6 +26,7 @@ function KlassExercise() {
       id: 1,
       type: "spelling",
       question: "Бул эмне?",
+      translation: "Что это?",
       img: "board_desk.png",
       letters: ["К", "Т", "Т", "А", "А"],
       correct: "ТАКТА"
@@ -34,322 +35,119 @@ function KlassExercise() {
       id: 2,
       type: "spelling",
       question: "Бул ким?",
+      translation: "Кто это?",
       img: "student_boy.png",
       letters: ["О", "К", "Ч", "У", "У", "У"],
       correct: "ОКУУЧУ"
     },
     {
       id: 3,
-      type: "multi-choice",
-      question: "Устолдо эмне бар?",
-      translation: "Что есть на столе?",
-      img: "desk_items.png",
-      options: ["Клей", "Кайчы", "Боек", "Калем", "Кагаз", "Сызгыч"],
-      correctItems: ["Клей", "Кайчы", "Боек", "Калем", "Кагаз"] 
-    },
-    {
-      id: 4,
       type: "dropdown-fill",
       question: "Сүйлөмдү толуктагыла",
       translation: "Дополняем предложения",
       img: "classroom.png",
       sentences: [
-        { text: "Бул ___ класс", correct: "биздин" },
-        { text: "Класста ___, ___ бар.", correct: ["саат", "желек"] }, 
-        { text: "Класс ___ жана ___", correct: ["жарык", "таза"] }
+        { text: "Бул ___ класс", correct: ["биздин"] },
+        { text: "Класста ___, ___ бар.", correct: ["саат", "желек"] }
       ],
       allOptions: ["биздин", "саат", "желек", "жарык", "таза"]
     },
-    {
-      id: 5,
-      type: "matching",
-      question: "Дал келтир",
-      translation: "Сопоставление",
-      pairs: [
-        { id: 1, text: "кайчы", img: "scissors.png" },
-        { id: 2, text: "сызгыч", img: "ruler.png" },
-        { id: 3, text: "боек", img: "paints.png" },
-        { id: 4, text: "жон баштык", img: "backpack.png" },
-        { id: 5, text: "бор", img: "chalk.png" },
-        { id: 6, text: "китеп", img: "book.png" }
-      ]
-    }, // <-- Здесь добавлена запятая
-    { id: 6, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... окуйм", correct: "Мен", trans: "..... читаю", img: "reading_book.png" },
-    { id: 7, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... окуйсуң", correct: "Сен", trans: "..... читаешь", img: "student_boy.png" },
-    { id: 8, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... эсептешет", correct: "Алар", trans: "..... считают", img: "counting.png" },
-    {  
-      id: 9, 
-      type: "image-choice", 
-      question: "Сүрөттө балдар эмне кылып жатышат?", 
-      trans: "Что делают дети на картинке?",
-      img: "students_in_class.png", 
-      options: ["Алар сабак жазып жатышат", "Ал китеп окуйт", "Силер сүрөт тартышат"],
-      correct: "0" // Сохраняем как строку для удобства сравнения
-    },
-    {  
-      id: 10, 
-      type: "image-choice", 
-      question: "Оля эмне кылат?", 
-      trans: "Что делает Оля?",
-      img: "olya_enter.png", 
-      options: ["Ал класска кирет", "Алар класска кирет", "Силер класска киресиңер"],
-      correct: "0" 
-    }
+    // Изменено на type: "dropdown" для отображения списка
+    { id: 4, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... окуйм", correct: "Мен", trans: "..... читаю", img: "reading_book.png", options: pronouns },
+    { id: 5, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... окуйсуң", correct: "Сен", trans: "..... читаешь", img: "student_boy.png", options: pronouns },
+    { id: 6, type: "image-choice", question: "Сүрөттө балдар эмне кылып жатышат?", trans: "Что делают дети на картинке?", img: "students_in_class.png", options: ["Алар сабак жазып жатышат", "Ал китеп окуйт", "Силер сүрөт тартышат"], correct: 0 },
+    { id: 7, type: "image-choice", question: "Оля эмне кылат?", trans: "Что делает Оля?", img: "olya_enter.png", options: ["Ал класска кирет", "Алар класска кирет", "Силер класска киресиңер"], correct: 0 }
   ];
 
   const currentTask = quizData[currentStep];
 
-  const handleDropdownChange = (idx, value) => {
-    setDropdownAnswers(prev => ({ ...prev, [idx]: value }));
+  const playCharacterTalk = () => {
+    setCharacterState("talk");
+    setTimeout(() => setCharacterState("idle"), 3000);
   };
 
-  const toggleItem = (item) => {
-    if (isChecked) return;
-    setSelectedItems(prev => 
-      prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
-    );
+  const checkAnswerWithCharacter = (correct) => {
+    setCharacterState(correct ? "success" : "error");
+    setTimeout(() => setCharacterState("idle"), 2000);
   };
 
-  const handleMatch = (type, id) => {
-    if (isChecked) return;
-    if (type === 'word') setActiveWordId(id);
-    else if (type === 'image' && activeWordId !== null) {
-      if (activeWordId === id) setMatchedPairs(prev => [...prev, id]);
-      setActiveWordId(null);
+  const checkAndLockAnswer = (correct) => {
+    if (!quizLocked) {
+      setIsCorrect(correct);
+      setQuizLocked(true);
+      checkAnswerWithCharacter(correct);
     }
   };
 
-  const handleCheck = () => {
-    let correct = false;
-    
-    if (currentTask.type === "spelling") {
-      correct = inputWord.toUpperCase() === currentTask.correct;
-    } 
-    else if (currentTask.type === "multi-choice") {
-      correct = selectedItems.length >= 3; 
-    } 
-   else if (currentTask.type === "dropdown-fill") {
-  // Считаем общее количество "___" во всех предложениях
-  const totalGaps = currentTask.sentences.reduce((acc, s) => acc + (s.text.split("___").length - 1), 0);
-  correct = Object.keys(dropdownAnswers).length === totalGaps;
-}
-    else if (currentTask.type === "matching") {
-      correct = matchedPairs.length === currentTask.pairs.length;
-    }
-    else if (currentTask.type === "dropdown" || currentTask.type === "image-choice") {
-      correct = inputWord === currentTask.correct;
-    }
-
-    setIsCorrect(correct);
-    setIsChecked(true);
-  };
-  
-
-  const handleNext = () => {
+  const handleNextStep = () => {
     if (currentStep < quizData.length - 1) {
-      setCurrentStep(currentStep + 1);
-      setSelectedItems([]);
-      setInputWord("");
-      setDropdownAnswers({});
-      setMatchedPairs([]);
-      setActiveWordId(null);
-      setIsChecked(false);
-      setIsCorrect(null);
+      setCurrentStep(prev => prev + 1);
+      resetStepStates();
     } else {
-      setIsFinished(true);
+      setCurrentStep(quizData.length);
     }
+  };
+
+  const handlePrevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(prev => prev - 1);
+      resetStepStates();
+    }
+  };
+
+  const resetStepStates = () => {
+    setInputWord("");
+    setDropdownAnswers({});
+    setSelectedOption(null);
+    setQuizLocked(false);
+    setIsCorrect(null);
+    setStepInitialized(false);
   };
 
   const resetQuiz = () => {
     setCurrentStep(0);
-    setIsFinished(false);
-    setIsChecked(false);
-    setInputWord("");
-    setDropdownAnswers({});
-    setMatchedPairs([]);
+    resetStepStates();
   };
 
-  
+  useEffect(() => {
+    if (currentStep < quizData.length) {
+      const timer = setTimeout(() => {
+        playCharacterTalk();
+        setStepInitialized(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep]);
 
-  return (
-    <div className="main-container">
-      <Navbar />
-      <div className="layout">
-        <Sidebar />
-        <div className="exercise-content">
-          <h2 className="exercise-header">Бул менин классым / көнүгүү</h2>
+  useEffect(() => {
+    if (stepInitialized && !quizLocked) {
+      if (currentTask.type === "spelling" && inputWord.length === currentTask.correct.length) {
+        checkAndLockAnswer(inputWord.toUpperCase() === currentTask.correct);
+      }
+      if (currentTask.type === "dropdown" && selectedOption !== null) {
+        checkAndLockAnswer(selectedOption === currentTask.correct);
+      }
+      if (currentTask.type === "image-choice" && selectedOption !== null) {
+        checkAndLockAnswer(selectedOption === currentTask.correct);
+      }
+    }
+  }, [inputWord, selectedOption, stepInitialized]);
 
-          {!isFinished ? (
-            <div className="quiz-wrapper">
-              <div className="progress-container">
-                <div className="progress-bar" style={{ width: `${((currentStep + 1) / quizData.length) * 100}%` }}></div>
-              </div>
+  const getOptionClass = (opt, idx) => {
+    const isSelected = selectedOption === idx;
+    if (!quizLocked) return isSelected ? "quiz-option selected" : "quiz-option";
+    if (idx === currentTask.correct) return "quiz-option correct-answer";
+    if (isSelected) return "quiz-option wrong-answer";
+    return "quiz-option disabled";
+  };
 
-              <div className={`quiz-card ${isChecked && isCorrect ? "success-light" : ""}`}>
-                
-                {/* 1. Блок изображения */}
-                {currentTask.type !== "matching" && (
-                  <div className="quiz-image-box">
-                    <img src={`/src/assets/5tema/${currentTask.img}`} alt="task" />
-                  </div>
-                )}
-
-                {/* 2. Блок вопроса */}
-                <div className="question-text">
-                  <h3>{currentTask.question}</h3>
-                  {(currentTask.translation || currentTask.trans) && (
-                    <p className="question-translation">{currentTask.translation || currentTask.trans}</p>
-                  )}
-                </div>
-
-                {/* 3. Отрисовка контента в зависимости от типа */}
-                <div className="task-body">
-                  {currentTask.type === "spelling" && (
-                    <div className="spelling-area">
-                      <div className={`word-display ${isChecked ? (isCorrect ? "correct-text" : "wrong-text") : ""}`}>
-                        {inputWord || "______"}
-                      </div>
-                      <div className="letter-chips">
-                        {currentTask.letters.map((L, i) => (
-                          <button key={i} className="chip" onClick={() => !isChecked && setInputWord(prev => prev + L)} disabled={isChecked}>
-                            {L}
-                          </button>
-                        ))}
-                      </div>
-                      {!isChecked && <button className="clear-btn" onClick={() => setInputWord("")}>Тазалоо</button>}
-                    </div>
-                  )}
-
-                  {currentTask.type === "multi-choice" && (
-                    <div className="options-grid">
-                      {currentTask.options.map((option, index) => (
-                        <button
-                          key={index}
-                          className={`option-btn ${selectedItems.includes(option) ? "selected" : ""} ${isChecked ? "disabled-opt" : ""}`}
-                          onClick={() => toggleItem(option)}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                {currentTask.type === "dropdown-fill" && (
-  <div className="dropdown-container-klass">
-    {currentTask.sentences.map((sentence, idx) => {
-      // Разделяем строку на части по маркеру "___"
-      const parts = sentence.text.split("___");
-      
-      return (
-        <div key={idx} className="sentence-item">
-          {parts.map((part, pIdx) => (
-            <React.Fragment key={pIdx}>
-              <span>{part}</span>
-              {/* Если это не последняя текстовая часть, вставляем select */}
-              {pIdx < parts.length - 1 && (
-                <select 
-                  onChange={(e) => handleDropdownChange(`${idx}-${pIdx}`, e.target.value)}
-                  disabled={isChecked}
-                  className={isChecked ? "checked-select" : ""}
-                >
-                  <option value="">...</option>
-                  {currentTask.allOptions.map(opt => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      );
-    })}
-  </div>
-)}
-
-                 {currentTask.type === "matching" && (
-  <div className="matching-task-container">
-    {/* Сетка кнопок со словами */}
-    <div className="words-grid-layout">
-      {currentTask.pairs.map(pair => (
-        <button
-          key={pair.id}
-          className={`match-chip ${activeWordId === pair.id ? "active" : ""} ${matchedPairs.includes(pair.id) ? "matched" : ""}`}
-          onClick={() => handleMatch('word', pair.id)}
-          disabled={matchedPairs.includes(pair.id) || isChecked}
-        >
-          {pair.text} 📎
-        </button>
-      ))}
-    </div>
-
-    {/* Горизонтальный ряд картинок */}
-    <div className="images-horizontal-row">
-      {currentTask.pairs.map(pair => (
-        <div 
-          key={pair.id} 
-          className={`match-image-item ${matchedPairs.includes(pair.id) ? "matched-img" : ""}`}
-          onClick={() => handleMatch('image', pair.id)}
-        >
-          <img src={`/src/assets/5tema/${pair.img}`} alt="item" />
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-                  {currentTask.type === "dropdown" && (
-                    <div className="sentence-row-center">
-                      <select 
-                        className="pronoun-select" 
-                        onChange={(e) => setInputWord(e.target.value)}
-                        disabled={isChecked}
-                        value={inputWord}
-                      >
-                        <option value="">???</option>
-                        {pronouns.map(p => <option key={p} value={p}>{p}</option>)}
-                      </select>
-                      <span className="verb-text">{currentTask.verb}</span>
-                    </div>
-                  )}
-
-                  {currentTask.type === "image-choice" && (
-                    <div className="options-vertical">
-                      {currentTask.options.map((opt, idx) => (
-                        <button 
-                          key={idx} 
-                          className={`option-btn-choice ${inputWord === idx.toString() ? "selected" : ""} ${isChecked ? "disabled-opt" : ""}`}
-                          onClick={() => !isChecked && setInputWord(idx.toString())}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 4. Обратная связь и кнопка */}
-                {isChecked && (
-                  <p className={`feedback-msg ${isCorrect ? "success" : "error"}`}>
-                    {isCorrect ? "Азаматсың! ✅" : "Ката! Кайра аракет кылып көр"}
-                  </p>
-                )}
-
-                <button 
-                  className="action-btn-main"
-                  onClick={isChecked ? handleNext : handleCheck}
-                  disabled={
-                    !isChecked && 
-                    inputWord === "" && 
-                    selectedItems.length === 0 && 
-                    Object.keys(dropdownAnswers).length === 0 &&
-                    matchedPairs.length === 0
-                  }
-                >
-                  {isChecked ? (currentStep === quizData.length - 1 ? "Аягы" : "Кийинки") : "Текшерүү"}
-                </button>
-              </div>
-            </div>
-          ) : (
+  if (currentStep === quizData.length) {
+    return (
+      <div className="greetings-container">
+        <Navbar />
+        <div className="exercise-layout">
+          <Sidebar />
+          <div className="exercise-main-content">
             <div className="finish-screen">
               <div className="finish-icon">🏆</div>
               <h2>Азаматсың!</h2>
@@ -359,7 +157,127 @@ function KlassExercise() {
                 <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
               </div>
             </div>
-          )}
+            <Character state={characterState} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="greetings-container">
+      <Navbar />
+      <div className="exercise-layout">
+        <Sidebar />
+        <div className="exercise-main-content">
+          <h2 className="exercise-header">Бул менин классым / көнүгүү</h2>
+
+          <div className="progress-container">
+            <div className="progress-bar-fill" style={{ width: `${((currentStep + 1) / quizData.length) * 100}%` }}></div>
+          </div>
+
+          <div className="quiz-section">
+            <div className="quiz-content">
+              
+              <div className="quiz-question">
+                <img src={`/src/assets/5tema/${currentTask.img}`} style={{width: '200px', marginBottom: '15px'}} alt=""/>
+                <h3>{currentTask.question}</h3>
+                {currentTask.translation && <p className="question-translation">{currentTask.translation || currentTask.trans}</p>}
+              </div>
+
+              {currentTask.type === "spelling" && (
+                <div className="spelling-area">
+                  <div className={`word-display ${quizLocked ? (isCorrect ? "correct-text" : "wrong-text") : ""}`}>
+                    {inputWord || "______"}
+                  </div>
+                  <div className="letter-chips">
+                    {currentTask.letters.map((L, i) => (
+                      <button key={i} className="chip" onClick={() => !quizLocked && setInputWord(prev => prev + L)} disabled={quizLocked}>
+                        {L}
+                      </button>
+                    ))}
+                  </div>
+                  {!quizLocked && <button className="clear-btn" onClick={() => setInputWord("")}>Тазалоо</button>}
+                </div>
+              )}
+
+              {currentTask.type === "dropdown" && (
+                <div className="dropdown-simple-center">
+                   <select 
+                    value={selectedOption || ""} 
+                    onChange={(e) => setSelectedOption(e.target.value)}
+                    disabled={quizLocked}
+                    className={quizLocked ? (isCorrect ? "correct-select" : "wrong-select") : ""}
+                   >
+                     <option value="">...</option>
+                     {currentTask.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                   </select>
+                   <span className="verb-text" style={{marginLeft: "10px"}}>{currentTask.verb}</span>
+                </div>
+              )}
+
+              {currentTask.type === "image-choice" && (
+                <div className="quiz-options">
+                  {currentTask.options.map((opt, idx) => (
+                    <button 
+                      key={idx} 
+                      className={getOptionClass(opt, idx)} 
+                      onClick={() => !quizLocked && setSelectedOption(idx)}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {currentTask.type === "dropdown-fill" && (
+                <div className="dropdown-container-klass">
+                  {currentTask.sentences.map((sentence, sIdx) => {
+                    const parts = sentence.text.split("___");
+                    return (
+                      <div key={sIdx} className="sentence-row-simple">
+                        {parts.map((part, pIdx) => (
+                          <React.Fragment key={pIdx}>
+                            <span>{part}</span>
+                            {pIdx < parts.length - 1 && (
+                              <select 
+                                onChange={(e) => !quizLocked && setDropdownAnswers(p => ({...p, [`${sIdx}-${pIdx}`]: e.target.value}))}
+                                disabled={quizLocked}
+                                className={quizLocked ? "locked-select" : ""}
+                              >
+                                <option value="">...</option>
+                                {currentTask.allOptions.map(o => <option key={o} value={o}>{o}</option>)}
+                              </select>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    );
+                  })}
+                  {!quizLocked && (
+                    <button className="check-btn-manual" onClick={() => {
+                      let allRight = true;
+                      currentTask.sentences.forEach((s, sIdx) => {
+                        s.correct.forEach((corrAns, pIdx) => {
+                          if (dropdownAnswers[`${sIdx}-${pIdx}`] !== corrAns) allRight = false;
+                        });
+                      });
+                      checkAndLockAnswer(allRight);
+                    }}>Текшерүү</button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="controls-row">
+            <button className="prev-btn" onClick={handlePrevStep} disabled={currentStep === 0}>Артка</button>
+            <button className="next-btn" onClick={handleNextStep}>
+              {currentStep === quizData.length - 1 ? "Аягы" : "Кийинки"}
+            </button>
+          </div>
+
+          <Character state={characterState} />
         </div>
       </div>
     </div>

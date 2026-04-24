@@ -13,23 +13,30 @@
 
 .exercise-main-content {
   flex-grow: 1;
-  padding: 5px;
+  padding: 1px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Заголовок темы - установлен размер 30px */
+.ex3-title {
+  font-size: 30px;
+  margin: 1px 0;
+  color: #333;
+}
+
 /* ============================================
    ПРОГРЕСС-БАР
    ============================================ */
-
 .progress-container {
   width: 60%;
   height: 12px;
   background: #e0f2f1;
   border-radius: 10px;
-  margin: 0 auto 30px;
+  margin: 0 auto 5px;
   overflow: hidden;
+
 }
 
 .progress-bar-fill {
@@ -44,11 +51,11 @@
 
 .header-banner {
   background-color: #d1f3fb;
-  padding: 5px 20px;
+  padding: 5px 30px;
   border-radius: 40px;
   font-size: 28px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 1px;
   color: #333;
 }
 
@@ -246,3 +253,60 @@
   filter: brightness(0.9);
   transform: translateY(-2px);
 }
+
+
+.finish-screen {
+  margin-top: 40px;
+  padding: 40px 30px;
+  background: #f9f9f9;
+  border-radius: 30px;
+  border: 2px solid #00c853;
+  text-align: center;
+  width: 500px;
+  max-width: 90%;
+}
+
+.finish-icon {
+  font-size: 60px;
+  margin-bottom: 15px;
+}
+
+.finish-screen h2 {
+  font-size: 32px;
+  color: #2ecc71;
+  margin-bottom: 10px;
+}
+
+.finish-screen p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.finish-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-retry {
+  padding: 12px 25px;
+  border-radius: 15px;
+  background: #e0e0e0;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-home {
+  padding: 12px 25px;
+  border-radius: 15px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+

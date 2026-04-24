@@ -7,7 +7,6 @@ import Character from "../../components/Character";
 
 function MektepExercise() {
   const navigate = useNavigate();
-  const containerRef = useRef(null);
   
   // Состояния для персонажа и шага
   const [characterState, setCharacterState] = useState("idle");
@@ -19,18 +18,17 @@ function MektepExercise() {
   const [inputWord, setInputWord] = useState("");
   const [dropdownAnswers, setDropdownAnswers] = useState({});
   
-  // Состояния блокировки для каждого упражнения
+  // Состояния блокировки
   const [quizLocked, setQuizLocked] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
 
-  // Данные упражнений (7 шагов)
+  // Данные упражнений (Добавлен пропущенный шаг 3 для корректной индексации)
   const exercises = [
     {
       id: 1,
       type: "image-click",
       question: "Окуучу кызды тап?",
       translation: "Найдите ученицу",
-      image: null,
       options: [
         { id: "boy", img: "teacher_agai.png", isCorrect: false },
         { id: "girl", img: "girl_aiday.png", isCorrect: true },
@@ -52,7 +50,15 @@ function MektepExercise() {
       ],
       allOptions: ["жалбырактар", "мугалим", "дарак", "окуучулар"]
     },
- 
+    {
+      id: 3,
+      type: "spelling",
+      question: "Бул эмне?",
+      translation: "Что это?",
+      image: "school.png",
+      letters: ["М", "Е", "К", "Т", "Е", "П"],
+      correct: "МЕКТЕП"
+    },
     {
       id: 4,
       type: "spelling",
@@ -93,41 +99,17 @@ function MektepExercise() {
 
   const currentExercise = exercises[currentStep];
 
-  // Текст для озвучки персонажа на каждом шаге
-  const stepTalks = {
-    0: "Окуучу кызды тап. Туура сүрөттү тандагыла.",
-    1: "Тийиштүү сөздөрдү танда. Бош орундарды толтургула.",
-    2: "Бул эмне? Мектеп деген сөздү туура түзгүлө.",
-    3: "Бул ким? Мугалим деген сөздү туура түзгүлө.",
-    4: "Окуучулар мектепке барат. Туура жоопту тандагыла.",
-    5: "Сүрөттө балдар китеп окушат. Туура жоопту тандагыла.",
-    6: "Назик мектепке барат. Туура жоопту тандагыла."
-  };
-
-  // Функция для воспроизведения речи персонажа
-  const playCharacterTalk = (step) => {
+  // Функции анимации
+  const playCharacterTalk = () => {
     setCharacterState("talk");
-    setTimeout(() => {
-      setCharacterState("idle");
-    }, 3000);
+    setTimeout(() => setCharacterState("idle"), 3000);
   };
 
-  // Функция для проверки ответов с анимацией персонажа
-  const checkAnswerWithCharacter = (isCorrect) => {
-    if (isCorrect) {
-      setCharacterState("success");
-      setTimeout(() => {
-        setCharacterState("idle");
-      }, 2000);
-    } else {
-      setCharacterState("error");
-      setTimeout(() => {
-        setCharacterState("idle");
-      }, 2000);
-    }
+  const checkAnswerWithCharacter = (correct) => {
+    setCharacterState(correct ? "success" : "error");
+    setTimeout(() => setCharacterState("idle"), 2000);
   };
 
-  // Функция проверки текущего упражнения (автоматическая)
   const checkAndLockAnswer = (correct) => {
     if (!quizLocked) {
       setIsCorrect(correct);
@@ -136,19 +118,16 @@ function MektepExercise() {
     }
   };
 
-  // Кнопка "Кийинки" - всегда переходит вперед
+  // Навигация (Исправлено: теперь кнопка просто переключает стейт)
   const handleNextStep = () => {
-    if (currentStep < exercises.length - 1) {
+    if (currentStep < exercises.length) {
       setCurrentStep(prev => prev + 1);
-      // Сброс состояний при переходе
       setSelectedOption(null);
       setInputWord("");
       setDropdownAnswers({});
       setQuizLocked(false);
       setIsCorrect(null);
       setStepInitialized(false);
-    } else {
-      setCurrentStep(exercises.length);
     }
   };
 
@@ -164,95 +143,6 @@ function MektepExercise() {
     }
   };
 
-  // При смене шага - персонаж объясняет задание
-  useEffect(() => {
-    if (currentStep < exercises.length) {
-      const timer = setTimeout(() => {
-        playCharacterTalk(currentStep);
-        setStepInitialized(true);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [currentStep]);
-
-  // Автоматическая проверка для image-click
-  useEffect(() => {
-    if (currentStep < exercises.length && stepInitialized && currentExercise.type === "image-click" && selectedOption && !quizLocked) {
-      const correct = selectedOption === currentExercise.correctId;
-      checkAndLockAnswer(correct);
-    }
-  }, [selectedOption, currentStep, stepInitialized]);
-
-  // Автоматическая проверка для choice
-  useEffect(() => {
-    if (currentStep < exercises.length && stepInitialized && currentExercise.type === "choice" && selectedOption !== null && !quizLocked) {
-      const correct = selectedOption === currentExercise.correct;
-      checkAndLockAnswer(correct);
-    }
-  }, [selectedOption, currentStep, stepInitialized]);
-
-  // Автоматическая проверка для dropdown-fill
-  useEffect(() => {
-    if (currentStep < exercises.length && stepInitialized && currentExercise.type === "dropdown-fill" && !quizLocked) {
-      const allFilled = Object.keys(dropdownAnswers).length === currentExercise.sentences.length;
-      if (allFilled) {
-        const correct = currentExercise.sentences.every((s, idx) => dropdownAnswers[idx] === s.correct);
-        checkAndLockAnswer(correct);
-      }
-    }
-  }, [dropdownAnswers, currentStep, stepInitialized]);
-
-  // Автоматическая проверка для spelling
-  useEffect(() => {
-    if (currentStep < exercises.length && stepInitialized && currentExercise.type === "spelling" && !quizLocked) {
-      if (inputWord.length === currentExercise.letters.length) {
-        const correct = inputWord.toUpperCase() === currentExercise.correct;
-        checkAndLockAnswer(correct);
-      }
-    }
-  }, [inputWord, currentStep, stepInitialized]);
-
-  // Получение класса для кнопки варианта ответа (choice)
-  const getOptionClass = (optionIndex) => {
-    if (!quizLocked) {
-      return selectedOption === optionIndex ? "quiz-option selected" : "quiz-option";
-    }
-    if (optionIndex === currentExercise.correct) {
-      return "quiz-option correct-answer";
-    }
-    if (selectedOption === optionIndex && optionIndex !== currentExercise.correct) {
-      return "quiz-option wrong-answer";
-    }
-    return "quiz-option disabled";
-  };
-
-  // Получение класса для картинки (image-click)
-  const getImageCardClass = (item) => {
-    if (!quizLocked) {
-      return selectedOption === item.id ? "image-card selected" : "image-card";
-    }
-    if (item.isCorrect) {
-      return "image-card correct-border";
-    }
-    if (selectedOption === item.id && !item.isCorrect) {
-      return "image-card wrong-border";
-    }
-    return "image-card";
-  };
-
-  // Получение класса для выпадающего списка
-  const getDropdownClass = (idx, correct) => {
-    if (!quizLocked) return "";
-    return dropdownAnswers[idx] === correct ? "correct-sel" : "wrong-sel";
-  };
-
-  // Добавление буквы для spelling
-  const addLetter = (letter) => {
-    if (!quizLocked && inputWord.length < currentExercise.letters.length) {
-      setInputWord(prev => prev + letter);
-    }
-  };
-
   const resetQuiz = () => {
     setCurrentStep(0);
     setSelectedOption(null);
@@ -261,6 +151,54 @@ function MektepExercise() {
     setQuizLocked(false);
     setIsCorrect(null);
     setStepInitialized(false);
+  };
+
+  // Эффекты инициализации шага
+  useEffect(() => {
+    if (currentStep < exercises.length) {
+      const timer = setTimeout(() => {
+        playCharacterTalk();
+        setStepInitialized(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep]);
+
+  // Авто-проверки (остаются без изменений)
+  useEffect(() => {
+    if (stepInitialized && !quizLocked) {
+      if (currentExercise?.type === "image-click" && selectedOption) {
+        checkAndLockAnswer(selectedOption === currentExercise.correctId);
+      }
+      if (currentExercise?.type === "choice" && selectedOption !== null) {
+        checkAndLockAnswer(selectedOption === currentExercise.correct);
+      }
+      if (currentExercise?.type === "dropdown-fill") {
+        const allFilled = Object.keys(dropdownAnswers).length === currentExercise.sentences.length;
+        if (allFilled) {
+          const correct = currentExercise.sentences.every((s, idx) => dropdownAnswers[idx] === s.correct);
+          checkAndLockAnswer(correct);
+        }
+      }
+      if (currentExercise?.type === "spelling" && inputWord.length === currentExercise.letters.length) {
+        checkAndLockAnswer(inputWord.toUpperCase() === currentExercise.correct);
+      }
+    }
+  }, [selectedOption, dropdownAnswers, inputWord, stepInitialized]);
+
+  // Вспомогательные функции для классов
+  const getImageCardClass = (item) => {
+    if (!quizLocked) return selectedOption === item.id ? "image-card selected" : "image-card";
+    if (item.isCorrect) return "image-card correct-border";
+    if (selectedOption === item.id) return "image-card wrong-border";
+    return "image-card";
+  };
+
+  const getOptionClass = (idx) => {
+    if (!quizLocked) return selectedOption === idx ? "quiz-option selected" : "quiz-option";
+    if (idx === currentExercise.correct) return "quiz-option correct-answer";
+    if (selectedOption === idx) return "quiz-option wrong-answer";
+    return "quiz-option disabled";
   };
 
   // Финальный экран
@@ -274,7 +212,7 @@ function MektepExercise() {
             <div className="finish-screen">
               <div className="finish-icon">🏆</div>
               <h2>Азаматсың!</h2>
-              <p>Сен бардык  тапшырманы аткардың!</p>
+              <p>Сен бардык тапшырманы аткардың!</p>
               <div className="finish-buttons">
                 <button className="btn-retry" onClick={resetQuiz}>Кайра аткаруу</button>
                 <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
@@ -293,148 +231,109 @@ function MektepExercise() {
       <div className="exercise-layout">
         <Sidebar />
         <div className="exercise-main-content">
-          {/* Прогресс-бар */}
+          <h2 className="exercise-header">Мен мектепке барам / көнүгүү</h2>
+
           <div className="progress-container">
-            <div
-              className="progress-bar-fill"
+            <div 
+              className="progress-bar-fill" 
               style={{ width: `${((currentStep + 1) / exercises.length) * 100}%` }}
             ></div>
           </div>
 
-          {/* Заголовок */}
-          <h2 className="exercise-header">Мен мектепке барам / көнүгүү</h2>
+          <div className="quiz-section">
+            <div className="quiz-content">
+              {/* Рендеринг вопросов по типу */}
+              {currentExercise.type === "image-click" && (
+                <>
+                  <div className="quiz-question">
+                    <h3>{currentExercise.question}</h3>
+                    <p className="question-translation">{currentExercise.translation}</p>
+                  </div>
+                  <div className="image-options-grid">
+                    {currentExercise.options.map((item) => (
+                      <div key={item.id} className={getImageCardClass(item)} onClick={() => !quizLocked && setSelectedOption(item.id)}>
+                        <img src={`/src/assets/4tema/${item.img}`} alt="choice" />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
-          {/* Упражнение: Image Click */}
-          {currentExercise.type === "image-click" && (
-            <div className="quiz-section">
-              <div className="quiz-content">
-                <div className="quiz-question">
-                  <h3>{currentExercise.question}</h3>
-                  {currentExercise.translation && <p className="question-translation">{currentExercise.translation}</p>}
-                </div>
-                <div className="image-options-grid">
-                  {currentExercise.options.map((item) => (
-                    <div 
-                      key={item.id}
-                      className={getImageCardClass(item)}
-                      onClick={() => !quizLocked && setSelectedOption(item.id)}
-                    >
-                      <img src={`/src/assets/4tema/${item.img}`} alt="choice" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {currentExercise.type === "dropdown-fill" && (
+                <>
+                  <div className="quiz-question">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '200px', marginBottom: '20px'}} alt=""/>
+                    <h3>{currentExercise.question}</h3>
+                  </div>
+                  <div className="dropdown-sentences">
+                    {currentExercise.sentences.map((sentence, idx) => (
+                      <div key={idx} className="sentence-row">
+                        <span>{sentence.text.split("___")[0]}</span>
+                        <select 
+                          onChange={(e) => !quizLocked && setDropdownAnswers(prev => ({ ...prev, [idx]: e.target.value }))}
+                          disabled={quizLocked}
+                          className={quizLocked ? (dropdownAnswers[idx] === sentence.correct ? "correct-sel" : "wrong-sel") : ""}
+                          value={dropdownAnswers[idx] || ""}
+                        >
+                          <option value="">...</option>
+                          {currentExercise.allOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                        <span>{sentence.text.split("___")[1]}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {currentExercise.type === "spelling" && (
+                <>
+                  <div className="quiz-question">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '120px', marginBottom: '20px'}} alt=""/>
+                    <h3>{currentExercise.question}</h3>
+                  </div>
+                  <div className={`word-display ${quizLocked ? (isCorrect ? "correct-text" : "wrong-text") : ""}`}>
+                    {inputWord || "______"}
+                  </div>
+                  <div className="letter-chips">
+                    {currentExercise.letters.map((L, i) => (
+                      <button key={i} className="chip" onClick={() => !quizLocked && inputWord.length < currentExercise.letters.length && setInputWord(prev => prev + L)} disabled={quizLocked}>
+                        {L}
+                      </button>
+                    ))}
+                  </div>
+                  {!quizLocked && inputWord.length > 0 && <button className="clear-btn" onClick={() => setInputWord("")}>Тазалоо</button>}
+                </>
+              )}
+
+              {currentExercise.type === "choice" && (
+                <>
+                  <div className="quiz-question">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '150px', marginBottom: '20px'}} alt=""/>
+                    <h3>{currentExercise.question}</h3>
+                  </div>
+                  <div className="quiz-options">
+                    {currentExercise.options.map((option, idx) => (
+                      <button key={idx} className={getOptionClass(idx)} onClick={() => !quizLocked && setSelectedOption(idx)} disabled={quizLocked}>
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
-          )}
+          </div>
 
-          {/* Упражнение: Dropdown Fill */}
-          {currentExercise.type === "dropdown-fill" && (
-            <div className="quiz-section">
-              <div className="quiz-content">
-                <div className="quiz-question">
-                  <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '200px', marginBottom: '20px'}} alt=""/>
-                  <h3>{currentExercise.question}</h3>
-                  {currentExercise.translation && <p className="question-translation">{currentExercise.translation}</p>}
-                </div>
-                <div className="dropdown-sentences">
-                  {currentExercise.sentences.map((sentence, idx) => (
-                    <div key={idx} className="sentence-row">
-                      <span>{sentence.text.split("___")[0]}</span>
-                      <select 
-                        onChange={(e) => !quizLocked && setDropdownAnswers(prev => ({ ...prev, [idx]: e.target.value }))}
-                        disabled={quizLocked}
-                        className={getDropdownClass(idx, sentence.correct)}
-                        value={dropdownAnswers[idx] || ""}
-                      >
-                        <option value="">...</option>
-                        {currentExercise.allOptions.map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                      <span>{sentence.text.split("___")[1]}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Упражнение: Spelling (составление слова) */}
-          {currentExercise.type === "spelling" && (
-            <div className="quiz-section">
-              <div className="quiz-content">
-                <div className="quiz-question">
-                  <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '90px', marginBottom: '20px'}} alt=""/>
-                  <h3>{currentExercise.question}</h3>
-                  {currentExercise.translation && <p className="question-translation">{currentExercise.translation}</p>}
-                </div>
-                <div className={`word-display ${quizLocked ? (isCorrect ? "correct-text" : "wrong-text") : ""}`}>
-                  {inputWord || "______"}
-                </div>
-                <div className="letter-chips">
-                  {currentExercise.letters.map((L, i) => (
-                    <button 
-                      key={i} 
-                      className="chip" 
-                      onClick={() => addLetter(L)}
-                      disabled={quizLocked}
-                    >
-                      {L}
-                    </button>
-                  ))}
-                </div>
-                {!quizLocked && inputWord.length > 0 && (
-                  <button className="clear-btn" onClick={() => setInputWord("")}>Тазалоо</button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Упражнение: Choice (выбор ответа) */}
-          {currentExercise.type === "choice" && (
-            <div className="quiz-section">
-              <div className="quiz-content">
-                <div className="quiz-question">
-                  <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '150px', marginBottom: '20px'}} alt=""/>
-                  <h3>{currentExercise.question}</h3>
-                  {currentExercise.translation && <p className="question-translation">{currentExercise.translation}</p>}
-                </div>
-                <div className="quiz-options">
-                  {currentExercise.options.map((option, idx) => (
-                    <button
-                      key={idx}
-                      className={getOptionClass(idx)}
-                      onClick={() => !quizLocked && setSelectedOption(idx)}
-                      disabled={quizLocked}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Кнопки навигации */}
+          {/* Навигация: Кнопка "Кийинки" теперь видна всегда */}
           <div className="controls-row">
-            <button 
-              className="prev-btn" 
-              onClick={handlePrevStep}
-              disabled={currentStep === 0}
-            >
+            <button className="prev-btn" onClick={handlePrevStep} disabled={currentStep === 0}>
               Артка
             </button>
 
-            {quizLocked && (
-              <button 
-                className="next-btn" 
-                onClick={handleNextStep}>
-                {currentStep === exercises.length - 1 ? "Аягы" : "Кийинки"}
-              </button>
-            )}
+            <button className="next-btn" onClick={handleNextStep}>
+              {currentStep === exercises.length - 1 ? "Аягы" : "Кийинки"}
+            </button>
           </div>
 
-          {/* Компонент персонажа */}
           <Character state={characterState} />
         </div>
       </div>

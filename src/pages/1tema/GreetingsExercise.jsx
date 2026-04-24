@@ -283,6 +283,7 @@ const GreetingsExercise = () => {
       <div className="exercise-layout">
         <Sidebar />
         <div className="exercise-main-content">
+          <h2 className="ex1-title">Саламдашуу/ көнүгүү</h2>
           {/* Прогресс */}
           <div className="progress-container">
             <div
@@ -355,8 +356,8 @@ const GreetingsExercise = () => {
               <div className="header-banner">Кантип саламдашабыз?</div>
               <div className="images-row">
                 {[
-                  {id: 1, img: "aksakal.png", w: "110px"},
-                  {id: 2, img: "girls_shaking_hands.png", w: "180px"},
+                  {id: 1, img: "aksakal.png", w: "140px"},
+                  {id: 2, img: "girls_shaking_hands.png", w: "190px"},
                   {id: 3, img: "teacher_standing.png", w: "100px"}
                 ].map(item => (
                   <div key={item.id} className="cap-card">
@@ -379,13 +380,11 @@ const GreetingsExercise = () => {
 
           {/* Упражнение 3: Quiz - Кандайсын? */}
           {currentStep === 3 && (
-            <div className="quiz-section">
-              <div className="header-banner">Туура жоопту танда</div>
-              <div className="quiz-content">
-                <div className="quiz-question">
-                  <img src={`/src/assets/1tema/${quizData1.image}`} style={{width: '150px', marginBottom: '20px'}} alt=""/>
+            <div className="scramble-section">
+              <div className="header-banner">Туура жоопту танда</div>           
+                  <img src={`/src/assets/1tema/${quizData1.image}`} style={{width: '200px', marginBottom: '0px'}} alt=""/>
                   <h3>{quizData1.question}</h3>
-                </div>
+              
                 <div className="quiz-options">
                   {quizData1.options.map((option, idx) => (
                     <button
@@ -399,18 +398,16 @@ const GreetingsExercise = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            
           )}
 
-          {/* Упражнение 4: Quiz - Саламатсызбы чоң апа? */}
+          {/* Упражнение 4: Quiz - Саламатсызбы чоң ата? */}
           {currentStep === 4 && (
-            <div className="quiz-section">
+            <div className="scramble-section">
               <div className="header-banner">Туура жоопту танда</div>
-              <div className="quiz-content">
-                <div className="quiz-question">
-                  <img src={`/src/assets/1tema/${quizData2.image}`} style={{width: '130px', marginBottom: '20px'}} alt=""/>
+                  <img src={`/src/assets/1tema/${quizData2.image}`} style={{width: '130px', marginBottom: '0px'}} />
                   <h3>{quizData2.question}</h3>
-                </div>
+                
                 <div className="quiz-options">
                   {quizData2.options.map((option, idx) => (
                     <button
@@ -424,7 +421,7 @@ const GreetingsExercise = () => {
                   ))}
                 </div>
               </div>
-            </div>
+           
           )}
 
           {/* Упражнение 5: Финальный экран */}

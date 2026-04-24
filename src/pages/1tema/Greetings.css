@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px; /*  отступ рядов */
+  gap: 15px; 
   background-color: #fff;
 }
  /* саламдашуу*/
@@ -36,7 +36,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 100px; /* Увеличен зазор между персонажами */
+  gap: 100px; 
   position: relative;
   width: 100%;
   margin-bottom: 90px;
@@ -52,7 +52,7 @@
 }
 
 .person-box img {
-  height: 270px; /* Базовый размер для идущих мальчиков и девочек */
+  height: 270px; 
   object-fit: contain;
 
 }
@@ -94,11 +94,10 @@
 
 .ru-word {
   font-size: 15px;
-  color: #757575; /* Серый перевод */
+  color: #757575; 
   margin-top: 2px;
 }
 
-/* --- ТОЧНОЕ ПОЗИЦИОНИРОВАНИЕ --- */
 
 /* Ряд 1: Над головами */
 .pos-top {
@@ -106,38 +105,35 @@
   margin-bottom: 20px;
 }
 
-/* Ряд 1: Мальчики идут. Перемещаем облачка сбоку/сзади */
 
-/* Общее обнуление для облачков в первом ряду */
 .dialogue-group:first-of-type .bubble {
-  bottom: auto; /* Убираем позиционирование снизу */
+  bottom: auto; 
   margin-bottom: 0;
-  top: 20px; /* Выравниваем по высоте (примерно на уровне плеч/головы) */
+  top: 20px; 
 }
 
-/* Облачко Аскара (мальчик слева, идет направо). Размещаем СЛЕВА от него */
 .person-box:has(img[alt="Askar"]) .bubble {
-  right: 100%; /* Прижимаем правую границу облачка к левой границе контейнера */
-  margin-right: 20px; /* Отступ от картинки */
+  right: 100%; 
+  margin-right: 20px; 
   left: auto;
 }
 
-/* Облачко Жолдоша (мальчик справа, идет налево). Размещаем СПРАВА от него */
+
 .person-box:has(img[alt="Joldosh"]) .bubble {
-  left: 100%; /* Прижимаем левую границу облачка к правой границе контейнера */
-  margin-left: 10px; /* Отступ от картинки */
+  left: 100%; 
+  margin-left: 10px; 
   right: auto;
 }
 
 
-/* Ряд 2: Рукопожатие (два облачка) */
+/* Ряд 2: Рукопожатие */
 .bubble.top-left { 
   top: -75px; 
-  left: -85px; 
+  left: -45px; 
 }
 .bubble.bottom-right { 
   top: -20px;
-  right: -80px; 
+  right: -90px; 
 }
 
 /* Группа девочек (ряд 2 справа) */
@@ -145,14 +141,14 @@
   display: flex;
   gap: 80px;
     display: flex;
-  margin-left: 130px; /* Сдвигаем всю группу девочек вправо */
+  margin-left: 130px; 
 }
  
 
-/* Ряд 3: Учитель (разнесены по сторонам) */
+/* Ряд 3: Учитель */
 .bubble.teacher-left { 
   top: -75px; 
-  left: -120px; 
+  left: -90px; 
 }
 .bubble.teacher-right { 
   top: -15px; 
@@ -186,7 +182,7 @@
   height: 300px;
 }
 .person-box-small-group img {
-  height: 270px; /* Девочки (Айжан и Айдай) чуть меньше */
+  height: 270px;
 }
 
 /* Ряд 3: Учитель и Бектур */
@@ -198,7 +194,6 @@
 }
 
 
-/* Находим вторую коробку (Бектура) в последнем ряду */
 .dialogue-group:last-of-type .person-box:last-of-type {
-  margin-left: 160px; /* Прижимаем Бектура и друга ближе к правому краю */
+  margin-left: 160px; 
 }

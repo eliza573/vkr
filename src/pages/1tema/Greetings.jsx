@@ -5,11 +5,18 @@ import Sidebar from "../../components/Sidebar";
 import RightSidebar from "../../components/RightSidebar";
 
 function Greetings() {
+
+const playAudio = (fileName) => {
+    if (!fileName) return;
+    const audio = new Audio(`/audio/${fileName}`); 
+    audio.play().catch(err => console.log("Ошибка воспроизведения:", err));
+  };
+
   const wordsForRightMenu = [
-    { kg: "Салам", ru: "Привет" },
-    { kg: "Саламатсызбы", ru: "Здравствуйте" },
-    { kg: "Саламатчылык", ru: "Здоровье (ответ)" },
-    { kg: "Кандайсың", ru: "Как ты" },
+{ kg: "Салам", ru: "Привет", audio: "Salam.mp3" },
+    { kg: "Саламатсызбы", ru: "Здравствуйте", audio: "Salamatsyzby.mp3" },
+    { kg: "Саламатчылык", ru: "Здоровье (ответ)", audio: "Salamatchylyk.mp3" },
+    { kg: "Кандайсың", ru: "Как ты", audio: "Kandaisyn.mp3" },
     { kg: "Балдар", ru: "Дети" },
     { kg: "Мугалим эже", ru: "Учительница" },
     { kg: "Сонун", ru: "Прекрасно" },
@@ -129,6 +136,7 @@ function Greetings() {
         <RightSidebar 
   words={wordsForRightMenu} 
   exerciseLink="/salam-exercise" 
+  onWordClick={(audioName) => playAudio(audioName)}
 />
       </div>
     </div>

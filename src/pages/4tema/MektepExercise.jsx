@@ -8,21 +8,17 @@ import Character from "../../components/Character";
 function MektepExercise() {
   const navigate = useNavigate();
   
-  // Состояния для персонажа и шага
   const [characterState, setCharacterState] = useState("idle");
   const [stepInitialized, setStepInitialized] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   
-  // Состояния для упражнений
   const [selectedOption, setSelectedOption] = useState(null);
   const [inputWord, setInputWord] = useState("");
   const [dropdownAnswers, setDropdownAnswers] = useState({});
   
-  // Состояния блокировки
   const [quizLocked, setQuizLocked] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
 
-  // Данные упражнений (Добавлен пропущенный шаг 3 для корректной индексации)
   const exercises = [
     {
       id: 1,
@@ -55,7 +51,7 @@ function MektepExercise() {
       type: "spelling",
       question: "Бул эмне?",
       translation: "Что это?",
-      image: "school.png",
+      image: "school_main.png",
       letters: ["М", "Е", "К", "Т", "Е", "П"],
       correct: "МЕКТЕП"
     },
@@ -65,7 +61,7 @@ function MektepExercise() {
       question: "Бул ким?",
       translation: "Кто это?",
       image: "teacher_stand.png",
-      letters: ["У", "М", "А", "Г", "И", "Л", "М"],
+      letters: ["М", "У", "Г", "А", "Л", "И", "М"],
       correct: "МУГАЛИМ"
     },
     {
@@ -92,14 +88,14 @@ function MektepExercise() {
       question: "Назик эмне кылат?",
       translation: "Что делает Назик?",
       image: "nazik.png",
-      options: ["Назик сабак жазышат", "Назик китеп окуйт", "Назик мектепке барат"],
-      correct: 2
+      options: ["Назик сабак жазат", "Назик китеп окуйт", "Назик мектепке барат"],
+      correct: 1
     }
   ];
 
   const currentExercise = exercises[currentStep];
+  const totalSteps = exercises.length;
 
-  // Функции анимации
   const playCharacterTalk = () => {
     setCharacterState("talk");
     setTimeout(() => setCharacterState("idle"), 3000);
@@ -118,33 +114,23 @@ function MektepExercise() {
     }
   };
 
-  // Навигация (Исправлено: теперь кнопка просто переключает стейт)
   const handleNextStep = () => {
-    if (currentStep < exercises.length) {
+    if (currentStep < exercises.length - 1) {
       setCurrentStep(prev => prev + 1);
-      setSelectedOption(null);
-      setInputWord("");
-      setDropdownAnswers({});
-      setQuizLocked(false);
-      setIsCorrect(null);
-      setStepInitialized(false);
+      resetStepStates();
+    } else {
+      setCurrentStep(exercises.length);
     }
   };
 
   const handlePrevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
-      setSelectedOption(null);
-      setInputWord("");
-      setDropdownAnswers({});
-      setQuizLocked(false);
-      setIsCorrect(null);
-      setStepInitialized(false);
+      resetStepStates();
     }
   };
 
-  const resetQuiz = () => {
-    setCurrentStep(0);
+  const resetStepStates = () => {
     setSelectedOption(null);
     setInputWord("");
     setDropdownAnswers({});
@@ -153,7 +139,11 @@ function MektepExercise() {
     setStepInitialized(false);
   };
 
-  // Эффекты инициализации шага
+  const resetQuiz = () => {
+    setCurrentStep(0);
+    resetStepStates();
+  };
+
   useEffect(() => {
     if (currentStep < exercises.length) {
       const timer = setTimeout(() => {
@@ -164,7 +154,6 @@ function MektepExercise() {
     }
   }, [currentStep]);
 
-  // Авто-проверки (остаются без изменений)
   useEffect(() => {
     if (stepInitialized && !quizLocked) {
       if (currentExercise?.type === "image-click" && selectedOption) {
@@ -184,9 +173,8 @@ function MektepExercise() {
         checkAndLockAnswer(inputWord.toUpperCase() === currentExercise.correct);
       }
     }
-  }, [selectedOption, dropdownAnswers, inputWord, stepInitialized]);
+  }, [selectedOption, dropdownAnswers, inputWord, stepInitialized, currentExercise, quizLocked]);
 
-  // Вспомогательные функции для классов
   const getImageCardClass = (item) => {
     if (!quizLocked) return selectedOption === item.id ? "image-card selected" : "image-card";
     if (item.isCorrect) return "image-card correct-border";
@@ -201,14 +189,23 @@ function MektepExercise() {
     return "quiz-option disabled";
   };
 
-  // Финальный экран
+  const getHeaderBannerText = () => {
+    if (currentExercise?.type === "image-click") return currentExercise.question;
+    if (currentExercise?.type === "dropdown-fill") return currentExercise.question;
+    if (currentExercise?.type === "spelling") return currentExercise.question;
+    if (currentExercise?.type === "choice") return "Туура жоопту танда";
+    return "";
+  };
+
   if (currentStep === exercises.length) {
     return (
-      <div className="greetings-container">
+      <div className="mektep-ex-page">
         <Navbar />
-        <div className="exercise-layout">
-          <Sidebar />
-          <div className="exercise-main-content">
+        <div className="mektep-ex-layout">
+          <div className="sidebar-wrapper">
+            <Sidebar />
+          </div>
+          <div className="mektep-ex-content">
             <div className="finish-screen">
               <div className="finish-icon">🏆</div>
               <h2>Азаматсың!</h2>
@@ -226,29 +223,31 @@ function MektepExercise() {
   }
 
   return (
-    <div className="greetings-container">
+    <div className="mektep-ex-page">
       <Navbar />
-      <div className="exercise-layout">
-        <Sidebar />
-        <div className="exercise-main-content">
-          <h2 className="exercise-header">Мен мектепке барам / көнүгүү</h2>
+      <div className="mektep-ex-layout">
+        <div className="sidebar-wrapper">
+          <Sidebar />
+        </div>
+        <div className="mektep-ex-content">
+          <h2 className="ex1-title">Мен мектепке барам / көнүгүү</h2>
 
           <div className="progress-container">
-            <div 
-              className="progress-bar-fill" 
-              style={{ width: `${((currentStep + 1) / exercises.length) * 100}%` }}
-            ></div>
+            <div className="progress-fill" style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}></div>
           </div>
 
-          <div className="quiz-section">
-            <div className="quiz-content">
-              {/* Рендеринг вопросов по типу */}
+          <div className="ex-header-banner">
+            {getHeaderBannerText()}
+          </div>
+
+          <div className="exercise-scroll-container">
+            <div className="step-content">
               {currentExercise.type === "image-click" && (
                 <>
-                  <div className="quiz-question">
-                    <h3>{currentExercise.question}</h3>
-                    <p className="question-translation">{currentExercise.translation}</p>
+                  <div className="task-image-container">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} className="task-img-large" alt="task" style={{ display: 'none' }} />
                   </div>
+                  <p className="question-translation">{currentExercise.translation}</p>
                   <div className="image-options-grid">
                     {currentExercise.options.map((item) => (
                       <div key={item.id} className={getImageCardClass(item)} onClick={() => !quizLocked && setSelectedOption(item.id)}>
@@ -261,21 +260,20 @@ function MektepExercise() {
 
               {currentExercise.type === "dropdown-fill" && (
                 <>
-                  <div className="quiz-question">
-                    <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '200px', marginBottom: '20px'}} alt=""/>
-                    <h3>{currentExercise.question}</h3>
+                  <div className="task-image-container">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} className="task-img-large" alt="task" />
                   </div>
-                  <div className="dropdown-sentences">
+                  <div className="dropdown-container">
                     {currentExercise.sentences.map((sentence, idx) => (
                       <div key={idx} className="sentence-row">
                         <span>{sentence.text.split("___")[0]}</span>
                         <select 
                           onChange={(e) => !quizLocked && setDropdownAnswers(prev => ({ ...prev, [idx]: e.target.value }))}
                           disabled={quizLocked}
-                          className={quizLocked ? (dropdownAnswers[idx] === sentence.correct ? "correct-sel" : "wrong-sel") : ""}
+                          className={quizLocked ? (dropdownAnswers[idx] === sentence.correct ? "correct-select" : "wrong-select") : ""}
                           value={dropdownAnswers[idx] || ""}
                         >
-                          <option value="">...</option>
+                          <option value="">---</option>
                           {currentExercise.allOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                         </select>
                         <span>{sentence.text.split("___")[1]}</span>
@@ -287,16 +285,15 @@ function MektepExercise() {
 
               {currentExercise.type === "spelling" && (
                 <>
-                  <div className="quiz-question">
-                    <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '120px', marginBottom: '20px'}} alt=""/>
-                    <h3>{currentExercise.question}</h3>
+                  <div className="task-image-container">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} className="task-img-large" alt="task" />
                   </div>
                   <div className={`word-display ${quizLocked ? (isCorrect ? "correct-text" : "wrong-text") : ""}`}>
                     {inputWord || "______"}
                   </div>
-                  <div className="letter-chips">
+                  <div className="letters-pool">
                     {currentExercise.letters.map((L, i) => (
-                      <button key={i} className="chip" onClick={() => !quizLocked && inputWord.length < currentExercise.letters.length && setInputWord(prev => prev + L)} disabled={quizLocked}>
+                      <button key={i} className="letter-chip" onClick={() => !quizLocked && inputWord.length < currentExercise.letters.length && setInputWord(prev => prev + L)} disabled={quizLocked}>
                         {L}
                       </button>
                     ))}
@@ -307,11 +304,14 @@ function MektepExercise() {
 
               {currentExercise.type === "choice" && (
                 <>
-                  <div className="quiz-question">
-                    <img src={`/src/assets/4tema/${currentExercise.image}`} style={{width: '150px', marginBottom: '20px'}} alt=""/>
-                    <h3>{currentExercise.question}</h3>
+                  <div className="task-image-container">
+                    <img src={`/src/assets/4tema/${currentExercise.image}`} className="task-img-large" alt="task" />
                   </div>
-                  <div className="quiz-options">
+                  <div className="question-text">
+                    <p className="question-kg">{currentExercise.question}</p>
+                    <p className="question-ru">{currentExercise.translation}</p>
+                  </div>
+                  <div className="quiz-options-horizontal">
                     {currentExercise.options.map((option, idx) => (
                       <button key={idx} className={getOptionClass(idx)} onClick={() => !quizLocked && setSelectedOption(idx)} disabled={quizLocked}>
                         {option}
@@ -323,14 +323,16 @@ function MektepExercise() {
             </div>
           </div>
 
-          {/* Навигация: Кнопка "Кийинки" теперь видна всегда */}
-          <div className="controls-row">
-            <button className="prev-btn" onClick={handlePrevStep} disabled={currentStep === 0}>
+          <div className="nav-controls">
+            <button className="nav-btn back" onClick={handlePrevStep} disabled={currentStep === 0}>
               Артка
             </button>
-
-            <button className="next-btn" onClick={handleNextStep}>
-              {currentStep === exercises.length - 1 ? "Аягы" : "Кийинки"}
+            <button 
+              className="nav-btn next" 
+              onClick={handleNextStep}
+              disabled={!quizLocked}
+            >
+              {currentStep === exercises.length - 1 ? "Аяктоо" : "Кийинки"}
             </button>
           </div>
 

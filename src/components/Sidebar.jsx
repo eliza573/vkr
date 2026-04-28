@@ -26,14 +26,12 @@ function Sidebar() {
       id: 4, 
       title: "Мен мектепке барам", 
       path: "/mektep",           // Основная страница (карточки)
-      words: "/mektep-words",    // Страница "Жаңы сөздөр"
       exercise: "/mektep-exercise"
     },
         { id: 41, title: "Окуу куралдары", path: "/okuu", words: "/tanyshuu", exercise: "/okuu-exercise" },
 
     { id: 5, title: "Бул менин классым", path: "/klass", words: "/class-words", exercise: "/klass-exercise" },
         { id: 6, title: " Үй-бүлө", path: "/uibuloo", words: "/uibuloo-words", exercise: "/family-exercise" },
-        { id: 7, title: " Мен сүрөт тартып жатам", path: "/surot", words: "/uibuloo-words", exercise: "/family-exercise" },
         { id: 8, title: " Күз", path: "/kuz", words: "/uibuloo-words", exercise: "/family-exercise" },
 
   ];

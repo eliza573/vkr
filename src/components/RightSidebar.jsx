@@ -2,9 +2,9 @@ import React from 'react';
 import "./RightSidebar.css";
 import { Link } from "react-router-dom";
 
-const RightSidebar = ({ words, exerciseLink }) => {
-
+const RightSidebar = ({ words, exerciseLink, onWordClick }) => {
   if (!words) return null;
+
   return (
     <div className="right-sidebar">
       <div className="new-words-section">
@@ -14,7 +14,14 @@ const RightSidebar = ({ words, exerciseLink }) => {
         <div className="words-list">
           {words.map((item, index) => (
             <div key={index} className="word-item-card">
-              <button className="audio-icon-btn">🔊</button>
+              {/* При нажатии вызываем функцию и передаем имя файла из данных */}
+              <button 
+                className="audio-icon-btn" 
+                onClick={() => onWordClick && onWordClick(item.audio)}
+                disabled={!item.audio} // Блокируем, если аудио нет
+              >
+                🔊
+              </button>
               <div className="word-text">
                 <span className="kg-word">{item.kg}</span>
                 <span className="dash"> - </span>
@@ -25,14 +32,12 @@ const RightSidebar = ({ words, exerciseLink }) => {
         </div>
       </div>
       
-{/* Кнопка Көнүгүү */}
       <Link to={exerciseLink}>
         <button className="exercise-nav-btn">
           Көнүгүү
           <p className="new-words-subtitle">Упражнения</p>
         </button>
       </Link>
-
     </div>
   );
 };

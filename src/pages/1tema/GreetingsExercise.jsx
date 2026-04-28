@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import "./Exercise.css";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
-
 import Character from "../../components/Character";
 import { useEffect } from "react";
 
@@ -18,7 +17,6 @@ const GreetingsExercise = () => {
   const [characterState, setCharacterState] = useState("idle");
   const [stepInitialized, setStepInitialized] = useState(false);
   
-  // Состояния для новых упражнений (выбор ответа)
   const [selectedAnswer1, setSelectedAnswer1] = useState(null);
   const [selectedAnswer2, setSelectedAnswer2] = useState(null);
   const [quizLocked1, setQuizLocked1] = useState(false);
@@ -28,17 +26,14 @@ const GreetingsExercise = () => {
     left: [
       { id: 'l1', text: "Саламатсыңарбы балдар?", img: "teacher_standing.png", width: "70px" },
       { id: 'l2', text: "Салам Айжан", img: "girl1.png", width: "90px" },
-      { id: 'l3', text: "Кандайсыз? Бектур байке", img: "boy_standing.png", width: "90px" },
     ],
     right: [
       { id: 'r1', text: "Саламатсызбы эже?", img: "group_students.png", width: "130px" },
-      { id: 'r2', text: "Жакшы", img: "boy_red_shirt.png", width: "80px" },
       { id: 'r3', text: "Салам Айдай", img: "girl2.png", width: "90px" },
     ],
-    correct: { 'l1': 'r1', 'l2': 'r3', 'l3': 'r2' }
+    correct: { 'l1': 'r1', 'l2': 'r3' }
   };
 
-  // Правильные ответы для 2 и 3 упражнения
   const correctScramble = ["С", "А", "Л", "А", "М"];
   const correctCaptions = {
     1: "Саламатсызбы чоң ата?",
@@ -48,7 +43,6 @@ const GreetingsExercise = () => {
 
   const scrambleLetters = ["С", "А", "М", "Л", "А"];
 
-  // Данные для упражнения 3 (выбор ответа) - "Кандайсын?"
   const quizData1 = {
     question: "Кандайсын?",
     image: "bektur.png",
@@ -56,7 +50,6 @@ const GreetingsExercise = () => {
     correct: "Жакшы"
   };
 
-  // Данные для упражнения 4 (выбор ответа) - "Саламатсызбы чоң ата?"
   const quizData2 = {
     question: "Саламатсызбы чоң ата?",
     image: "aksakal.png",
@@ -64,7 +57,6 @@ const GreetingsExercise = () => {
     correct: "Саламатчылык"
   };
 
-  // Текст для озвучки персонажа на каждом шаге (теперь 5 шагов)
   const stepTalks = {
     0: "Дал келтиргиле! Сүйлөмдөрдү жана сүрөттөрдү туура дал келтиргиле.",
     1: "Туура жаз! Сөздү туура түзүү үчүн тамгаларды көчүрүп салгыла.",
@@ -73,7 +65,6 @@ const GreetingsExercise = () => {
     4: "Саламатсызбы чоң апа? Туура жоопту тандагыла."
   };
 
-  // Функция для воспроизведения речи персонажа
   const playCharacterTalk = (step) => {
     setCharacterState("talk");
     setTimeout(() => {
@@ -81,7 +72,6 @@ const GreetingsExercise = () => {
     }, 3000);
   };
 
-  // Функция для проверки ответов с анимацией персонажа (без автоматического перехода)
   const checkAnswerWithCharacter = (isCorrect) => {
     if (isCorrect) {
       setCharacterState("success");
@@ -96,40 +86,32 @@ const GreetingsExercise = () => {
     }
   };
 
-  // Проверка Matching упражнения (шаг 0)
   const isMatchingComplete = () => {
     return Object.keys(matchingData.correct).length === connections.filter(c => c.isCorrect).length;
   };
 
-  // Проверка Scramble упражнения (шаг 1)
   const isScrambleComplete = () => {
     return placedLetters.every((letter, idx) => letter === correctScramble[idx]);
   };
 
-  // Проверка Captions упражнения (шаг 2)
   const isCaptionsComplete = () => {
     return Object.keys(correctCaptions).every(
       key => placedCaptions[key] === correctCaptions[key]
     );
   };
 
-  // Проверка Quiz 1 (шаг 3)
   const isQuiz1Complete = () => {
     return selectedAnswer1 === quizData1.correct;
   };
 
-  // Проверка Quiz 2 (шаг 4)
   const isQuiz2Complete = () => {
     return selectedAnswer2 === quizData2.correct;
   };
 
-
   const handleNextStep = () => {
-    //  переход на следующий шаг без проверки
     setCurrentStep(prev => prev + 1);
     setStepInitialized(false);
   };
-
 
   useEffect(() => {
     if (currentStep < 5) {
@@ -141,14 +123,12 @@ const GreetingsExercise = () => {
     }
   }, [currentStep]);
 
-  // Автоматическая ПРОВЕРКА (без перехода) для Matching (шаг 0)
   useEffect(() => {
     if (currentStep === 0 && connections.length > 0 && stepInitialized) {
       const allCorrect = Object.keys(matchingData.correct).length === connections.filter(c => c.isCorrect).length;
       if (allCorrect) {
         checkAnswerWithCharacter(true);
       } else {
-        // Проверяем было ли последнее соединение неправильным
         const lastConnection = connections[connections.length - 1];
         if (lastConnection && !lastConnection.isCorrect) {
           checkAnswerWithCharacter(false);
@@ -157,7 +137,6 @@ const GreetingsExercise = () => {
     }
   }, [connections, currentStep, stepInitialized]);
 
-  // Автоматическая проверка для Scramble (шаг 1)
   useEffect(() => {
     if (currentStep === 1 && stepInitialized) {
       const isComplete = isScrambleComplete();
@@ -169,7 +148,6 @@ const GreetingsExercise = () => {
     }
   }, [placedLetters, currentStep, stepInitialized]);
 
-  // Автоматическая проверка для Captions (шаг 2)
   useEffect(() => {
     if (currentStep === 2 && stepInitialized) {
       const isComplete = isCaptionsComplete();
@@ -182,7 +160,6 @@ const GreetingsExercise = () => {
     }
   }, [placedCaptions, currentStep, stepInitialized]);
 
-  // Обработчики для выбора ответа в викторинах (с проверкой, но без перехода)
   const handleQuiz1Answer = (answer) => {
     if (quizLocked1) return;
     setSelectedAnswer1(answer);
@@ -214,13 +191,11 @@ const GreetingsExercise = () => {
     setQuizLocked2(false);
   };
 
-  // Логика проверки для букв
   const getLetterClass = (char, index) => {
     if (!char) return "drop-slot";
     return char === correctScramble[index] ? "drop-slot correct" : "drop-slot wrong";
   };
 
-  // Логика проверки для подписей
   const getCaptionClass = (id) => {
     const placed = placedCaptions[id];
     if (!placed) return "drop-zone-green";
@@ -268,7 +243,6 @@ const GreetingsExercise = () => {
     setPlacedCaptions(prev => ({ ...prev, [slotId]: content }));
   };
 
-  // Получение класса для кнопки варианта ответа
   const getOptionClass = (option, selected, correct) => {
     if (!selected) return "quiz-option";
     if (selected === option) {
@@ -278,114 +252,125 @@ const GreetingsExercise = () => {
   };
 
   return (
-    <div className="greetings-container">
+    <div className="greetings-ex-page">
       <Navbar />
-      <div className="exercise-layout">
-        <Sidebar />
-        <div className="exercise-main-content">
-          <h2 className="ex1-title">Саламдашуу/ көнүгүү</h2>
-          {/* Прогресс */}
+      <div className="greetings-ex-layout">
+        <div className="sidebar-wrapper">
+          <Sidebar />
+        </div>
+        <div className="greetings-ex-content">
+          <h2 className="ex1-title">Саламдашуу / көнүгүү</h2>
+          
           <div className="progress-container">
             <div
-              className="progress-bar-fill"
+              className="progress-fill"
               style={{ width: `${((currentStep + 1) / 6) * 100}%` }}
             ></div>
           </div>
           
-          {/* Упражнение 0: Matching */}
-          {currentStep === 0 && (
-            <div className="step-wrapper">
-              <div className="header-banner">Дал келтиргиле</div>
-              <div className="matching-area" ref={containerRef}>
-                <svg className="arrows-svg">
-                  {connections.map((conn, i) => (
-                    <line key={i} x1={conn.start.x} y1={conn.start.y} x2={conn.end.x} y2={conn.end.y} 
-                          stroke={conn.isCorrect ? "#66f877" : "#ff4d4d"} strokeWidth="3" />
-                  ))}
-                </svg>
-                <div className="matching-grid">
-                  <div className="items-column">
-                    {matchingData.left.map(item => (
-                      <div key={item.id} className={`match-row left ${isMatched(item.id) ? 'matched' : ''}`}>
-                        <div className="bubble-text left">{item.text}</div>
-                        <img src={`/src/assets/1tema/${item.img}`} style={{width: item.width, height: 'auto'}} alt=""/>
-                        <div className={`dot ${activeStart?.id === item.id ? 'active' : ''}`} onClick={(e) => handlePointClick(item.id, 'left', e)}></div>
-                      </div>
+          <div className="ex-header-banner">
+            {currentStep === 0 && "Дал келтиргиле"}
+            {currentStep === 1 && "Туура жаз"}
+            {currentStep === 2 && "Кантип саламдашабыз?"}
+            {(currentStep === 3 || currentStep === 4) && "Туура жоопту танда"}
+          </div>
+
+          <div className="exercise-scroll-container">
+            {/* Упражнение 0: Matching */}
+            {currentStep === 0 && (
+              <div className="step-content">
+                <div className="matching-area" ref={containerRef}>
+                  <svg className="arrows-svg">
+                    {connections.map((conn, i) => (
+                      <line key={i} x1={conn.start.x} y1={conn.start.y} x2={conn.end.x} y2={conn.end.y} 
+                            stroke={conn.isCorrect ? "#66f877" : "#ff4d4d"} strokeWidth="3" />
                     ))}
-                  </div>
-                  <div className="items-column">
-                    {matchingData.right.map(item => (
-                      <div key={item.id} className={`match-row right ${isMatched(item.id) ? 'matched' : ''}`}>
-                        <div className="dot" onClick={(e) => handlePointClick(item.id, 'right', e)}></div>
-                        <img src={`/src/assets/1tema/${item.img}`} style={{width: item.width, height: 'auto'}} alt=""/>
-                        <div className="bubble-text right">{item.text}</div>
-                      </div>
-                    ))}
+                  </svg>
+                  <div className="matching-grid">
+                    <div className="items-column">
+                      {matchingData.left.map(item => (
+                        <div key={item.id} className={`match-row left ${isMatched(item.id) ? 'matched' : ''}`}>
+                          <div className="bubble-text left">{item.text}</div>
+                          <img src={`/src/assets/1tema/${item.img}`} style={{width: '80px', height: 'auto'}} alt=""/>
+                          <div className={`dot ${activeStart?.id === item.id ? 'active' : ''}`} onClick={(e) => handlePointClick(item.id, 'left', e)}></div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="items-column">
+                      {matchingData.right.map(item => (
+                        <div key={item.id} className={`match-row right ${isMatched(item.id) ? 'matched' : ''}`}>
+                          <div className="dot" onClick={(e) => handlePointClick(item.id, 'right', e)}></div>
+                          <img src={`/src/assets/1tema/${item.img}`} style={{width: '120px', height: 'auto'}} alt=""/>
+                          <div className="bubble-text right">{item.text}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Упражнение 1: Scramble (Туура жаз) */}
-          {currentStep === 1 && (
-            <div className="scramble-section">
-              <div className="header-banner">Туура жаз</div>
-              <img src="/src/assets/1tema/askar_walk.png" style={{width: '180px', marginBottom: '20px'}} alt=""/>
-              <div className="slots-row">
-                {placedLetters.map((char, i) => (
-                  <div key={i} 
-                       className={getLetterClass(char, i)} 
-                       onDragOver={(e) => e.preventDefault()} 
-                       onDrop={(e) => handleDropToLetterSlot(e, i)}>
-                    {char}
-                  </div>
-                ))}
-              </div>
-              <div className="letters-pool">
-                {scrambleLetters.map((l, i) => (
-                  <div key={i} className="drag-item letter" draggable onDragStart={(e) => handleDragStart(e, l, "letter")}>{l}</div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Упражнение 2: Captions Drag & Drop */}
-          {currentStep === 2 && (
-            <div className="captions-drag-section">
-              <div className="header-banner">Кантип саламдашабыз?</div>
-              <div className="images-row">
-                {[
-                  {id: 1, img: "aksakal.png", w: "140px"},
-                  {id: 2, img: "girls_shaking_hands.png", w: "190px"},
-                  {id: 3, img: "teacher_standing.png", w: "100px"}
-                ].map(item => (
-                  <div key={item.id} className="cap-card">
-                    <img src={`/src/assets/1tema/${item.img}`} style={{width: item.w, height: 'auto'}} alt=""/>
-                    <div className={getCaptionClass(item.id)} 
+            {/* Упражнение 1: Scramble */}
+            {currentStep === 1 && (
+              <div className="step-content">
+                <div className="task-image-container">
+                  <img src="/src/assets/1tema/askar_walk.png" className="task-img-large" alt="task" />
+                </div>
+                <div className="slots-row">
+                  {placedLetters.map((char, i) => (
+                    <div key={i} 
+                         className={getLetterClass(char, i)} 
                          onDragOver={(e) => e.preventDefault()} 
-                         onDrop={(e) => handleDropToCaptionSlot(e, item.id)}>
-                      {placedCaptions[item.id] || ""}
+                         onDrop={(e) => handleDropToLetterSlot(e, i)}>
+                      {char}
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="letters-pool">
+                  {scrambleLetters.map((l, i) => (
+                    <div key={i} className="drag-item letter" draggable onDragStart={(e) => handleDragStart(e, l, "letter")}>{l}</div>
+                  ))}
+                </div>
               </div>
-              <div className="options-pool">
-                {["Салам Айдай", "Саламатсызбы", "Саламатсызбы чоң ата?"].map(txt => (
-                  <div key={txt} className="drag-item caption" draggable onDragStart={(e) => handleDragStart(e, txt, "caption")}>{txt}</div>
-                ))}
-              </div>
-            </div>
-          )}
+            )}
 
-          {/* Упражнение 3: Quiz - Кандайсын? */}
-          {currentStep === 3 && (
-            <div className="scramble-section">
-              <div className="header-banner">Туура жоопту танда</div>           
-                  <img src={`/src/assets/1tema/${quizData1.image}`} style={{width: '200px', marginBottom: '0px'}} alt=""/>
-                  <h3>{quizData1.question}</h3>
-              
-                <div className="quiz-options">
+            {/* Упражнение 2: Captions Drag & Drop */}
+            {currentStep === 2 && (
+              <div className="step-content">
+                <div className="images-row">
+                  {[
+                    {id: 1, img: "aksakal.png", w: "130px"},
+                    {id: 2, img: "girls_shaking_hands.png", w: "170px"},
+                    {id: 3, img: "teacher_standing.png", w: "90px"}
+                  ].map(item => (
+                    <div key={item.id} className="cap-card">
+                      <img src={`/src/assets/1tema/${item.img}`} style={{width: item.w, height: 'auto'}} alt=""/>
+                      <div className={getCaptionClass(item.id)} 
+                           onDragOver={(e) => e.preventDefault()} 
+                           onDrop={(e) => handleDropToCaptionSlot(e, item.id)}>
+                        {placedCaptions[item.id] || ""}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="options-pool">
+                  {["Салам Айдай", "Саламатсызбы", "Саламатсызбы чоң ата?"].map(txt => (
+                    <div key={txt} className="drag-item caption" draggable onDragStart={(e) => handleDragStart(e, txt, "caption")}>{txt}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Упражнение 3: Quiz - Кандайсын? */}
+            {currentStep === 3 && (
+              <div className="step-content">
+                <div className="task-image-container">
+                  <img src={`/src/assets/1tema/${quizData1.image}`} className="task-img-large" alt="task" />
+                </div>
+                <div className="question-text">
+                  <p className="question-kg">{quizData1.question}</p>
+                </div>
+                <div className="quiz-options-horizontal">
                   {quizData1.options.map((option, idx) => (
                     <button
                       key={idx}
@@ -398,17 +383,18 @@ const GreetingsExercise = () => {
                   ))}
                 </div>
               </div>
-            
-          )}
+            )}
 
-          {/* Упражнение 4: Quiz - Саламатсызбы чоң ата? */}
-          {currentStep === 4 && (
-            <div className="scramble-section">
-              <div className="header-banner">Туура жоопту танда</div>
-                  <img src={`/src/assets/1tema/${quizData2.image}`} style={{width: '130px', marginBottom: '0px'}} />
-                  <h3>{quizData2.question}</h3>
-                
-                <div className="quiz-options">
+            {/* Упражнение 4: Quiz - Саламатсызбы чоң ата? */}
+            {currentStep === 4 && (
+              <div className="step-content">
+                <div className="task-image-container">
+                  <img src={`/src/assets/1tema/${quizData2.image}`} className="task-img-large" alt="task" />
+                </div>
+                <div className="question-text">
+                  <p className="question-kg">{quizData2.question}</p>
+                </div>
+                <div className="quiz-options-horizontal">
                   {quizData2.options.map((option, idx) => (
                     <button
                       key={idx}
@@ -421,26 +407,26 @@ const GreetingsExercise = () => {
                   ))}
                 </div>
               </div>
-           
-          )}
+            )}
 
-          {/* Упражнение 5: Финальный экран */}
-          {currentStep === 5 && (
-            <div className="finish-screen">
-              <div className="finish-icon">🏆</div>
-              <h2>Азаматсың!</h2>
-              <p>Бардык 5 көнүгүүнү ийгиликтүү аяктадың!</p>
-              <div className="finish-buttons">
-                <button className="btn-retry" onClick={resetQuiz}>Кайра аткаруу</button>
-                <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
+            {/* Упражнение 5: Финальный экран */}
+            {currentStep === 5 && (
+              <div className="finish-screen">
+                <div className="finish-icon">🏆</div>
+                <h2>Азаматсың!</h2>
+                <p>Бардык көнүгүүнү ийгиликтүү аяктадың!</p>
+                <div className="finish-buttons">
+                  <button className="btn-retry" onClick={resetQuiz}>Кайра аткаруу</button>
+                  <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {currentStep < 5 && (
-            <div className="controls-row">
+            <div className="nav-controls">
               <button 
-                className="prev-btn" 
+                className="nav-btn back" 
                 onClick={() => {
                   setCurrentStep(prev => prev - 1);
                   setStepInitialized(false);
@@ -449,16 +435,14 @@ const GreetingsExercise = () => {
               >
                 Артка
               </button>
-
               <button 
-                className="next-btn" 
+                className="nav-btn next" 
                 onClick={handleNextStep}>
                 Кийинки
               </button>
             </div>
           )}
           
-          {/* Компонент персонажа */}
           <Character state={characterState} />
         </div>
       </div>

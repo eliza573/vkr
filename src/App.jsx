@@ -9,13 +9,15 @@ import FamilyMain from "./pages/6tema/FamilyMain";
 import Greetings from "./pages/1tema/Greetings";
 import GreetingsExercise from "./pages/1tema/GreetingsExercise";
 import TanyshuuExercise from "./pages/3tema/TanyshuuExercise";
-import Taanyshuu from "./pages/3tema/taanyshuu";
+import Taanyshuu from "./pages/3tema/Taanyshuu";
 import FamilyExercise from "./pages/6tema/FamilyExercise";
 import Koshtoshuu from "./pages/2tema/Koshtoshuu";
 import Kim from "./pages/31tema/kim";
 import KimExercise from "./pages/31tema/KimExercise";
 import Oku from "./pages/41tema/Oku";
 import OkuExercise from "./pages/41tema/OkuExercise";
+import Kuz from "./pages/7tema/Kuz";
+
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
       <Route path="/kim-exercise" element={<KimExercise/>}/>
       <Route path="/okuu" element={<Oku/>}/>
       <Route path="/okuu-exercise" element={<OkuExercise/>}/>
+      <Route path="/kuz" element={<Kuz/>}/>
       
 
 

@@ -28,7 +28,7 @@ function KlassExercise() {
       question: "Бул эмне?",
       translation: "Что это?",
       img: "board_desk.png",
-      letters: ["К", "Т", "Т", "А", "А"],
+      letters: ["Т", "А", "К", "Т", "А"],
       correct: "ТАКТА"
     },
     {
@@ -37,7 +37,7 @@ function KlassExercise() {
       question: "Бул ким?",
       translation: "Кто это?",
       img: "student_boy.png",
-      letters: ["О", "К", "Ч", "У", "У", "У"],
+      letters: ["О", "К", "У", "У", "Ч", "У"],
       correct: "ОКУУЧУ"
     },
     {
@@ -52,14 +52,48 @@ function KlassExercise() {
       ],
       allOptions: ["биздин", "саат", "желек", "жарык", "таза"]
     },
-    // Изменено на type: "dropdown" для отображения списка
-    { id: 4, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... окуйм", correct: "Мен", trans: "..... читаю", img: "reading_book.png", options: pronouns },
-    { id: 5, type: "dropdown", question: "Тиешелүү ат атоочту тандаңыз:", verb: "..... окуйсуң", correct: "Сен", trans: "..... читаешь", img: "student_boy.png", options: pronouns },
-    { id: 6, type: "image-choice", question: "Сүрөттө балдар эмне кылып жатышат?", trans: "Что делают дети на картинке?", img: "students_in_class.png", options: ["Алар сабак жазып жатышат", "Ал китеп окуйт", "Силер сүрөт тартышат"], correct: 0 },
-    { id: 7, type: "image-choice", question: "Оля эмне кылат?", trans: "Что делает Оля?", img: "olya_enter.png", options: ["Ал класска кирет", "Алар класска кирет", "Силер класска киресиңер"], correct: 0 }
+    { 
+      id: 4, 
+      type: "dropdown", 
+      question: "Тиешелүү ат атоочту тандаңыз:", 
+      verb: "..... окуйм", 
+      correct: "Мен", 
+      trans: "..... читаю", 
+      img: "reading_book.png", 
+      options: pronouns 
+    },
+    { 
+      id: 5, 
+      type: "dropdown", 
+      question: "Тиешелүү ат атоочту тандаңыз:", 
+      verb: "..... окуйсуң", 
+      correct: "Сен", 
+      trans: "..... читаешь", 
+      img: "student_boy.png", 
+      options: pronouns 
+    },
+    { 
+      id: 6, 
+      type: "image-choice", 
+      question: "Сүрөттө балдар эмне кылып жатышат?", 
+      trans: "Что делают дети на картинке?", 
+      img: "students_in_class.png", 
+      options: ["Алар сабак жазып жатышат", "Ал китеп окуйт", "Силер сүрөт тартышат"], 
+      correct: 0 
+    },
+    { 
+      id: 7, 
+      type: "image-choice", 
+      question: "Оля эмне кылат?", 
+      trans: "Что делает Оля?", 
+      img: "olya_enter.png", 
+      options: ["Ал класска кирет", "Алар класска кирет", "Силер класска киресиңер"], 
+      correct: 0 
+    }
   ];
 
   const currentTask = quizData[currentStep];
+  const totalSteps = quizData.length;
 
   const playCharacterTalk = () => {
     setCharacterState("talk");
@@ -80,11 +114,11 @@ function KlassExercise() {
   };
 
   const handleNextStep = () => {
-    if (currentStep < quizData.length - 1) {
+    if (currentStep < totalSteps - 1) {
       setCurrentStep(prev => prev + 1);
       resetStepStates();
     } else {
-      setCurrentStep(quizData.length);
+      setCurrentStep(totalSteps);
     }
   };
 
@@ -110,7 +144,7 @@ function KlassExercise() {
   };
 
   useEffect(() => {
-    if (currentStep < quizData.length) {
+    if (currentStep < totalSteps) {
       const timer = setTimeout(() => {
         playCharacterTalk();
         setStepInitialized(true);
@@ -119,35 +153,68 @@ function KlassExercise() {
     }
   }, [currentStep]);
 
+  // Автоматическая проверка для spelling
   useEffect(() => {
-    if (stepInitialized && !quizLocked) {
-      if (currentTask.type === "spelling" && inputWord.length === currentTask.correct.length) {
-        checkAndLockAnswer(inputWord.toUpperCase() === currentTask.correct);
-      }
-      if (currentTask.type === "dropdown" && selectedOption !== null) {
-        checkAndLockAnswer(selectedOption === currentTask.correct);
-      }
-      if (currentTask.type === "image-choice" && selectedOption !== null) {
-        checkAndLockAnswer(selectedOption === currentTask.correct);
+    if (stepInitialized && !quizLocked && currentTask?.type === "spelling" && inputWord.length === currentTask.correct.length) {
+      checkAndLockAnswer(inputWord.toUpperCase() === currentTask.correct);
+    }
+  }, [inputWord, stepInitialized, currentTask, quizLocked]);
+
+  // Автоматическая проверка для dropdown
+  useEffect(() => {
+    if (stepInitialized && !quizLocked && currentTask?.type === "dropdown" && selectedOption !== null) {
+      checkAndLockAnswer(selectedOption === currentTask.correct);
+    }
+  }, [selectedOption, stepInitialized, currentTask, quizLocked]);
+
+  // Автоматическая проверка для image-choice
+  useEffect(() => {
+    if (stepInitialized && !quizLocked && currentTask?.type === "image-choice" && selectedOption !== null) {
+      checkAndLockAnswer(selectedOption === currentTask.correct);
+    }
+  }, [selectedOption, stepInitialized, currentTask, quizLocked]);
+
+  // Автоматическая проверка для dropdown-fill
+  useEffect(() => {
+    if (stepInitialized && !quizLocked && currentTask?.type === "dropdown-fill") {
+      const allFilled = Object.keys(dropdownAnswers).length === 3;
+      if (allFilled) {
+        let allCorrect = true;
+        currentTask.sentences.forEach((s, sIdx) => {
+          s.correct.forEach((corrAns, pIdx) => {
+            if (dropdownAnswers[`${sIdx}-${pIdx}`] !== corrAns) allCorrect = false;
+          });
+        });
+        checkAndLockAnswer(allCorrect);
       }
     }
-  }, [inputWord, selectedOption, stepInitialized]);
+  }, [dropdownAnswers, stepInitialized, currentTask, quizLocked]);
 
-  const getOptionClass = (opt, idx) => {
+  const getOptionClass = (idx) => {
     const isSelected = selectedOption === idx;
     if (!quizLocked) return isSelected ? "quiz-option selected" : "quiz-option";
-    if (idx === currentTask.correct) return "quiz-option correct-answer";
+    if (idx === currentTask?.correct) return "quiz-option correct-answer";
     if (isSelected) return "quiz-option wrong-answer";
     return "quiz-option disabled";
   };
 
-  if (currentStep === quizData.length) {
+  const getHeaderBannerText = () => {
+    if (currentTask?.type === "spelling") return currentTask.question;
+    if (currentTask?.type === "dropdown") return currentTask.question;
+    if (currentTask?.type === "image-choice") return currentTask.question;
+    if (currentTask?.type === "dropdown-fill") return currentTask.question;
+    return "";
+  };
+
+  if (currentStep === totalSteps) {
     return (
-      <div className="greetings-container">
+      <div className="klass-ex-page">
         <Navbar />
-        <div className="exercise-layout">
-          <Sidebar />
-          <div className="exercise-main-content">
+        <div className="klass-ex-layout">
+          <div className="sidebar-wrapper">
+            <Sidebar />
+          </div>
+          <div className="klass-ex-content">
             <div className="finish-screen">
               <div className="finish-icon">🏆</div>
               <h2>Азаматсың!</h2>
@@ -165,64 +232,70 @@ function KlassExercise() {
   }
 
   return (
-    <div className="greetings-container">
+    <div className="klass-ex-page">
       <Navbar />
-      <div className="exercise-layout">
-        <Sidebar />
-        <div className="exercise-main-content">
-          <h2 className="exercise-header">Бул менин классым / көнүгүү</h2>
+      <div className="klass-ex-layout">
+        <div className="sidebar-wrapper">
+          <Sidebar />
+        </div>
+        <div className="klass-ex-content">
+          <h2 className="ex1-title">Бул менин классым / көнүгүү</h2>
 
           <div className="progress-container">
-            <div className="progress-bar-fill" style={{ width: `${((currentStep + 1) / quizData.length) * 100}%` }}></div>
+            <div className="progress-fill" style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}></div>
           </div>
 
-          <div className="quiz-section">
-            <div className="quiz-content">
-              
-              <div className="quiz-question">
-                <img src={`/src/assets/5tema/${currentTask.img}`} style={{width: '200px', marginBottom: '15px'}} alt=""/>
-                <h3>{currentTask.question}</h3>
-                {currentTask.translation && <p className="question-translation">{currentTask.translation || currentTask.trans}</p>}
+          <div className="ex-header-banner">
+            {getHeaderBannerText()}
+          </div>
+
+          <div className="exercise-scroll-container">
+            <div className="step-content">
+              <div className="task-image-container">
+                <img src={`/src/assets/5tema/${currentTask.img}`} className="task-img-large" alt="task" />
               </div>
+              
+              {currentTask.translation && <p className="question-translation">{currentTask.translation || currentTask.trans}</p>}
 
               {currentTask.type === "spelling" && (
                 <div className="spelling-area">
                   <div className={`word-display ${quizLocked ? (isCorrect ? "correct-text" : "wrong-text") : ""}`}>
                     {inputWord || "______"}
                   </div>
-                  <div className="letter-chips">
+                  <div className="letters-pool">
                     {currentTask.letters.map((L, i) => (
-                      <button key={i} className="chip" onClick={() => !quizLocked && setInputWord(prev => prev + L)} disabled={quizLocked}>
+                      <button key={i} className="letter-chip" onClick={() => !quizLocked && inputWord.length < currentTask.correct.length && setInputWord(prev => prev + L)} disabled={quizLocked}>
                         {L}
                       </button>
                     ))}
                   </div>
-                  {!quizLocked && <button className="clear-btn" onClick={() => setInputWord("")}>Тазалоо</button>}
+                  {!quizLocked && inputWord.length > 0 && <button className="clear-btn" onClick={() => setInputWord("")}>Тазалоо</button>}
                 </div>
               )}
 
               {currentTask.type === "dropdown" && (
-                <div className="dropdown-simple-center">
-                   <select 
+                <div className="dropdown-container">
+                  <select 
                     value={selectedOption || ""} 
-                    onChange={(e) => setSelectedOption(e.target.value)}
+                    onChange={(e) => !quizLocked && setSelectedOption(e.target.value)}
                     disabled={quizLocked}
                     className={quizLocked ? (isCorrect ? "correct-select" : "wrong-select") : ""}
-                   >
-                     <option value="">...</option>
-                     {currentTask.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                   </select>
-                   <span className="verb-text" style={{marginLeft: "10px"}}>{currentTask.verb}</span>
+                  >
+                    <option value="">---</option>
+                    {currentTask.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <span className="verb-text">{currentTask.verb}</span>
                 </div>
               )}
 
               {currentTask.type === "image-choice" && (
-                <div className="quiz-options">
+                <div className="quiz-options-horizontal">
                   {currentTask.options.map((opt, idx) => (
                     <button 
                       key={idx} 
-                      className={getOptionClass(opt, idx)} 
+                      className={getOptionClass(idx)} 
                       onClick={() => !quizLocked && setSelectedOption(idx)}
+                      disabled={quizLocked}
                     >
                       {opt}
                     </button>
@@ -231,7 +304,7 @@ function KlassExercise() {
               )}
 
               {currentTask.type === "dropdown-fill" && (
-                <div className="dropdown-container-klass">
+                <div className="dropdown-fill-container">
                   {currentTask.sentences.map((sentence, sIdx) => {
                     const parts = sentence.text.split("___");
                     return (
@@ -241,11 +314,12 @@ function KlassExercise() {
                             <span>{part}</span>
                             {pIdx < parts.length - 1 && (
                               <select 
-                                onChange={(e) => !quizLocked && setDropdownAnswers(p => ({...p, [`${sIdx}-${pIdx}`]: e.target.value}))}
+                                onChange={(e) => !quizLocked && setDropdownAnswers(prev => ({...prev, [`${sIdx}-${pIdx}`]: e.target.value}))}
                                 disabled={quizLocked}
                                 className={quizLocked ? "locked-select" : ""}
+                                value={dropdownAnswers[`${sIdx}-${pIdx}`] || ""}
                               >
-                                <option value="">...</option>
+                                <option value="">---</option>
                                 {currentTask.allOptions.map(o => <option key={o} value={o}>{o}</option>)}
                               </select>
                             )}
@@ -254,26 +328,21 @@ function KlassExercise() {
                       </div>
                     );
                   })}
-                  {!quizLocked && (
-                    <button className="check-btn-manual" onClick={() => {
-                      let allRight = true;
-                      currentTask.sentences.forEach((s, sIdx) => {
-                        s.correct.forEach((corrAns, pIdx) => {
-                          if (dropdownAnswers[`${sIdx}-${pIdx}`] !== corrAns) allRight = false;
-                        });
-                      });
-                      checkAndLockAnswer(allRight);
-                    }}>Текшерүү</button>
-                  )}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="controls-row">
-            <button className="prev-btn" onClick={handlePrevStep} disabled={currentStep === 0}>Артка</button>
-            <button className="next-btn" onClick={handleNextStep}>
-              {currentStep === quizData.length - 1 ? "Аягы" : "Кийинки"}
+          <div className="nav-controls">
+            <button className="nav-btn back" onClick={handlePrevStep} disabled={currentStep === 0}>
+              Артка
+            </button>
+            <button 
+              className="nav-btn next" 
+              onClick={handleNextStep}
+              disabled={!quizLocked}
+            >
+              {currentStep === totalSteps - 1 ? "Аяктоо" : "Кийинки"}
             </button>
           </div>
 

@@ -181,13 +181,12 @@
 .kz-final-line-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Распределяет диалог Аксакала и блок учителя по краям */
+  justify-content: space-between; 
   align-items: flex-end;
   width: 100%;
   gap: 20px;
 }
 
-/* Общий стиль для пар "Текст + Картинка" в этом ряду */
 .kz-final-item {
   display: flex;
   flex-direction: row;
@@ -195,7 +194,6 @@
   gap: 15px;
 }
 
-/* Ограничение ширины пузырей, чтобы они не вытесняли картинки */
 .kz-final-item .kz-bubble {
   max-width: 250px;
   margin-bottom: 0 !important;
@@ -203,6 +201,6 @@
 
 /* Размер картинок в финальном ряду */
 .kz-img-vsm {
-  height: 330px; /* Можно немного уменьшить, если не влезает в одну строку */
+  height: 330px; 
   object-fit: contain;
 }

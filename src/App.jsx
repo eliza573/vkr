@@ -12,7 +12,7 @@ import TanyshuuExercise from "./pages/3tema/TanyshuuExercise";
 import Taanyshuu from "./pages/3tema/Taanyshuu";
 import FamilyExercise from "./pages/6tema/FamilyExercise";
 import Koshtoshuu from "./pages/2tema/Koshtoshuu";
-import Kim from "./pages/31tema/kim";
+import Kim from "./pages/31tema/Kim";
 import KimExercise from "./pages/31tema/KimExercise";
 import Oku from "./pages/41tema/Oku";
 import OkuExercise from "./pages/41tema/OkuExercise";

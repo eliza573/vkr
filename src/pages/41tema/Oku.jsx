@@ -21,16 +21,57 @@ import eraserImg from "../../assets/31tema/eraser.png";
 import brushImg from "../../assets/31tema/brush.png";
 import scissorsImg from "../../assets/31tema/scissors.png";
 
+let currentAudio = null;
+let currentFile = null;
+
+const playAudio = (fileName) => {
+  if (!fileName) return;
+
+  // если нажали ту же кнопку — СТОП
+  if (currentAudio && currentFile === fileName) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentFile = null;
+    return;
+  }
+
+  // если другой звук — остановить старый
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // новый звук
+  const audio = new Audio(`/audio/${fileName}`);
+  currentAudio = audio;
+  currentFile = fileName;
+
+  audio.play().catch(err => console.log("Ошибка:", err));
+
+  audio.onended = () => {
+    currentAudio = null;
+    currentFile = null;
+  };
+};
+
+  const AudioIcon = ({ file }) => (
+    <span className="audio-icon" onClick={() => playAudio(file)}>
+      🔊
+    </span>
+  );
+
+
 const Okuu = () => {
   // Слова для правого сайдбара
   const wordsForRightMenu = [
-    { kg: "Окуу куралдары", ru: "Учебные принадлежности" },
-    { kg: "Китеп", ru: "Книга" },
-    { kg: "Дептер", ru: "Тетрадь" },
-    { kg: "Калем", ru: "Карандаш" },
-    { kg: "Өчүргүч", ru: "Стирательная резинка" },
-    { kg: "Сызгыч", ru: "Линейка" },
-    { kg: "Жон баштык", ru: "Рюкзак" },
+    { kg: "Окуу куралдары", ru: "Учебные принадлежности", audio: "Okuukuraldary.mp3" },
+    { kg: "Китеп", ru: "Книга", audio: "Kitep.mp3" },
+    { kg: "Дептер", ru: "Тетрадь", audio: "Menin.mp3" },
+    { kg: "Калем", ru: "Карандаш", audio: "Kalem1.mp3" },
+    { kg: "Өчүргүч", ru: "Ластик", audio: "Ochurguch.mp3" },
+    { kg: "Сызгыч", ru: "Линейка", audio: "Syzgych.mp3" },
+    { kg: "Жон баштык", ru: "Рюкзак", audio: "Jonbashtyk.mp3" },
   ];
 
   // Данные предметов для кругового расположения
@@ -97,7 +138,10 @@ const Okuu = () => {
           </div>
         </main>
 
-        <RightSidebar words={wordsForRightMenu} exerciseLink="/okuu-exercise" />
+        <RightSidebar words={wordsForRightMenu} exerciseLink="/okuu-exercise"
+                    onWordClick={(audioName) => playAudio(audioName)}
+
+        />
       </div>
     </div>
   );

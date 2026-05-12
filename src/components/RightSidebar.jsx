@@ -25,7 +25,7 @@ const RightSidebar = ({ words, exerciseLink, onWordClick }) => {
               <div className="word-text">
                 <span className="kg-word">{item.kg}</span>
                 <span className="dash"> - </span>
-                <span className="ruu-word">{item.ru}</span>
+                <span className="ru-word">{item.ru}</span>
               </div>
             </div>
           ))}

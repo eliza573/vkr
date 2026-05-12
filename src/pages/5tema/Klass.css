@@ -42,7 +42,7 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-width: 700px; /* Увеличенная ширина блоков */
+  max-width: 700px; 
 }
 
 .kl-bubble-row {
@@ -70,7 +70,7 @@
 }
 
 .kl-item-text-box {
-  flex: 1; /* Текст занимает всё свободное пространство */
+  flex: 1; 
   background-color: #e1f5fe;
   border-radius: 35px;
   padding: 12px 25px;

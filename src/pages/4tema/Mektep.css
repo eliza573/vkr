@@ -43,7 +43,7 @@
   gap: 5px;
   width: 100%;
   max-width: 500px;
-  max-width: 650px; /*ширина текстовых блоков */
+  max-width: 650px; 
 }
 
 .mt-intro-bubble {
@@ -73,7 +73,7 @@
 .mt-card-media {
   display: flex;
   justify-content: center;
-  margin-right: 0; /* Убираем лишние отступы справа */
+  margin-right: 0; 
 }
 
 .mt-card-body {
@@ -92,15 +92,10 @@
 .mt-card-text {
   flex: 1;
   
-  padding-right: 10px; /* Отступ перед кнопкой звука */
+  padding-right: 10px; 
 }
 
-/* Индивидуальные размеры для фотографий (согласно макету) 
-.mt-card-media {
-  flex: 0 0 120px; 
-  display: flex;
-  justify-content: center;
-}*/
+
 
 .mt-card-media img {
   object-fit: contain;

@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// pages/6tema/FamilyExercise.jsx
+import React, { useState } from 'react';
+import ExerciseTemplate from '../../components/ExerciseTemplate';
 import "./FamilyExercise.css";
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
-import Character from "../../components/Character";
 
 const FamilyExercise = () => {
-  const navigate = useNavigate();
-  const [characterState, setCharacterState] = useState("idle");
-  const [step, setStep] = useState(1);
-
   // Состояния для упражнений
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [selectedRight, setSelectedRight] = useState(null);
-  const [matchedPairs, setMatchedPairs] = useState([]);
-  const [quizLocked, setQuizLocked] = useState(false);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-
+  const [choiceAnswers, setChoiceAnswers] = useState({});
+  const [choiceLocked, setChoiceLocked] = useState({});
+  
   const [spellingWords, setSpellingWords] = useState({
     word1: ["Ч", "О", "", "А", "Т", "А"],
     word2: ["Т", "А", "", "Т", "А"],
@@ -25,6 +15,16 @@ const FamilyExercise = () => {
     word4: ["К", "А", "", "Ы", "Н", "Д", "А", "Ш"],
     word5: ["", "Ж", "Е"]
   });
+  const [spellingLocked, setSpellingLocked] = useState(false);
+  
+  const [inlineAnswers, setInlineAnswers] = useState({});
+  const [inlineLocked, setInlineLocked] = useState({});
+  const [openSelect, setOpenSelect] = useState(null);
+  
+  const [selectedLeft, setSelectedLeft] = useState(null);
+  const [selectedRight, setSelectedRight] = useState(null);
+  const [matchedPairs, setMatchedPairs] = useState([]);
+  const [matchingLocked, setMatchingLocked] = useState(false);
 
   const correctSpellingState = {
     word1: ["Ч", "О", "Ң", "А", "Т", "А"],
@@ -34,9 +34,9 @@ const FamilyExercise = () => {
     word5: ["Э", "Ж", "Е"]
   };
 
-  const quizData = [
+  // Данные упражнений
+  const exercises = [
     {
-      id: 1,
       type: "choice",
       question: "Бул ким?",
       translation: "Кто это?",
@@ -45,7 +45,6 @@ const FamilyExercise = () => {
       correct: "Ата"
     },
     {
-      id: 2,
       type: "choice",
       question: "Бул ким?",
       translation: "Кто это?",
@@ -54,15 +53,12 @@ const FamilyExercise = () => {
       correct: "Чоң апа"
     },
     {
-      id: 3,
       type: "spelling-grid",
       question: "Сөздөрдү толуктагыла",
       translation: "Дополните слова",
-      letters: ["Ң", "Я", "Е", "Р", "Э"],
-      correctState: correctSpellingState
+      letters: ["Ң", "Я", "Е", "Р", "Э"]
     },
     {
-      id: 4,
       type: "choice",
       question: "Булар кимдер?",
       translation: "Кто они?",
@@ -71,7 +67,6 @@ const FamilyExercise = () => {
       correct: "бир туугандар"
     },
     {
-      id: 5,
       type: "choice",
       question: "Кимдерди коруп турасын?",
       translation: "Кого ты видишь?",
@@ -80,7 +75,6 @@ const FamilyExercise = () => {
       correct: "Апасы, кызы"
     },
     {
-      id: 6,
       type: "inline-select",
       question: "Биздин уй-булоодо ___ адам бар.",
       translation: "В нашей семье ___ человек.",
@@ -89,7 +83,6 @@ const FamilyExercise = () => {
       correct: "9"
     },
     {
-      id: 7,
       type: "matching-translation",
       question: "Котормосун туура тап",
       translation: "Найди правильный перевод",
@@ -100,7 +93,6 @@ const FamilyExercise = () => {
       ]
     },
     {
-      id: 8,
       type: "inline-select",
       question: "Бул менин ___ .",
       translation: "Это мой ___.",
@@ -109,7 +101,6 @@ const FamilyExercise = () => {
       correct: "байкем"
     },
     {
-      id: 9,
       type: "inline-select",
       question: "Сенин апаңдын апасы — ___",
       translation: "Мама твоей мамы — кто?",
@@ -118,7 +109,6 @@ const FamilyExercise = () => {
       correct: "таене"
     },
     {
-      id: 10,
       type: "inline-select",
       question: "Сенин атаңдын апасы — ___",
       translation: "Мама твоей папы — кто?",
@@ -128,73 +118,16 @@ const FamilyExercise = () => {
     }
   ];
 
-  const currentTask = quizData[step - 1];
-  const totalSteps = quizData.length;
-
-  const triggerCharacter = (state) => {
-    setCharacterState(state);
-    setTimeout(() => setCharacterState("idle"), 1500);
+  // Обработчики
+  const handleChoiceClick = (idx, option) => {
+    if (!choiceLocked[idx]) {
+      setChoiceAnswers(prev => ({ ...prev, [idx]: option }));
+      setChoiceLocked(prev => ({ ...prev, [idx]: true }));
+    }
   };
 
-  // Автоматическая проверка для choice
-  useEffect(() => {
-    if (!quizLocked && selectedOption && (currentTask?.type === "choice")) {
-      const isCorrect = selectedOption === currentTask.correct;
-      triggerCharacter(isCorrect ? "success" : "error");
-      setQuizLocked(true);
-    }
-  }, [selectedOption, currentTask, quizLocked]);
-
-  // Автоматическая проверка для inline-select
-  useEffect(() => {
-    if (!quizLocked && selectedOption && (currentTask?.type === "inline-select")) {
-      const isCorrect = selectedOption === currentTask.correct;
-      triggerCharacter(isCorrect ? "success" : "error");
-      setQuizLocked(true);
-    }
-  }, [selectedOption, currentTask, quizLocked]);
-
-  // Автоматическая проверка для spelling-grid
-  useEffect(() => {
-    if (!quizLocked && currentTask?.type === "spelling-grid") {
-      const allFilled = Object.values(spellingWords).every(word => word.every(char => char !== ""));
-      if (allFilled) {
-        const isCorrect = JSON.stringify(spellingWords) === JSON.stringify(currentTask.correctState);
-        triggerCharacter(isCorrect ? "success" : "error");
-        setQuizLocked(true);
-      }
-    }
-  }, [spellingWords, currentTask, quizLocked]);
-
-  // Автоматическая проверка для matching-translation
-  useEffect(() => {
-    if (!quizLocked && currentTask?.type === "matching-translation") {
-      if (matchedPairs.length === currentTask.pairs.length) {
-        triggerCharacter(true);
-        setQuizLocked(true);
-      }
-    }
-  }, [matchedPairs, currentTask, quizLocked]);
-
-  // Логика для matching (клик по парам)
-  useEffect(() => {
-    if (selectedLeft && selectedRight && !quizLocked && currentTask?.type === "matching-translation") {
-      const isMatch = currentTask.pairs.some(p => p.left === selectedLeft && p.right === selectedRight);
-      if (isMatch) {
-        setMatchedPairs(prev => [...prev, selectedLeft]);
-        triggerCharacter("success");
-        setSelectedLeft(null);
-        setSelectedRight(null);
-      } else {
-        triggerCharacter("error");
-        setSelectedLeft(null);
-        setSelectedRight(null);
-      }
-    }
-  }, [selectedLeft, selectedRight, currentTask, quizLocked]);
-
   const handleLetterClick = (letter) => {
-    if (quizLocked) return;
+    if (spellingLocked) return;
     setSpellingWords(prev => {
       const newWords = { ...prev };
       for (let key in newWords) {
@@ -210,67 +143,225 @@ const FamilyExercise = () => {
     });
   };
 
-  const handleSelectChange = (val) => {
-    if (quizLocked) return;
-    setSelectedOption(val);
-  };
-
-  const handleDragStart = (e, text) => e.dataTransfer.setData("text", text);
-
-  const handleDrop6 = (e, id) => {
-    e.preventDefault();
-    if (quizLocked) return;
-    const droppedText = e.dataTransfer.getData("text");
-    const item = currentTask.pairs?.find(d => d.id === id);
-    const isCorrect = droppedText === item?.correct;
-    if (isCorrect) {
-      setMatchedPairs(prev => [...prev, id]);
-      triggerCharacter("success");
-    } else {
-      triggerCharacter("error");
+  const handleInlineSelect = (idx, value) => {
+    if (!inlineLocked[idx]) {
+      setInlineAnswers(prev => ({ ...prev, [idx]: value }));
+      setInlineLocked(prev => ({ ...prev, [idx]: true }));
+      setOpenSelect(null);
     }
   };
 
-  const isComplete = () => {
-    if (currentTask?.type === "choice") return selectedOption !== null;
-    if (currentTask?.type === "inline-select") return selectedOption !== null;
-    if (currentTask?.type === "spelling-grid") {
-      return Object.values(spellingWords).every(word => word.every(char => char !== ""));
+  const handleLeftClick = (leftText, stepIdx) => {
+    if (!matchingLocked && !matchedPairs.includes(leftText)) {
+      setSelectedLeft(leftText);
     }
-    if (currentTask?.type === "matching-translation") {
-      return matchedPairs.length === currentTask.pairs.length;
-    }
-    return false;
   };
 
-  const getOptionClass = (option) => {
-    if (!quizLocked) return selectedOption === option ? "quiz-option selected" : "quiz-option";
-    if (option === currentTask?.correct) return "quiz-option correct-answer";
-    if (selectedOption === option && option !== currentTask?.correct) return "quiz-option wrong-answer";
+  const handleRightClick = (rightText, stepIdx, pairs) => {
+    if (!matchingLocked) {
+      setSelectedRight(rightText);
+      
+      if (selectedLeft) {
+        const isMatch = pairs.some(p => p.left === selectedLeft && p.right === rightText);
+        if (isMatch) {
+          setMatchedPairs(prev => [...prev, selectedLeft]);
+          setSelectedLeft(null);
+          setSelectedRight(null);
+        } else {
+          setSelectedLeft(null);
+          setSelectedRight(null);
+        }
+      }
+    }
+  };
+
+  const getChoiceClass = (idx, option, correct) => {
+    const selected = choiceAnswers[idx];
+    const locked = choiceLocked[idx];
+    
+    if (!selected || !locked) {
+      return selected === option ? "quiz-option selected" : "quiz-option";
+    }
+    if (option === correct) return "quiz-option correct-answer";
+    if (selected === option) return "quiz-option wrong-answer";
     return "quiz-option disabled";
   };
 
-  const getSelectClass = () => {
-    if (!quizLocked) return "select-trigger";
-    if (selectedOption === currentTask?.correct) return "select-trigger correct-select";
-    if (selectedOption && selectedOption !== currentTask?.correct) return "select-trigger wrong-select";
+  const getSpellingCellClass = (wordKey, index, char) => {
+    if (!spellingLocked) {
+      return char === "" ? "spelling-cell empty" : "spelling-cell";
+    }
+    const correctChar = correctSpellingState[wordKey][index];
+    if (char === "") return "spelling-cell empty";
+    return char === correctChar ? "spelling-cell correct-cell" : "spelling-cell wrong-cell";
+  };
+
+  const getInlineSelectClass = (idx, selected, correct) => {
+    if (!inlineLocked[idx]) return "select-trigger";
+    if (selected === correct) return "select-trigger correct-select";
+    if (selected && selected !== correct) return "select-trigger wrong-select";
     return "select-trigger";
   };
 
-  const getSpellingCellClass = (wordKey, index, char) => {
-    if (!quizLocked) return char === "" ? "spelling-cell empty" : "spelling-cell filled";
-    const isCorrectChar = char === currentTask?.correctState[wordKey][index];
-    if (char === "") return "spelling-cell empty";
-    return isCorrectChar ? "spelling-cell correct-cell" : "spelling-cell wrong-cell";
+  const isSpellingComplete = () => {
+    return Object.values(spellingWords).every(word => word.every(char => char !== ""));
   };
 
-  const resetStep = () => {
-    setSelectedOption(null);
-    setSelectedLeft(null);
-    setSelectedRight(null);
-    setMatchedPairs([]);
-    setQuizLocked(false);
-    setIsSelectOpen(false);
+  // Создание шагов
+  const steps = exercises.map((ex, idx) => {
+    let checkAnswerFn = () => null;
+    
+    if (ex.type === "choice") {
+      checkAnswerFn = () => {
+        const answer = choiceAnswers[idx];
+        if (!answer) return null;
+        return answer === ex.correct;
+      };
+    } else if (ex.type === "spelling-grid") {
+      checkAnswerFn = () => {
+        if (!isSpellingComplete()) return null;
+        const isCorrect = JSON.stringify(spellingWords) === JSON.stringify(correctSpellingState);
+        if (isCorrect && !spellingLocked) setSpellingLocked(true);
+        return isCorrect;
+      };
+    } else if (ex.type === "inline-select") {
+      checkAnswerFn = () => {
+        const answer = inlineAnswers[idx];
+        if (!answer) return null;
+        return answer === ex.correct;
+      };
+    } else if (ex.type === "matching-translation") {
+      checkAnswerFn = () => {
+        if (matchedPairs.length !== ex.pairs.length) return null;
+        if (!matchingLocked) setMatchingLocked(true);
+        return true;
+      };
+    }
+    
+    return {
+      banner: ex.type === "choice" ? "Туура жоопту танда" :
+             ex.type === "spelling-grid" ? "Сөздөрдү толуктагыла" :
+             ex.type === "inline-select" ? "Сүйлөмдү толукта" :
+             "Котормосун туура тап",
+      content: (
+        <div className="step-content">
+          {ex.img && (
+            <div className="task-image-container">
+              <img src={`/src/assets/6tema/${ex.img}`} className="task-img-large" alt="task" />
+            </div>
+          )}
+          
+          <div className="question-text">
+            <p className="question-kg">{ex.question}</p>
+            <p className="question-ru">{ex.translation}</p>
+          </div>
+
+          {ex.type === "choice" && (
+            <div className="quiz-options-horizontal">
+              {ex.options.map((opt, optIdx) => (
+                <button 
+                  key={optIdx}
+                  className={getChoiceClass(idx, opt, ex.correct)}
+                  onClick={() => handleChoiceClick(idx, opt)}
+                  disabled={choiceLocked[idx]}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {ex.type === "spelling-grid" && (
+            <div className="spelling-container">
+              {Object.keys(spellingWords).map((wordKey, wordIdx) => (
+                <div key={wordIdx} className="spelling-row">
+                  {spellingWords[wordKey].map((char, charIdx) => (
+                    <div key={charIdx} className={getSpellingCellClass(wordKey, charIdx, char)}>
+                      {char}
+                    </div>
+                  ))}
+                </div>
+              ))}
+              <div className="letters-pool">
+                {ex.letters.map((l, i) => (
+                  <button key={i} className="letter-btn" onClick={() => handleLetterClick(l)} disabled={spellingLocked}>
+                    {l}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {ex.type === "inline-select" && (
+            <div className="inline-select-container">
+              <div className="sentence-bubble">
+                <p className="sentence-text">
+                  {ex.question.split("___")[0]}
+                  <span className="custom-select-wrapper">
+                    <button 
+                      className={getInlineSelectClass(idx, inlineAnswers[idx], ex.correct)}
+                      onClick={() => !inlineLocked[idx] && setOpenSelect(openSelect === idx ? null : idx)}
+                      disabled={inlineLocked[idx]}
+                    >
+                      {inlineAnswers[idx] || "тандаңыз"}
+                    </button>
+                    {!inlineLocked[idx] && openSelect === idx && (
+                      <div className="select-options-list">
+                        {ex.options.map(opt => (
+                          <div 
+                            key={opt} 
+                            className="select-item"
+                            onClick={() => handleInlineSelect(idx, opt)}
+                          >
+                            {opt}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </span>
+                  {ex.question.split("___")[1]}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {ex.type === "matching-translation" && (
+            <div className="matching-container">
+              <div className="matching-column">
+                {ex.pairs.map((p, i) => (
+                  <button 
+                    key={i} 
+                    className={`match-item kg ${selectedLeft === p.left ? 'active' : ''} ${matchedPairs.includes(p.left) ? 'matched' : ''}`}
+                    onClick={() => handleLeftClick(p.left, idx)}
+                    disabled={matchingLocked || matchedPairs.includes(p.left)}
+                  >
+                    {p.left}
+                  </button>
+                ))}
+              </div>
+              <div className="matching-column">
+                {[...ex.pairs].reverse().map((p, i) => (
+                  <button 
+                    key={i} 
+                    className={`match-item ru ${selectedRight === p.right ? 'active' : ''} ${matchedPairs.includes(ex.pairs.find(pair => pair.right === p.right)?.left) ? 'matched' : ''}`}
+                    onClick={() => handleRightClick(p.right, idx, ex.pairs)}
+                    disabled={matchingLocked}
+                  >
+                    {p.right}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ),
+      checkAnswer: checkAnswerFn
+    };
+  });
+
+  const handleReset = () => {
+    setChoiceAnswers({});
+    setChoiceLocked({});
     setSpellingWords({
       word1: ["Ч", "О", "", "А", "Т", "А"],
       word2: ["Т", "А", "", "Т", "А"],
@@ -278,209 +369,24 @@ const FamilyExercise = () => {
       word4: ["К", "А", "", "Ы", "Н", "Д", "А", "Ш"],
       word5: ["", "Ж", "Е"]
     });
+    setSpellingLocked(false);
+    setInlineAnswers({});
+    setInlineLocked({});
+    setOpenSelect(null);
+    setSelectedLeft(null);
+    setSelectedRight(null);
+    setMatchedPairs([]);
+    setMatchingLocked(false);
   };
 
-  if (step === totalSteps + 1) {
-    return (
-      <div className="family-ex-page">
-        <Navbar />
-        <div className="family-ex-layout">
-          <div className="sidebar-wrapper">
-            <Sidebar />
-          </div>
-          <main className="family-ex-content">
-            <div className="finish-screen">
-              <div className="finish-icon">🏆</div>
-              <h2>Азаматсың!</h2>
-              <p>Бардык көнүгүүлөрдү ийгиликтүү аяктадың!</p>
-              <div className="finish-buttons">
-                <button className="btn-retry" onClick={() => { setStep(1); resetStep(); }}>Кайра аткаруу</button>
-                <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
-              </div>
-            </div>
-            <Character state={characterState} />
-          </main>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="family-ex-page">
-      <Navbar />
-      <div className="family-ex-layout">
-        <div className="sidebar-wrapper">
-          <Sidebar />
-        </div>
-        <main className="family-ex-content">
-          <h2 className="ex1-title">Үй-бүлө / көнүгүү</h2>
-
-          <div className="progress-container">
-            <div className="progress-fill" style={{ width: `${(step / totalSteps) * 100}%` }}></div>
-          </div>
-
-          <div className="ex-header-banner">
-            {currentTask?.type === "choice" && "Туура жоопту танда"}
-            {currentTask?.type === "spelling-grid" && "Сөздөрдү толуктагыла"}
-            {currentTask?.type === "inline-select" && "Сүйлөмдү толукта"}
-            {currentTask?.type === "matching-translation" && "Котормосун туура тап"}
-          </div>
-
-          <div className="exercise-scroll-container">
-            <div className="step-content">
-              {/* Изображение */}
-              {currentTask?.img && (
-                <div className="task-image-container">
-                  <img src={`/src/assets/6tema/${currentTask.img}`} className="task-img-large" alt="task" />
-                </div>
-              )}
-
-              {/* Текст вопроса */}
-              <div className="question-text">
-                <p className="question-kg">{currentTask?.question}</p>
-                <p className="question-ru">{currentTask?.translation}</p>
-              </div>
-
-              {/* CHOICE тип */}
-              {currentTask?.type === "choice" && (
-                <div className="quiz-options-horizontal">
-                  {currentTask.options.map((opt, idx) => (
-                    <button 
-                      key={idx}
-                      className={getOptionClass(opt)}
-                      onClick={() => !quizLocked && setSelectedOption(opt)}
-                      disabled={quizLocked}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* SPELLING GRID тип */}
-              {currentTask?.type === "spelling-grid" && (
-                <div className="spelling-container">
-                  {Object.keys(spellingWords).map((wordKey, idx) => (
-                    <div key={idx} className="spelling-row">
-                      {spellingWords[wordKey].map((char, charIdx) => (
-                        <div key={charIdx} className={getSpellingCellClass(wordKey, charIdx, char)}>
-                          {char}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                  <div className="letters-pool">
-                    {currentTask.letters.map((l, i) => (
-                      <button key={i} className="letter-btn" onClick={() => handleLetterClick(l)} disabled={quizLocked}>
-                        {l}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* INLINE-SELECT тип */}
-              {currentTask?.type === "inline-select" && (
-                <div className="inline-select-container">
-                  <div className="sentence-bubble">
-                    <p className="sentence-text">
-                      {currentTask.question.split("___")[0]}
-                      <span className="custom-select-wrapper">
-                        <button 
-                          className={getSelectClass()}
-                          onClick={() => !quizLocked && setIsSelectOpen(!isSelectOpen)}
-                          disabled={quizLocked}
-                        >
-                          {selectedOption || "тандаңыз"}
-                        </button>
-                        {!quizLocked && isSelectOpen && (
-                          <div className="select-options-list">
-                            {currentTask.options.map(opt => (
-                              <div 
-                                key={opt} 
-                                className="select-item"
-                                onClick={() => {
-                                  handleSelectChange(opt);
-                                  setIsSelectOpen(false);
-                                }}
-                              >
-                                {opt}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </span>
-                      {currentTask.question.split("___")[1]}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* MATCHING TRANSLATION тип */}
-              {currentTask?.type === "matching-translation" && (
-                <div className="matching-container">
-                  <div className="matching-column">
-                    {currentTask.pairs.map((p, i) => (
-                      <button 
-                        key={i} 
-                        className={`match-item kg ${selectedLeft === p.left ? 'active' : ''} ${matchedPairs.includes(p.left) ? 'matched' : ''}`}
-                        onClick={() => !quizLocked && !matchedPairs.includes(p.left) && setSelectedLeft(p.left)}
-                        disabled={quizLocked}
-                      >
-                        {p.left}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="matching-column">
-                    {[...currentTask.pairs].reverse().map((p, i) => (
-                      <button 
-                        key={i} 
-                        className={`match-item ru ${selectedRight === p.right ? 'active' : ''} ${matchedPairs.includes(currentTask.pairs.find(pair => pair.right === p.right)?.left) ? 'matched' : ''}`}
-                        onClick={() => !quizLocked && setSelectedRight(p.right)}
-                        disabled={quizLocked}
-                      >
-                        {p.right}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="nav-controls">
-            <button 
-              className="nav-btn back" 
-              onClick={() => {
-                if (step > 1) {
-                  setStep(step - 1);
-                  resetStep();
-                }
-              }} 
-              disabled={step === 1}
-            >
-              Артка
-            </button>
-            <button 
-              className="nav-btn next" 
-              onClick={() => {
-                if (step < totalSteps) {
-                  setStep(step + 1);
-                  resetStep();
-                } else {
-                  setStep(totalSteps + 1);
-                }
-              }}
-              disabled={!quizLocked && !isComplete()}
-            >
-              {step === totalSteps ? "Аяктоо" : "Кийинки"}
-            </button>
-          </div>
-
-          <Character state={characterState} />
-        </main>
-      </div>
-    </div>
+    <ExerciseTemplate
+      title="Үй-бүлө / көнүгүү"
+      steps={steps}
+      totalSteps={10}
+      onReset={handleReset}
+      containerClass="family-exercise"
+    />
   );
 };
 

@@ -29,7 +29,7 @@
 }
 
 .word-item-card {
-  background-color: #d1e9f0; /* Светло-голубой как на фото */
+  background-color: #9fa2f2; /* Светло-голубой как на фото */
   border-radius: 15px;
   padding: 12px 15px;
   display: flex;
@@ -39,7 +39,7 @@
 }
 
 .audio-icon-btn {
-  background-color: #90cada;
+  background-color: #6669d2;
   border: none;
   border-radius: 50%;
   width: 30px;
@@ -64,7 +64,7 @@ font-size: 20px;
 
 .exercise-nav-btn {
   margin-top: 5px;
-  background-color: #d1e9f0;
+  background-color: #9fa2f2;
   border: none;
   border-radius: 15px;
   padding: 5px;

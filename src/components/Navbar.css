@@ -1,9 +1,9 @@
 .navbar{
 display:flex;
-height: 60px;
+height: 40px;
 justify-content:space-between;
 align-items:center;
-background:#8dc9d8;
+background:#6669d2;
 padding:15px 30px;
 }
 
@@ -16,7 +16,7 @@ margin-left:15px;
 padding:18px 25px;
 border-radius:8px;
 border:1px solid gray;
-background:#d9eef4;
+background:#9fa2f2;
 cursor:pointer;
 }
 

@@ -1,0 +1,527 @@
+/* TusExercise.css - все классы имеют префикс tus-ex- для избежания конфликтов */
+
+.tus-ex-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+}
+
+.tus-ex-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tus-ex-sidebar-wrapper {
+  flex-shrink: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tus-ex-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.tus-ex-title {
+  font-size: 24px;
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+  flex-shrink: 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tus-ex-progress-container {
+  width: 80%;
+  max-width: 500px;
+  height: 12px;
+  background-color: #e0f9e9;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.tus-ex-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  transition: width 0.4s ease;
+}
+
+.tus-ex-header-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 8px 30px;
+  border-radius: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: white;
+  flex-shrink: 0;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.tus-ex-scroll-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.tus-ex-step-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 0;
+  padding: 10px;
+}
+
+/* Упражнение 1: Кайсыл тамга жок */
+.tus-ex-missing-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.tus-ex-missing-card {
+  background: white;
+  padding: 25px 35px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.tus-ex-missing-card:hover {
+  transform: translateY(-5px);
+}
+
+.tus-ex-word-display {
+  margin-bottom: 25px;
+}
+
+.tus-ex-word-text {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2c3e50;
+  letter-spacing: 5px;
+  background: #f0f0f0;
+  padding: 10px 20px;
+  border-radius: 15px;
+  display: inline-block;
+}
+
+.tus-ex-options-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.tus-ex-missing-option {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #d1f3fb;
+  color: #2c3e50;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tus-ex-missing-option:hover:not(.tus-ex-missing-disabled) {
+  transform: scale(1.1);
+  background: #a8e6cf;
+}
+
+.tus-ex-missing-correct {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+.tus-ex-missing-wrong {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+.tus-ex-missing-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.tus-ex-feedback-icon {
+  margin-top: 15px;
+  font-size: 24px;
+}
+
+/* Упражнение 2: Matching Colors */
+.tus-ex-matching-area {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.tus-ex-colors-column {
+  background: white;
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  min-width: 200px;
+}
+
+.tus-ex-colors-column h4 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 18px;
+  border-bottom: 2px solid #27ae60;
+  padding-bottom: 10px;
+}
+
+.tus-ex-color-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.tus-ex-color-item:hover:not(.tus-ex-color-matched) {
+  transform: translateX(5px);
+  background: #e8f5e9;
+}
+
+.tus-ex-color-active {
+  background: #fff3e0;
+  box-shadow: 0 0 0 2px #ff9800;
+  transform: scale(1.02);
+}
+
+.tus-ex-color-matched {
+  opacity: 0.5;
+  cursor: default;
+  background: #c8e6c9;
+  text-decoration: line-through;
+}
+
+.tus-ex-color-square {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.tus-ex-color-name {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.tus-ex-match-check {
+  font-size: 24px;
+  color: #4caf50;
+}
+
+/* Общие стили для изображений */
+.tus-ex-task-image-container {
+  flex-shrink: 0;
+  margin-bottom: 20px;
+}
+
+.tus-ex-task-img-large {
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 15px;
+  background: white;
+  padding: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* Текст вопроса */
+.tus-ex-question-text {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.tus-ex-question-kg {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.tus-ex-question-ru {
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+/* Кнопки викторины */
+.tus-ex-quiz-options {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tus-ex-quiz-option {
+  min-width: 130px;
+  padding: 14px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  text-transform: lowercase;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.tus-ex-quiz-option:hover:not(.tus-ex-disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+.tus-ex-correct-answer {
+  background: #4caf50 !important;
+  color: white !important;
+  animation: tus-ex-pulse 0.5s ease;
+}
+
+.tus-ex-wrong-answer {
+  background: #f44336 !important;
+  color: white !important;
+  animation: tus-ex-shake 0.3s ease;
+}
+
+.tus-ex-disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Подсказка */
+.tus-ex-task-hint {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #fff9c4;
+  border-radius: 25px;
+  color: #f57f17;
+  font-size: 14px;
+}
+
+/* Навигация */
+.tus-ex-nav-controls {
+  display: flex;
+  gap: 50px;
+  margin-top: 15px;
+  padding: 10px 0;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.tus-ex-nav-btn {
+  padding: 10px 35px;
+  border-radius: 30px;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tus-ex-nav-back {
+  background-color: #ecf0f1;
+  color: #7f8c8d;
+}
+
+.tus-ex-nav-next {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  box-shadow: 0 2px 10px rgba(39, 174, 96, 0.3);
+}
+
+.tus-ex-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tus-ex-nav-btn:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+/* Финальный экран */
+.tus-ex-finish-screen {
+  background: white;
+  padding: 30px;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  text-align: center;
+  max-width: 450px;
+  margin: auto;
+  animation: tus-ex-scaleIn 0.5s ease;
+}
+
+.tus-ex-finish-icon {
+  font-size: 80px;
+  margin-bottom: 15px;
+  animation: tus-ex-bounce 0.5s ease;
+}
+
+.tus-ex-finish-screen h2 {
+  font-size: 32px;
+  color: #27ae60;
+  margin-bottom: 10px;
+}
+
+.tus-ex-finish-screen p {
+  font-size: 18px;
+  color: #7f8c8d;
+  margin: 5px 0;
+}
+
+.tus-ex-finish-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.tus-ex-btn-retry {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  padding: 12px 28px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.tus-ex-btn-home {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.tus-ex-btn-retry:hover, .tus-ex-btn-home:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Анимации */
+@keyframes tus-ex-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes tus-ex-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes tus-ex-scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tus-ex-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+  .tus-ex-layout {
+    flex-direction: column;
+  }
+  
+  .tus-ex-content {
+    padding: 10px;
+  }
+  
+  .tus-ex-title {
+    font-size: 18px;
+  }
+  
+  .tus-ex-header-banner {
+    font-size: 16px;
+    padding: 6px 20px;
+  }
+  
+  .tus-ex-missing-card {
+    padding: 15px 25px;
+  }
+  
+  .tus-ex-word-text {
+    font-size: 24px;
+  }
+  
+  .tus-ex-missing-option {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+  
+  .tus-ex-matching-area {
+    gap: 20px;
+  }
+  
+  .tus-ex-colors-column {
+    min-width: 150px;
+    padding: 15px;
+  }
+  
+  .tus-ex-color-square {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .tus-ex-color-name {
+    font-size: 14px;
+  }
+  
+  .tus-ex-quiz-option {
+    min-width: 100px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}

@@ -42,7 +42,7 @@
 }
 
 .topicCard {
-  background: #bfe2ec;
+  background: #6669d2;
   padding: 25px;
   border-radius: 15px;
   text-align: center;
@@ -54,7 +54,7 @@
 .topicCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  border-color: #8dc9d8;
+  border-color: #6669d2;
 }
 
 .topicCard img {

@@ -4,15 +4,58 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import RightSidebar from "../../components/RightSidebar";
 
+
+let currentAudio = null;
+let currentFile = null;
+
+const playAudio = (fileName) => {
+  if (!fileName) return;
+
+  // если нажали ту же кнопку — СТОП
+  if (currentAudio && currentFile === fileName) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentFile = null;
+    return;
+  }
+
+  // если другой звук — остановить старый
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // новый звук
+  const audio = new Audio(`/audio/${fileName}`);
+  currentAudio = audio;
+  currentFile = fileName;
+
+  audio.play().catch(err => console.log("Ошибка:", err));
+
+  audio.onended = () => {
+    currentAudio = null;
+    currentFile = null;
+  };
+};
+
+  const AudioIcon = ({ file }) => (
+    <span className="audio-icon" onClick={() => playAudio(file)}>
+      🔊
+    </span>
+  );
+
 const Taanyshuu = () => {
   const wordsForRightMenu = [
-    { kg: "менин", ru: "мой, моя, мое" }, { kg: "сенин", ru: "твой, твоя, твое" },
-    { kg: "сиздин", ru: "ваш, ваша, ваше" }, { kg: "анын", ru: "его, ее" },
-    { kg: "биздин", ru: "наш, наша, наши" }, { kg: "силердин", ru: "ваши" },
-    { kg: "сиздердин", ru: "ваши" }, { kg: "алардын", ru: "их" },
-    { kg: "ат", ru: "имя" }, { kg: "атым", ru: "мое имя" },
-    { kg: "окуучу", ru: "ученик (ца)" }, { kg: "мугалим", ru: "учитель" },
-    { kg: "Ким?", ru: "Кто?" },
+    { kg: "менин", ru: "мой, моя, мое", audio: "Menin.mp3" }, 
+    { kg: "сенин", ru: "твой, твоя, твое", audio: "Senin.mp3" },
+    { kg: "сиздин", ru: "ваш, ваша, ваше", audio: "Sizdin.mp3" }, 
+    { kg: "анын", ru: "его, ее", audio: "Anyn1.mp3" },
+    { kg: "биздин", ru: "наш, наша, наши", audio: "Bizdin.mp3" },
+    { kg: "алардын", ru: "их", audio: "Alardyn.mp3" },
+    { kg: "ат", ru: "имя", audio: "At.mp3" }, 
+    { kg: "Менин атым", ru: "мое имя", audio: "Meninatym.mp3" },
+    { kg: "Ким?", ru: "Кто?", audio: "Kim.mp3" },
    
   ];
 
@@ -135,6 +178,7 @@ const Taanyshuu = () => {
 <RightSidebar 
   words={wordsForRightMenu} 
   exerciseLink="/tany-exercise" 
+    onWordClick={(audioName) => playAudio(audioName)}
 />      </div>
     </div>
   );

@@ -17,6 +17,10 @@ import KimExercise from "./pages/31tema/KimExercise";
 import Oku from "./pages/41tema/Oku";
 import OkuExercise from "./pages/41tema/OkuExercise";
 import Kuz from "./pages/7tema/Kuz";
+import KoshtoshuuExercise from "./pages/2tema/KoshtoshuuExercise";
+import KuzExercise from "./pages/7tema/KuzExercise";
+import Tus from "./pages/61tema/Tus";
+import TusExercise from "./pages/61tema/TusExercise";
 
 
 function App() {
@@ -39,7 +43,12 @@ function App() {
       <Route path="/okuu" element={<Oku/>}/>
       <Route path="/okuu-exercise" element={<OkuExercise/>}/>
       <Route path="/kuz" element={<Kuz/>}/>
-      
+      <Route path="/kosh" element={<KoshtoshuuExercise/>}/>
+      <Route path="/kuz-exercise" element={<KuzExercise/>}/>
+      <Route path="/tuc" element={<Tus/>}/>
+            <Route path="/tus-exercise" element={<TusExercise/>}/>
+
+
 
 
 

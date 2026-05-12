@@ -1,99 +1,4 @@
-/* ГЛАВНЫЙ КОНТЕЙНЕР - ФИКСИРОВАННАЯ ВЫСОТА */
-.kim-ex-page {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #fff;
-}
-
-/* ЛЕЙАУТ: Sidebar + Контент */
-.kim-ex-layout {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-/* ОБЁРТКА ДЛЯ SIDEBAR - СКРОЛЛ РАЗРЕШЁН */
-.sidebar-wrapper {
-  flex-shrink: 0;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* ОСНОВНОЙ КОНТЕНТ - НЕ СКРОЛЛИТСЯ */
-.kim-ex-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2px 20px;
-  overflow: hidden;
-  min-height: 0;
-}
-
-/* ЗАГОЛОВОК */
-.ex1-title {
-  font-size: 24px;
-  margin: 0 0 2px 0;
-  color: #333;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-/* ПРОГРЕСС-БАР */
-.kim-progress-container {
-  width: 80%;
-  max-width: 500px;
-  height: 12px;
-  background-color: #e0f9e9;
-  border-radius: 10px;
-  margin-bottom: 5px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.kim-progress-fill {
-  height: 100%;
-  background-color: #4df38e;
-  transition: width 0.4s ease;
-}
-
-/* ЗАГОЛОВОК БАННЕР */
-.ex-header-banner {
-  background-color: #d1f3fb;
-  padding: 8px 30px;
-  border-radius: 40px;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #333;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-/* КОНТЕЙНЕР ДЛЯ УПРАЖНЕНИЯ - ОСНОВНОЙ, БЕЗ СКРОЛЛА */
-.exercise-scroll-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
-  width: 100%;
-  max-width: 1000px;
-}
-
-/* СОДЕРЖИМОЕ ШАГА - БЕЗ СКРОЛЛА */
-.step-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
-  padding: 2px;
-}
+/* KimExercise.css - специфические стили */
 
 /* --- СТИЛИ ДЛЯ ШАГА 1 (КАТЕГОРИИ) --- */
 .cat-header-row, .cat-zones-row {
@@ -111,7 +16,6 @@
   font-weight: bold;
   margin-bottom: 5px;
   font-size: 20px;
-
 }
 
 .cat-label.yellow { background-color: #f9f0b5; }
@@ -335,93 +239,38 @@ select {
   cursor: grabbing;
 }
 
-/* --- НАВИГАЦИЯ --- */
-.kim-nav-controls {
-  display: flex;
-  gap: 50px;
-  margin-top: 15px;
-  padding: 10px 0;
-  flex-shrink: 0;
-  justify-content: center;
-}
-
-.nav-btn {
-  padding: 10px 35px;
-  border-radius: 30px;
-  border: none;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.nav-btn.back {
-  background-color: #eee;
-  color: #777;
-}
-
-.nav-btn.next {
-  background-color: #d1f3fb;
-  color: #008eb3;
-}
-
-.nav-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.nav-btn:hover:not(:disabled) {
-  transform: scale(1.02);
-}
-
-/* --- ФИНАЛЬНЫЙ ЭКРАН --- */
-.finish-screen {
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  text-align: center;
-  max-width: 450px;
-  margin: auto;
-  animation: scaleIn 0.5s ease;
-}
-
-.finish-icon {
-  font-size: 60px;
-}
-
-.btn-retry, .btn-home {
-  padding: 10px 20px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: transform 0.2s;
-}
-
-.btn-retry {
-  background-color: #f0f0f0;
-  color: #333;
-}
-
-.btn-home {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.btn-retry:hover, .btn-home:hover {
-  transform: scale(1.05);
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* --- ПЕРСОНАЖ --- */
-.character-container {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  z-index: 100;
+/* Адаптивность */
+@media (max-width: 768px) {
+  .cat-label {
+    width: 100%;
+  }
+  
+  .cat-zone {
+    width: 100%;
+  }
+  
+  .pool-img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .mini-img {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .task-img-large {
+    height: 150px;
+  }
+  
+  .letter-box {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  
+  .kim-ex-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
 }

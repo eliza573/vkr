@@ -4,17 +4,99 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import RightSidebar from "../../components/RightSidebar";
 
+let currentAudio = null;
+let currentFile = null;
+
+const playAudio = (fileName) => {
+  if (!fileName) return;
+
+  // если нажали ту же кнопку — СТОП
+  if (currentAudio && currentFile === fileName) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentFile = null;
+    return;
+  }
+
+  // если другой звук — остановить старый
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // новый звук
+  const audio = new Audio(`/audio/${fileName}`);
+  currentAudio = audio;
+  currentFile = fileName;
+
+  audio.play().catch(err => console.log("Ошибка:", err));
+
+  audio.onended = () => {
+    currentAudio = null;
+    currentFile = null;
+  };
+};
+
 function Kim() {
+
+  const kimSections = [
+    {
+      title: "Бул ким?",
+      ru: "Кто это?",
+      audio: "Bulkim.mp3",
+      color: "yellow",
+      items: [
+        { kg: "Бул кыз. Аты Анара", ru: "Девочка. Анара", img: "girl.png", audio: "Bulkyz.mp3" },
+        { kg: "Бул бала. Аты Азат", ru: "Мальчик. Азат", img: "boy.png", audio: "Bulbala.mp3" },
+        { kg: "Мугалим", ru: "Учитель", img: "teacher.png", audio: "Mugalim.mp3" },
+      ]
+    },
+    {
+      title: "Булар кимдер?",
+      ru: "Кто они?",
+      audio: "Bularkimder.mp3",
+      color: "yellow",
+      items: [
+        { kg: "Балдар", ru: "Мальчики", img: "boys_group.png", audio: "Baldar.mp3" },
+        { kg: "Окуучулар", ru: "Ученики", img: "students_group.png", audio: "Okuuchular.mp3" },
+        { kg: "Кыздар", ru: "Девочки", img: "girls_group.png", audio: "Kyzdar.mp3" },
+      ]
+    },
+    {
+      title: "Бул эмне?",
+      ru: "Что это?",
+      audio: "Bulemne.mp3",
+      color: "green",
+      items: [
+        { kg: "Китеп", ru: "Книга", img: "book.png", audio: "Kitep.mp3" },
+        { kg: "Мектеп", ru: "Школа", img: "school_main.png", audio: "Mektep.mp3" },
+        { kg: "Такта", ru: "Доска", img: "board_desk.png", audio: "Takta.mp3" },
+      ]
+    },
+    {
+      title: "Булар эмнелер?",
+      ru: "Что это? (мн.ч.)",
+      audio: "Bularemneler.mp3",
+      color: "green",
+      items: [
+        { kg: "Китептер", ru: "Книги", img: "books.png", audio: "Kitepter1.mp3" },
+        { kg: "Калемдер", ru: "Карандаши", img: "pencils.png", audio: "Kalemder.mp3" },
+        { kg: "Такталар", ru: "Доски", img: "boards.png", audio: "Taktalar.mp3" },
+      ]
+    }
+  ];
+
   const wordsForRightMenu = [
-    { kg: "Ким?", ru: "Кто?" },
-    { kg: "Эмне?", ru: "Что?" },
-    { kg: "Бул", ru: "Это" },
-    { kg: "Мектеп", ru: "Школа" },
-    { kg: "Окуучу кыз", ru: "Ученица" },
-    { kg: "Окуучу бала", ru: "Ученик" },
-    { kg: "Мугалим", ru: "Учитель" },
-    { kg: "Китеп", ru: "Книга" },
-    { kg: "Такта", ru: "Доска" },
+    { kg: "Ким?", ru: "Кто?", audio: "Kim.mp3" },
+    { kg: "Эмне?", ru: "Что?", audio: "Emne.mp3" },
+    { kg: "Бул", ru: "Это", audio: "Bul.mp3" },
+    { kg: "Мектеп", ru: "Школа", audio: "Mektep.mp3" },
+    { kg: "Окуучу кыз", ru: "Ученица", audio: "Okuuchukyz.mp3" },
+    { kg: "Окуучу бала", ru: "Ученик", audio: "Okuuchubala.mp3" },
+    { kg: "Мугалим", ru: "Учительница", audio: "Mugalim.mp3" },
+    { kg: "Китеп", ru: "Книга", audio: "Kitep.mp3" },
+    { kg: "Такта", ru: "Доска", audio: "Takta.mp3" },
   ];
 
   return (
@@ -22,139 +104,61 @@ function Kim() {
       <Navbar />
       <div className="layout-wrapper">
         <Sidebar />
-        
+
         <main className="kim-content">
-          <h1 className="main-title">Ким? Эмне? </h1>
+          <h1 className="main-title">Ким? Эмне?</h1>
 
-          {/* Секция: Бул ким? */}
-          <section className="kim-section">
-            <div className="question-header yellow">
-              Бул ким? 🔊 
-            <div className="trans-ru">Кто это?</div>
+          {kimSections.map((section, index) => (
+            <section key={index} className="kim-section">
 
-            </div>
-            
-            <div className="items-grid">
-              <div className="kim-card">
-                <img src="/src/assets/31tema/girl.png" alt="Кыз бала" />
-                <div className="caption yellow-cap">
-                  Кыз бала. Аты Анара 🔊
-                  <div className="trans-ru">Девочка. Зовут Анара</div>
-                </div>
+              {/* Заголовок */}
+              <div className={`question-header ${section.color}`}>
+                {section.title}
+                <button 
+                  className="audio-btn"
+                  onClick={() => playAudio(section.audio)}
+                >
+                  🔊
+                </button>
+                <div className="trans-ru">{section.ru}</div>
               </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/boy.png" alt="Эркек бала" />
-                <div className="caption yellow-cap">
-                  Эркек бала. Аты Азат 🔊
-                  <div className="trans-ru">Мальчик. Зовут Азат</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/teacher.png" alt="Мугалим" />
-                <div className="caption yellow-cap">
-                  Мугалим
-                  <div className="trans-ru">Учитель</div>
-                </div>
-              </div>
-            </div>
-          </section>
 
-          {/* Секция: Булар кимдер? */}
-          <section className="kim-section">
-            <div className="question-header yellow">
-              Булар кимдер? 🔊             
-              <div className="trans-ru">Кто они?</div>
-            </div>
-            <div className="items-grid">
-              <div className="kim-card">
-                <img src="/src/assets/31tema/boys_group.png" alt="Балдар" />
-                <div className="caption yellow-cap">
-                  Балдар 🔊
-                  <div className="trans-ru">Мальчики / Дети</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/students_group.png" alt="Окуучулар" />
-                <div className="caption yellow-cap">
-                  Окуучулар 🔊
-                  <div className="trans-ru">Ученики</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/girls_group.png" alt="Кыздар" />
-                <div className="caption yellow-cap">
-                  Кыздар 🔊
-                  <div className="trans-ru">Девочки</div>
-                </div>
-              </div>
-            </div>
-          </section>
+              {/* Карточки */}
+              <div className="items-grid">
+                {section.items.map((item, i) => (
+                  <div key={i} className="kim-card">
+                    <img src={`/src/assets/31tema/${item.img}`} alt="" />
+                    
+                    <div className={`caption ${section.color}-cap`}>
+                    
+                      
+                    <div className="kg-row">
+    <span>{item.kg}</span>
+    <button 
+      className="audio-btn"
+      onClick={() => playAudio(item.audio)}
+    >
+                        🔊
+                      </button>
+                       </div>
+                      <div className="trans-ru">{item.ru}</div>
+                    </div>
 
-          {/* Секция: Бул эмне? */}
-          <section className="kim-section">
-            <div className="question-header green">
-              Бул эмне? 🔊 
-            <div className="trans-ru">Что это?</div>
+                  </div>
+                ))}
+              </div>
 
-            </div>
-            <div className="items-grid">
-              <div className="kim-card">
-                <img src="/src/assets/31tema/book.png" alt="Китеп" className="img-small" />
-                <div className="caption green-cap">
-                  Китеп 🔊
-                  <div className="trans-ru">Книга</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/school_main.png" alt="Мектеп" className="img-med" />
-                <div className="caption green-cap">
-                  Мектеп
-                  <div className="trans-ru">Школа</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/board_desk.png" alt="Такта" className="img-small" />
-                <div className="caption green-cap">
-                  Такта
-                  <div className="trans-ru">Доска</div>
-                </div>
-              </div>
-            </div>
-          </section>
+            </section>
+          ))}
 
-          {/* Секция: Булар эмнелер? */}
-          <section className="kim-section">
-            <div className="question-header green">
-              Булар эмнелер? 🔊
-                          <div className="trans-ru">Что это? мн.ч.</div>
-            </div>
-            <div className="items-grid">
-              <div className="kim-card">
-                <img src="/src/assets/31tema/books.png" alt="Китептер" className="img-small" />
-                <div className="caption green-cap">
-                  Китептер 🔊
-                  <div className="trans-ru">Книги</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/pencils.png" alt="Калемдер" className="img-small" />
-                <div className="caption green-cap">
-                  Калемдер 🔊
-                  <div className="trans-ru">Карандаши / Ручки</div>
-                </div>
-              </div>
-              <div className="kim-card">
-                <img src="/src/assets/31tema/boards.png" alt="Такталар" className="img-small" />
-                <div className="caption green-cap">
-                  Такталар
-                  <div className="trans-ru">Доски</div>
-                </div>
-              </div>
-            </div>
-          </section>
         </main>
 
-        <RightSidebar words={wordsForRightMenu} exerciseLink="/kim-exercise" />
+        <RightSidebar 
+          words={wordsForRightMenu} 
+          exerciseLink="/kim-exercise" 
+          onWordClick={(audioName) => playAudio(audioName)}
+        />
+
       </div>
     </div>
   );

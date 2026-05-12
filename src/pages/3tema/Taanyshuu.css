@@ -57,10 +57,10 @@
   line-height: 1.4;
 }
 
-.kz-bubble.blue { background: #e3f2fd; border: 1px solid #bbdefb; }
+.kz-bubble.blue { background: #bebff4; border: 1px solid #abadf0; }
 .kz-bubble.yellow { background: #fff9c4; border: 1px solid #fff59d; }
 .kz-bubble.yellow-pale { background: #fffde7; }
-.kz-bubble.blue-light { background: #e0f2f1; border: 1px solid #b2dfdb; }
+.kz-bubble.blue-light { background: #bebff4; border: 1px solid #abadf0; }
 
 /* Перевод (серый текст) */
 .kz-gray-text {
@@ -111,7 +111,7 @@
 }
 
 .kz-names-list {
-  background: #e3f2fd;
+  background: #bebff4;
   padding: 5px 15px;
   border-radius: 12px;
   font-size: 22px;

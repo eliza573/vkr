@@ -3,15 +3,44 @@ import "./Kuz.css";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import RightSidebar from "../../components/RightSidebar";
+let currentAudio = null;
+let currentFile = null;
+
+const playAudio = (fileName) => {
+  if (!fileName) return;
+
+  // если нажали ту же кнопку — СТОП
+  if (currentAudio && currentFile === fileName) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentFile = null;
+    return;
+  }
+
+  // если другой звук — остановить старый
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // новый звук
+  const audio = new Audio(`/audio/${fileName}`);
+  currentAudio = audio;
+  currentFile = fileName;
+
+  audio.play().catch(err => console.log("Ошибка:", err));
+
+  audio.onended = () => {
+    currentAudio = null;
+    currentFile = null;
+  };
+};
 
 function Kuz() {
-  const playAudio = (fileName) => {
-    if (!fileName) return;
-    const audio = new Audio(`/audio/${fileName}`);
-    audio.play().catch(err => console.log("Ошибка воспроизведения:", err));
-  };
+ 
 
-  const newWords = [
+  const wordsForRightMenu = [
     { kg: "Жалбырак", ru: "Лист", audio: "jalbyrak.mp3" },
     { kg: "түшөт", ru: "падает", audio: "tushot.mp3" },
     { kg: "айлар", ru: "месяцы", audio: "aylar.mp3" },
@@ -111,7 +140,7 @@ function Kuz() {
         </main>
 
         <RightSidebar 
-          words={newWords} 
+          words={wordsForRightMenu} 
           exerciseLink="/kuz-exercise" 
           onWordClick={(audio) => playAudio(audio)}
         />

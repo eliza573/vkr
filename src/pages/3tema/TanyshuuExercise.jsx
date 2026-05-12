@@ -1,37 +1,32 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// pages/3tema/TanyshuuExercise.jsx
+import React, { useState } from 'react';
+import ExerciseTemplate from '../../components/ExerciseTemplate';
 import "./TanyshuuExercise.css";
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
-import Character from "../../components/Character";
 
 import img1 from "../../assets/3tema/kids.png";
 import girlImg from "../../assets/3tema/girl_wave.png";
-import schoolImg from "../../assets/3tema/school.png";
+import schoolImg from "../../assets/3tema/boy_wave.png";
 
-function TanyshuuExercise() {
-  const navigate = useNavigate();
-
-  const [characterState, setCharacterState] = useState("idle");
-  const [stepInitialized, setStepInitialized] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-
+const TanyshuuExercise = () => {
+  // Состояния для упражнений
   const [selectedAnswer1, setSelectedAnswer1] = useState(null);
   const [quizLocked1, setQuizLocked1] = useState(false);
-
+  
   const [placedLettersKyz, setPlacedLettersKyz] = useState(Array(3).fill(null));
-  const correctKyz = ["К", "Ы", "З"];
-  const scrambleKyz = ["К", "Ы", "З"];
-
-  const [placedLettersMektep, setPlacedLettersMektep] = useState(Array(6).fill(null));
-  const correctMektep = ["М", "Е", "К", "Т", "Е", "П"];
-  const scrambleMektep = ["М", "Е", "К", "Т", "Е", "П"];
-
+  const [placedLettersMektep, setPlacedLettersMektep] = useState(Array(5).fill(null));
+  
   const [selectedAnswer4, setSelectedAnswer4] = useState(null);
   const [quizLocked4, setQuizLocked4] = useState(false);
-
+  
   const [selectedAnswer5, setSelectedAnswer5] = useState(null);
   const [quizLocked5, setQuizLocked5] = useState(false);
+
+  // Данные упражнений
+  const correctKyz = ["К", "Ы", "З"];
+  const scrambleKyz = ["К", "Ы", "З"];
+  
+  const correctMektep = ["А", "С", "К", "А", "Р"];
+  const scrambleMektep = ["С", "А", "К", "Р", "А"];
 
   const quizData1 = { 
     question: "___ атым Айгерим", 
@@ -54,71 +49,42 @@ function TanyshuuExercise() {
     image: img1 
   };
 
-  const playCharacterTalk = () => {
-    setCharacterState("talk");
-    setTimeout(() => setCharacterState("idle"), 3000);
+  // Обработчики
+  const handleDragStart = (e, content) => {
+    e.dataTransfer.setData("content", content);
   };
 
-  const checkAnswerWithCharacter = (isCorrect) => {
-    setCharacterState(isCorrect ? "success" : "error");
-    setTimeout(() => setCharacterState("idle"), 2000);
-  };
-
-  const handleNextStep = () => {
-    if (currentStep < 5) {
-      setCurrentStep(prev => prev + 1);
-      setStepInitialized(false);
-    }
-  };
-
-  const handlePrevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
-      setStepInitialized(false);
-    }
-  };
-
-  const resetExercise = () => {
-    setCurrentStep(0);
-    setSelectedAnswer1(null);
-    setSelectedAnswer4(null);
-    setSelectedAnswer5(null);
-    setQuizLocked1(false);
-    setQuizLocked4(false);
-    setQuizLocked5(false);
-    setPlacedLettersKyz(Array(3).fill(null));
-    setPlacedLettersMektep(Array(6).fill(null));
-    setStepInitialized(false);
-  };
-
-  useEffect(() => {
-    if (currentStep < 5) {
-      const timer = setTimeout(() => {
-        playCharacterTalk();
-        setStepInitialized(true);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [currentStep]);
-
-  const handleDragStart = (e, content) => e.dataTransfer.setData("content", content);
-  
   const handleDropToLetterSlot = (e, index, type) => {
     e.preventDefault();
     const content = e.dataTransfer.getData("content");
+    
     if (type === "kyz") {
-      const newLetters = [...placedLettersKyz];
-      newLetters[index] = content;
-      setPlacedLettersKyz(newLetters);
-      if (content) {
-        checkAnswerWithCharacter(content === correctKyz[index]);
+      if (placedLettersKyz[index] === null) {
+        const newLetters = [...placedLettersKyz];
+        newLetters[index] = content;
+        setPlacedLettersKyz(newLetters);
       }
     } else {
-      const newLetters = [...placedLettersMektep];
-      newLetters[index] = content;
-      setPlacedLettersMektep(newLetters);
-      if (content) {
-        checkAnswerWithCharacter(content === correctMektep[index]);
+      if (placedLettersMektep[index] === null) {
+        const newLetters = [...placedLettersMektep];
+        newLetters[index] = content;
+        setPlacedLettersMektep(newLetters);
+      }
+    }
+  };
+
+  const handleLetterRemove = (index, type) => {
+    if (type === "kyz") {
+      if (placedLettersKyz[index]) {
+        const newLetters = [...placedLettersKyz];
+        newLetters[index] = null;
+        setPlacedLettersKyz(newLetters);
+      }
+    } else {
+      if (placedLettersMektep[index]) {
+        const newLetters = [...placedLettersMektep];
+        newLetters[index] = null;
+        setPlacedLettersMektep(newLetters);
       }
     }
   };
@@ -128,192 +94,218 @@ function TanyshuuExercise() {
     return char === correctArray[index] ? "drop-slot correct" : "drop-slot wrong";
   };
 
-  const getOptionClass = (option, selected, correct, locked) => {
-    if (!selected || !locked) return "quiz-option";
+  const getOptionClass = (option, selected, correct) => {
+    if (!selected) return "quiz-option";
     if (selected === option) {
       return option === correct ? "quiz-option correct-answer" : "quiz-option wrong-answer";
     }
-    if (option === correct && locked) return "quiz-option correct-answer";
     return "quiz-option disabled";
   };
 
+  // Шаги упражнения
+  const steps = [
+    {
+      banner: "Туура жоопту танда",
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={quizData1.image} className="task-img-large" alt="task" />
+          </div>
+          <div className="question-text">
+            <p className="question-kg">{quizData1.question}</p>
+          </div>
+          <div className="quiz-options-horizontal">
+            {quizData1.options.map((opt, i) => (
+              <button 
+                key={i} 
+                className={getOptionClass(opt, selectedAnswer1, quizData1.correct)}
+                onClick={() => { 
+                  if (!quizLocked1) {
+                    setSelectedAnswer1(opt); 
+                    setQuizLocked1(true); 
+                  }
+                }}
+                disabled={quizLocked1}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+      ),
+      checkAnswer: () => {
+        if (!selectedAnswer1) return null;
+        return selectedAnswer1 === quizData1.correct;
+      }
+    },
+    {
+      banner: "Бул ким?",
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={girlImg} className="task-img-large" alt="task" />
+          </div>
+          <div className="slots-row">
+            {placedLettersKyz.map((char, i) => (
+              <div 
+                key={i} 
+                className={getLetterClass(char, correctKyz, i)} 
+                onClick={() => handleLetterRemove(i, "kyz")}
+                onDragOver={e => e.preventDefault()} 
+                onDrop={e => handleDropToLetterSlot(e, i, "kyz")}
+              >
+                {char}
+              </div>
+            ))}
+          </div>
+          <div className="letters-pool">
+            {scrambleKyz.map((l, i) => (
+              <div 
+                key={i} 
+                className="drag-item letter" 
+                draggable 
+                onDragStart={e => handleDragStart(e, l)}
+              >
+                {l}
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+      checkAnswer: () => {
+        const isComplete = placedLettersKyz.every((letter, idx) => letter === correctKyz[idx]);
+        return isComplete && placedLettersKyz.some(l => l !== null) ? true : (placedLettersKyz.some(l => l !== null) ? false : null);
+      }
+    },
+    {
+      banner: "Сенин атын ким?",
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={schoolImg} className="task-img-large mektep-img" alt="task" />
+          </div>
+          <div className="slots-row">
+            {placedLettersMektep.map((char, i) => (
+              <div 
+                key={i} 
+                className={getLetterClass(char, correctMektep, i)} 
+                onClick={() => handleLetterRemove(i, "mektep")}
+                onDragOver={e => e.preventDefault()} 
+                onDrop={e => handleDropToLetterSlot(e, i, "mektep")}
+              >
+                {char}
+              </div>
+            ))}
+          </div>
+          <div className="letters-pool">
+            {scrambleMektep.map((l, i) => (
+              <div 
+                key={i} 
+                className="drag-item letter" 
+                draggable 
+                onDragStart={e => handleDragStart(e, l)}
+              >
+                {l}
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+      checkAnswer: () => {
+        const isComplete = placedLettersMektep.every((letter, idx) => letter === correctMektep[idx]);
+        return isComplete && placedLettersMektep.some(l => l !== null) ? true : (placedLettersMektep.some(l => l !== null) ? false : null);
+      }
+    },
+    {
+      banner: "Туура жоопту танда",
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={quizData4.image} className="task-img-large" alt="task" />
+          </div>
+          <div className="question-text">
+            <p className="question-kg">{quizData4.question}</p>
+          </div>
+          <div className="quiz-options-horizontal">
+            {quizData4.options.map((opt, i) => (
+              <button 
+                key={i} 
+                className={getOptionClass(opt, selectedAnswer4, quizData4.correct)}
+                onClick={() => { 
+                  if (!quizLocked4) {
+                    setSelectedAnswer4(opt); 
+                    setQuizLocked4(true); 
+                  }
+                }}
+                disabled={quizLocked4}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+      ),
+      checkAnswer: () => {
+        if (!selectedAnswer4) return null;
+        return selectedAnswer4 === quizData4.correct;
+      }
+    },
+    {
+      banner: "Туура жоопту танда",
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={quizData5.image} className="task-img-large" alt="task" />
+          </div>
+          <div className="question-text">
+            <p className="question-kg">{quizData5.question}</p>
+          </div>
+          <div className="quiz-options-horizontal">
+            {quizData5.options.map((opt, i) => (
+              <button 
+                key={i} 
+                className={getOptionClass(opt, selectedAnswer5, quizData5.correct)}
+                onClick={() => { 
+                  if (!quizLocked5) {
+                    setSelectedAnswer5(opt); 
+                    setQuizLocked5(true); 
+                  }
+                }}
+                disabled={quizLocked5}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+      ),
+      checkAnswer: () => {
+        if (!selectedAnswer5) return null;
+        return selectedAnswer5 === quizData5.correct;
+      }
+    }
+  ];
+
+  const handleReset = () => {
+    setSelectedAnswer1(null);
+    setQuizLocked1(false);
+    setPlacedLettersKyz(Array(3).fill(null));
+    setPlacedLettersMektep(Array(5).fill(null));
+    setSelectedAnswer4(null);
+    setQuizLocked4(false);
+    setSelectedAnswer5(null);
+    setQuizLocked5(false);
+  };
+
   return (
-    <div className="tanyshuu-ex-page">
-      <Navbar />
-      <div className="tanyshuu-ex-layout">
-        <div className="sidebar-wrapper">
-          <Sidebar />
-        </div>
-        <div className="tanyshuu-ex-content">
-          <h2 className="ex1-title">Таанышуу / көнүгүү</h2>
-          
-          <div className="progress-container">
-            <div className="progress-fill" style={{ width: `${((currentStep + 1) / 6) * 100}%` }}></div>
-          </div>
-
-          <div className="ex-header-banner">
-            {(currentStep === 0 || currentStep === 3 || currentStep === 4) && "Туура жоопту танда"}
-            {currentStep === 1 && "Бул ким?"}
-            {currentStep === 2 && "Бул эмне?"}
-          </div>
-
-          <div className="exercise-scroll-container">
-            {currentStep === 0 && (
-              <div className="step-content">
-                <div className="task-image-container">
-                  <img src={quizData1.image} className="task-img-large" alt="task" />
-                </div>
-                <div className="question-text">
-                  <p className="question-kg">{quizData1.question}</p>
-                </div>
-                <div className="quiz-options-horizontal">
-                  {quizData1.options.map((opt, i) => (
-                    <button 
-                      key={i} 
-                      className={getOptionClass(opt, selectedAnswer1, quizData1.correct, quizLocked1)}
-                      onClick={() => { 
-                        setSelectedAnswer1(opt); 
-                        setQuizLocked1(true); 
-                        checkAnswerWithCharacter(opt === quizData1.correct); 
-                      }}
-                      disabled={quizLocked1}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 1 && (
-              <div className="step-content">
-                <div className="task-image-container">
-                  <img src={girlImg} className="task-img-large" alt="task" />
-                </div>
-                <div className="slots-row">
-                  {placedLettersKyz.map((char, i) => (
-                    <div 
-                      key={i} 
-                      className={getLetterClass(char, correctKyz, i)} 
-                      onDragOver={e => e.preventDefault()} 
-                      onDrop={e => handleDropToLetterSlot(e, i, "kyz")}
-                    >
-                      {char}
-                    </div>
-                  ))}
-                </div>
-                <div className="letters-pool">
-                  {scrambleKyz.map((l, i) => (
-                    <div key={i} className="drag-item letter" draggable onDragStart={e => handleDragStart(e, l)}>{l}</div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 2 && (
-              <div className="step-content">
-                <div className="task-image-container">
-                  <img src={schoolImg} className="task-img-large mektep-img" alt="task" />
-                </div>
-                <div className="slots-row">
-                  {placedLettersMektep.map((char, i) => (
-                    <div 
-                      key={i} 
-                      className={getLetterClass(char, correctMektep, i)} 
-                      onDragOver={e => e.preventDefault()} 
-                      onDrop={e => handleDropToLetterSlot(e, i, "mektep")}
-                    >
-                      {char}
-                    </div>
-                  ))}
-                </div>
-                <div className="letters-pool">
-                  {scrambleMektep.map((l, i) => (
-                    <div key={i} className="drag-item letter" draggable onDragStart={e => handleDragStart(e, l)}>{l}</div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="step-content">
-                <div className="task-image-container">
-                  <img src={quizData4.image} className="task-img-large" alt="task" />
-                </div>
-                <div className="question-text">
-                  <p className="question-kg">{quizData4.question}</p>
-                </div>
-                <div className="quiz-options-horizontal">
-                  {quizData4.options.map((opt, i) => (
-                    <button 
-                      key={i} 
-                      className={getOptionClass(opt, selectedAnswer4, quizData4.correct, quizLocked4)}
-                      onClick={() => { 
-                        setSelectedAnswer4(opt); 
-                        setQuizLocked4(true); 
-                        checkAnswerWithCharacter(opt === quizData4.correct); 
-                      }}
-                      disabled={quizLocked4}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 4 && (
-              <div className="step-content">
-                <div className="task-image-container">
-                  <img src={quizData5.image} className="task-img-large" alt="task" />
-                </div>
-                <div className="question-text">
-                  <p className="question-kg">{quizData5.question}</p>
-                </div>
-                <div className="quiz-options-horizontal">
-                  {quizData5.options.map((opt, i) => (
-                    <button 
-                      key={i} 
-                      className={getOptionClass(opt, selectedAnswer5, quizData5.correct, quizLocked5)}
-                      onClick={() => { 
-                        setSelectedAnswer5(opt); 
-                        setQuizLocked5(true); 
-                        checkAnswerWithCharacter(opt === quizData5.correct); 
-                      }}
-                      disabled={quizLocked5}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 5 && (
-              <div className="finish-screen">
-                <div className="finish-icon">🏆</div>
-                <h2>Азаматсың!</h2>
-                <p>Бардык көнүгүүнү ийгиликтүү аяктадың!</p>
-                <div className="finish-buttons">
-                  <button className="btn-retry" onClick={resetExercise}>Кайра аткаруу</button>
-                  <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {currentStep < 5 && (
-            <div className="nav-controls">
-              <button className="nav-btn back" onClick={handlePrevStep} disabled={currentStep === 0}>Артка</button>
-              <button className="nav-btn next" onClick={handleNextStep}>Кийинки</button>
-            </div>
-          )}
-
-          <Character state={characterState} />
-        </div>
-      </div>
-    </div>
+    <ExerciseTemplate
+      title="Таанышуу / көнүгүү"
+      steps={steps}
+      totalSteps={5}
+      onReset={handleReset}
+      containerClass="tanyshuu-exercise"
+    />
   );
-}
+};
 
 export default TanyshuuExercise;

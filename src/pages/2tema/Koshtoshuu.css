@@ -78,8 +78,8 @@
   width: 100%;
 }
 
-.ks-bubble.ks-blue { background: #e3f2fd; border: 1px solid #bbdefb; }
-.ks-bubble.ks-teal { background: #e0f2f1; border: 1px solid #b2dfdb; }
+.ks-bubble.ks-blue { background: #bebff4; border: 1px solid #9fa2f2; }
+.ks-bubble.ks-teal { background: #abadf0; border: 1px solid #9fa2f2; }
 
 .ks-gray-text {
   display: block;

@@ -11,18 +11,54 @@ import img2 from "../../assets/2tema/bay2.png";
 import img3 from "../../assets/2tema/bay3.png";
 import img4 from "../../assets/2tema/bay4.png";
 
+let currentAudio = null;
+let currentFile = null;
+
+const playAudio = (fileName) => {
+  if (!fileName) return;
+
+  // если нажали ту же кнопку — СТОП
+  if (currentAudio && currentFile === fileName) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentFile = null;
+    return;
+  }
+
+  // если другой звук — остановить старый
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // новый звук
+  const audio = new Audio(`/audio/${fileName}`);
+  currentAudio = audio;
+  currentFile = fileName;
+
+  audio.play().catch(err => console.log("Ошибка:", err));
+
+  audio.onended = () => {
+    currentAudio = null;
+    currentFile = null;
+  };
+};
+
+  const AudioIcon = ({ file }) => (
+    <span className="audio-icon" onClick={() => playAudio(file)}>
+      🔊
+    </span>
+  );
+
 const Koshtoshuu = () => {
   const wordsForRightMenu = [
-    { kg: "Жакшы баргыла", ru: "Счастливо идите (мн.ч)" },
-    { kg: "Жакшы калыңыз", ru: "Оставайтесь хорошо (вежл.)" },
-    { kg: "Саламатта барыңыз", ru: "До свидания (вежл. идите)" },
-    { kg: "Саламатта калыңыз", ru: "До свидания (оставайтесь)" },
-    { kg: "Эже", ru: " Сестра" },
-    { kg: "Ата", ru: " Папа" },
-    { kg: "Чон ата", ru: " Дедушка" },
-
-
-
+    { kg: "Жакшы баргыла", ru: "Счастливого пути (мн.ч)", audio: "Jakshybargyla.mp3" },
+    { kg: "Жакшы калыңыз", ru: "Всего хорошего", audio: "Kalynyz.mp3" },
+    { kg: "Саламатта барыңыз", ru: "До свидания (вежл. идите)", audio: "Salamat.mp3" },
+    { kg: "Эже", ru: " Сестра", audio: "Eje.mp3" },
+    { kg: "Ата", ru: " Папа", audio: "Ata.mp3" },
+    { kg: "Чон ата", ru: " Дедушка", audio: "Chonata.mp3" },
   ];
 
   return (
@@ -85,7 +121,8 @@ const Koshtoshuu = () => {
 
          <RightSidebar 
   words={wordsForRightMenu} 
-  exerciseLink="/salam-exercise" 
+  exerciseLink="/kosh" 
+    onWordClick={(audioName) => playAudio(audioName)}
 />
       </div>
     </div>

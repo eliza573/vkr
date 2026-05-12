@@ -4,9 +4,49 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import RightSidebar from '../../components/RightSidebar';
 
+let currentAudio = null;
+let currentFile = null;
+
+const playAudio = (fileName) => {
+  if (!fileName) return;
+
+  // если нажали ту же кнопку — СТОП
+  if (currentAudio && currentFile === fileName) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+    currentFile = null;
+    return;
+  }
+
+  // если другой звук — остановить старый
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // новый звук
+  const audio = new Audio(`/audio/${fileName}`);
+  currentAudio = audio;
+  currentFile = fileName;
+
+  audio.play().catch(err => console.log("Ошибка:", err));
+
+  audio.onended = () => {
+    currentAudio = null;
+    currentFile = null;
+  };
+};
+
+  const AudioIcon = ({ file }) => (
+    <span className="audio-icon" onClick={() => playAudio(file)}>
+      🔊
+    </span>
+  );
+
 function FamilyMain() {
   const mainFamily = [
-    { id: "me", name: "Мен", translate: "Я", img: "me.png", pos: "pos-me" },
+    { id: "me", name: "Мен", translate: "Я", img: "me.png", pos: "pos-me", audio: "Men.mp3" },
     { id: "mother", name: "Апа", translate: "Мама", img: "mother.png", pos: "pos-mother" },
     { id: "father", name: "Ата", translate: "Папа", img: "father.png", pos: "pos-father" },
     { id: "grandma", name: "Чоң апа", translate: "Бабушка", img: "grandma.png", pos: "pos-grandma" },
@@ -34,18 +74,11 @@ const familyIntro = [
   ];
 
    const wordsForRightMenu = [
-    { kg: "менин", ru: "мой, моя, мое" },
-    { kg: "мектеп", ru: "школа" },
-    { kg: "эмне", ru: "что" },
-    { kg: "ким", ru: "кто" },
-    { kg: "балдар", ru: "дети" },
-    { kg: "окуучу", ru: "ученик" },
-    { kg: "сүрөт", ru: "картина/фото" },
-    { kg: "тамак", ru: "еда" },
-    { kg: "тиш", ru: "зуб" },
-    { kg: "саноо", ru: "считать" },
-    { kg: "жазуу", ru: "писать" },
-    { kg: "окуу", ru: "читать/учиться" },
+    { kg: "менин", ru: "мой, моя, мое", audio: "Menin.mp3" },
+    { kg: "мектеп", ru: "школа", audio: "Mektep.mp3" },
+    { kg: "эмне", ru: "что", audio: "Emne.mp3" },
+    { kg: "ким", ru: "кто" , audio: "Kim.mp3"},
+    { kg: "балдар", ru: "дети", audio: "Baldar.mp3" },
   ];
 
  return (
@@ -168,6 +201,8 @@ const familyIntro = [
 <RightSidebar 
   words={wordsForRightMenu} 
   exerciseLink="/family-exercise" 
+              onWordClick={(audioName) => playAudio(audioName)}
+
 />      </div>
     </div>
   );

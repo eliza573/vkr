@@ -59,7 +59,7 @@
 }
 
 .kim-card img {
-  height: 250px;
+  height: 200px;
   object-fit: contain;
   margin-bottom: 15px;
 }
@@ -109,4 +109,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+
+.audio-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 10px;
+  transition: transform 0.1s;
+}
+
+.audio-btn:hover {
+  transform: scale(1.1);
+}
+
+
+.kg-row {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* по центру */
+  gap: 8px; /* расстояние между текстом и кнопкой */
+}
+
+.audio-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
 }

@@ -104,7 +104,7 @@
   padding: 10px 20px;
   font-size: 18px;
   border-radius: 40px;
-  border: 2px solid #b2dfdb;
+  border: 2px solid #d1e9f0;
   background: white;
   cursor: pointer;
   min-width: 140px;
@@ -113,7 +113,7 @@
 
 .dropdown-container select:focus {
   outline: none;
-  border-color: #20b0d1;
+  border-color: #d1e9f0;
 }
 
 .verb-text {
@@ -147,7 +147,7 @@
   min-width: 160px;
   padding: 12px 25px;
   font-size: 17px;
-  background: #7bc6cf;
+  background: #d1e9f0;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -159,7 +159,7 @@
 }
 
 .quiz-option:hover:not(:disabled) {
-  background: #5baab5;
+  background: #d1e9f0;
   transform: scale(1.02);
 }
 
@@ -186,7 +186,7 @@
   align-items: center;
   margin-top: 20px;
   padding: 20px;
-  background: #f0fbff;
+  background: #d1e9f0;
   border-radius: 20px;
   width: 100%;
 }
@@ -203,7 +203,7 @@
 .sentence-row-simple select {
   padding: 8px 15px;
   border-radius: 25px;
-  border: 2px solid #b2dfdb;
+  border: 2px solid #d1e9f0;
   font-size: 16px;
   outline: none;
   background: white;

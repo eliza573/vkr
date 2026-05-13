@@ -32,7 +32,7 @@ const MektepExercise = () => {
     image: "teacher_agai.png",
     options: [
       { id: "boy", img: "teacher_agai.png", isCorrect: false },
-      { id: "girl", img: "girl_aiday.png", isCorrect: true },
+      { id: "girl", img: "girl.png", isCorrect: true },
       { id: "teacher", img: "teacher_eje.png", isCorrect: false }
     ],
     correctId: "girl"

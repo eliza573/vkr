@@ -1,6 +1,8 @@
 // pages/3tema/TanyshuuExercise.jsx
 import React, { useState } from 'react';
 import ExerciseTemplate from '../../components/ExerciseTemplate';
+import '../../components/ExerciseCommon.css'; 
+
 import "./TanyshuuExercise.css";
 
 import img1 from "../../assets/3tema/kids.png";

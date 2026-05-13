@@ -1,6 +1,6 @@
 .sidebar {
   width: 210px;
-  background-color: #6669d2;
+  background-color: #8dc9d8;
   padding: 20px 10px;
   min-height: 100vh;
   box-sizing: border-box;
@@ -12,10 +12,10 @@
 
 /* Основная кнопка темы */
 .topic {
-  background-color: #9fa2f2;
+  background-color: #bfe2ec;
   padding: 12px 15px;
   border-radius: 8px;
-  border: 1.5px solid #56589e;
+  border: 1.5px solid #6aa8b7;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -24,7 +24,7 @@
 }
 
 .topic:hover {
-  background-color: #b7b9ef;
+  background-color: #d6eff7;
 }
 
 .active-topic {
@@ -77,16 +77,16 @@
 }
 
 .submenu-item {
-  background-color: #56589e; 
+  background-color: #76c1d4; 
   padding: 10px 15px;
   border-radius: 6px;
-  border: 1px solid #56589e;
+  border: 1px solid #6aa8b7;
   font-size: 16px;
   transition: all 0.2s ease;
 }
 
 .submenu-item:hover {
-  background-color: #56589e;
+  background-color: #5eb2c7;
   transform: translateX(5px); /* Легкий сдвиг при наведении */
 }
 

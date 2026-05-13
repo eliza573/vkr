@@ -31,14 +31,22 @@ function Sidebar() {
         { id: 41, title: "Окуу куралдары", path: "/okuu", words: "/tanyshuu", exercise: "/okuu-exercise" },
 
     { id: 5, title: "Бул менин классым", path: "/klass", words: "/class-words", exercise: "/klass-exercise" },
-            { id: 51, title: " Сандар", path: "/san", words: "/uibuloo-words", exercise: "/san-exercise" },
+            { id: 51, title: " Сандар", path: "/san", words: "/uibuloo-words", exercise: "/san_exercise" },
         { id: 6, title: " Үй-бүлө", path: "/uibuloo", words: "/uibuloo-words", exercise: "/family-exercise" },
+        { id: 62, title: " Дене мүчөлөрү", path: "/dene", words: "/uibuloo-words", exercise: "/dene_exercise" },
         { id: 61, title: " Түстөр", path: "/tuc", words: "/uibuloo-words", exercise: "/tuc-exercise" },
         { id: 8, title: " Күз", path: "/kuz", words: "/uibuloo-words", exercise: "/kuz-exercise" },
-        { id: 9, title: " Жашылчалар", path: "/jash", words: "/uibuloo-words", exercise: "/jash-exercise" },
+        { id: 91, title: " Жашылчалар", path: "/jash", words: "/uibuloo-words", exercise: "/jash-exercise" },
         { id: 10, title: "Жемиштер", path: "/jemish", words: "/uibuloo-words", exercise: "/jemish-exercise" },
-
-
+{ id: 9,
+  title: "Жаныбарлар",
+  path: "/animals_aidana",
+  exercise: "/animals_aidana"
+},
+{ id: 11,
+  title: "Канаттуулар",
+  path: "/birds",
+  exercise: "/birds"}
 
   ];
 

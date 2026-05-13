@@ -11,7 +11,7 @@ let currentFile = null;
 const playAudio = (fileName) => {
   if (!fileName) return;
 
-  // 👉 если нажали ту же кнопку — СТОП
+  // если нажали ту же кнопку — СТОП
   if (currentAudio && currentFile === fileName) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
@@ -20,20 +20,19 @@ const playAudio = (fileName) => {
     return;
   }
 
-  // 👉 если другой звук — остановить старый
+  //  если другой звук — остановить старый
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
   }
 
-  // ▶ новый звук
+  //  новый звук
   const audio = new Audio(`/audio/${fileName}`);
   currentAudio = audio;
   currentFile = fileName;
 
   audio.play().catch(err => console.log("Ошибка:", err));
 
-  // 👉 когда закончился — очистить
   audio.onended = () => {
     currentAudio = null;
     currentFile = null;

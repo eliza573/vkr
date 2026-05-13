@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ExerciseTemplate from '../../components/ExerciseTemplate';
+
 import "./OkuExercise.css"; 
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
@@ -50,8 +52,8 @@ const OkuExercise = () => {
       items: [
         { id: "w1", word: "дептер", missing: [2], correct: "п" },
         { id: "w2", word: "калемсап", missing: [7], correct: "п" },
-        { id: "w3", word: "кызгылт", missing: [2], correct: "з" },
-        { id: "w4", word: "очургуч", missing: [6], correct: "ч" }
+        { id: "w3", word: "учтагыч", missing: [2], correct: "т" },
+        { id: "w4", word: "өчүргүч", missing: [6], correct: "ч" }
       ]
     },
     {

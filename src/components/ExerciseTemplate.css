@@ -61,7 +61,7 @@
 }
 
 .ex-header-banner {
-  background: linear-gradient(135deg, #667eea 0%, #6356d6 100%);
+  background: linear-gradient(135deg, #8dc9d8 0%, #63c4dc 100%);
   padding: 2px 30px;
   border-radius: 40px;
   font-size: 20px;
@@ -129,7 +129,7 @@
 }
 
 .nav-btn.next {
-  background: linear-gradient(135deg, #667eea, #6356d6);
+  background: linear-gradient(135deg, #8dc9d8, #63c4dc);
   color: rgb(231, 24, 24);
 }
 

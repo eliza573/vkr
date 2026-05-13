@@ -1,6 +1,8 @@
 // pages/2tema/KoshtoshuuExercise.jsx
 import React, { useState } from 'react';
 import ExerciseTemplate from '../../components/ExerciseTemplate';
+import '../../components/ExerciseCommon.css'; 
+
 import "./KoshtoshuuExercise.css";
 
 const KoshtoshuuExercise = () => {

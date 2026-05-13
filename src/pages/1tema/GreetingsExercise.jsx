@@ -1,6 +1,7 @@
 // pages/1tema/GreetingsExercise.jsx
 import React, { useState, useRef } from 'react';
 import ExerciseTemplate from '../../components/ExerciseTemplate';
+import '../../components/ExerciseCommon.css'; 
 import "./Exercise.css";
 
 const GreetingsExercise = () => {

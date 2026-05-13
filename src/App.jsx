@@ -21,6 +21,13 @@ import KoshtoshuuExercise from "./pages/2tema/KoshtoshuuExercise";
 import KuzExercise from "./pages/7tema/KuzExercise";
 import Tus from "./pages/61tema/Tus";
 import TusExercise from "./pages/61tema/TusExercise";
+import Sandar from "./pages/51tema/Sandar";
+import SandarExercise from "./pages/51tema/SandarExercise";
+import Dene from "./pages/62tema/Dene";
+import DeneExercise from "./pages/62tema/DeneExercise";
+
+import AnimalsExercise from "./pages/animals/AnimalsExercise";
+import BirdsExercise from "./pages/animals/BirdsExercise";
 
 
 function App() {
@@ -47,7 +54,15 @@ function App() {
       <Route path="/kuz-exercise" element={<KuzExercise/>}/>
       <Route path="/tuc" element={<Tus/>}/>
             <Route path="/tus-exercise" element={<TusExercise/>}/>
+            <Route path="/san" element={<Sandar/>}/>
+            <Route path="/san_exercise" element={<SandarExercise/>}/>
+            <Route path="/dene" element={<Dene/>}/>
+            <Route path="/dene_exercise" element={<DeneExercise/>}/>
 
+
+    <Route path="/animals_aidana"  element={<AnimalsExercise />} />
+    <Route path="/birds" element={<BirdsExercise />} />
+<Route/>
 
 
 

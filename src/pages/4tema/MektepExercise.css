@@ -3,11 +3,11 @@
 /* ИЗОБРАЖЕНИЕ */
 .task-image-container {
   flex-shrink: 0;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .task-img-large {
-  height: 350px;
+  height: 300px;
   width: auto;
   object-fit: contain;
   border-radius: 15px;
@@ -89,7 +89,7 @@
   min-width: 140px;
   padding: 12px 25px;
   font-size: 18px;
-  background: #7bc6cf;
+  background: #bebff4;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -101,13 +101,13 @@
 }
 
 .quiz-option:hover:not(:disabled) {
-  background: #5baab5;
+  background: #bebff4;
   transform: scale(1.02);
 }
 
 .quiz-option.selected {
-  background: #e0f7fa;
-  border: 2px solid #00bcd4;
+  background: #bebff4;
+  border: 2px solid #bebff4;
 }
 
 .quiz-option.correct-answer {
@@ -150,8 +150,8 @@
 }
 
 .image-card.selected {
-  border-color: #00bcd4;
-  background: #e0f7fa;
+  border-color: #bebff4;
+  background: #bebff4;
 }
 
 .image-card.correct-border {
@@ -191,7 +191,7 @@
 .sentence-row select {
   padding: 8px 15px;
   border-radius: 25px;
-  border: 2px solid #b2dfdb;
+  border: 2px solid #bebff4;
   font-size: 20px;
   outline: none;
   background: white;

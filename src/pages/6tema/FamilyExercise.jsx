@@ -54,7 +54,7 @@ const FamilyExercise = () => {
     },
     {
       type: "spelling-grid",
-      question: "Сөздөрдү толуктагыла",
+     
       translation: "Дополните слова",
       letters: ["Ң", "Я", "Е", "Р", "Э"]
     },
@@ -84,7 +84,7 @@ const FamilyExercise = () => {
     },
     {
       type: "matching-translation",
-      question: "Котормосун туура тап",
+   
       translation: "Найди правильный перевод",
       pairs: [
         { left: "менин апам", right: "моя мама" },

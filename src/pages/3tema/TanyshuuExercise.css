@@ -7,13 +7,13 @@
 }
 
 .task-img-large {
-  max-height: 180px;
+  max-height: 200px;
   object-fit: contain;
   border-radius: 15px;
 }
 
 .mektep-img {
-  max-height: 140px;
+  max-height: 180px;
 }
 
 /* ТЕКСТ ВОПРОСА */
@@ -109,7 +109,7 @@
   min-width: 140px;
   padding: 12px 25px;
   font-size: 18px;
-  background: #7bc6cf;
+  background: #d1e9f0;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -121,7 +121,7 @@
 }
 
 .quiz-option:hover:not(:disabled) {
-  background: #5baab5;
+  background: #d1e9f0;
   transform: scale(1.02);
 }
 

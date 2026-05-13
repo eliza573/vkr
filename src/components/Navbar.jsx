@@ -13,8 +13,8 @@ function Navbar() {
         <Link to="/">
           <button>Башкы бет</button>
         </Link>
-        <button>Мамлекеттик символдор</button>
-        <button>Кыргыз алфавити</button>
+        <button>Кируу</button>
+        <button>Катталуу</button>
       </div>
 
     </div>

@@ -138,7 +138,8 @@ const Okuu = () => {
           </div>
         </main>
 
-        <RightSidebar words={wordsForRightMenu} exerciseLink="/okuu-exercise"
+        <RightSidebar words={wordsForRightMenu} 
+        exerciseLink="/okuu-exercise"
                     onWordClick={(audioName) => playAudio(audioName)}
 
         />

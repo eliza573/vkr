@@ -41,7 +41,7 @@
 }
 
 .yellow { background-color: #e1f5fe; }
-.green { background-color: #92d9ad; }
+.green { background-color: #f9f0b5; }
 
 /* Сетка 3 в ряд */
 .items-grid {
@@ -79,7 +79,7 @@
 }
 
 .yellow-cap { background-color: #e1f5fe; }
-.green-cap { background-color: #92d9ad; }
+.green-cap { background-color: #f9f0b5; }
 
 /* Адаптация подSidebar */
 .layout-wrapper {
@@ -139,4 +139,12 @@
   background: none;
   cursor: pointer;
   font-size: 18px;
+}
+
+.section-divider {
+  width: 100%;
+  height: 2px;
+  background-color: #e0e0e0;
+  border: none;
+  margin: 20px 0;
 }

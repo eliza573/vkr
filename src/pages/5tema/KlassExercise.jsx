@@ -1,5 +1,5 @@
 // pages/5tema/KlassExercise.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ExerciseTemplate from '../../components/ExerciseTemplate';
 import "./KlassExercise.css";
 
@@ -26,7 +26,7 @@ const KlassExercise = () => {
   const [choiceAnswer2, setChoiceAnswer2] = useState(null);
   const [choiceLocked2, setChoiceLocked2] = useState(false);
 
-  const pronouns = ["Мен", "Сен", "Сиз", "Ал", "Биз", "Силер", "Сиздер", "Алар"];
+  const pronouns = ["Мен", "Сен", "Ал"];
 
   // Данные упражнений
   const exercise1 = {
@@ -90,13 +90,25 @@ const KlassExercise = () => {
     correct: 0
   };
 
-  // Обработчики
-  const handleSpellingClick = (letter, type, correctLength, setLocked) => {
-    if (type === 1 && !spellingLocked1 && inputWord1.length < correctLength) {
-      setInputWord1(prev => prev + letter);
+  // Обработчики для spelling с авто-проверкой
+  const handleSpellingClick = (letter, type, correctWord, setLocked) => {
+    if (type === 1 && !spellingLocked1) {
+      const newValue = inputWord1 + letter;
+      setInputWord1(newValue);
+      if (newValue.length === correctWord.length) {
+        if (newValue === correctWord) {
+          setSpellingLocked1(true);
+        }
+      }
     }
-    if (type === 2 && !spellingLocked2 && inputWord2.length < correctLength) {
-      setInputWord2(prev => prev + letter);
+    if (type === 2 && !spellingLocked2) {
+      const newValue = inputWord2 + letter;
+      setInputWord2(newValue);
+      if (newValue.length === correctWord.length) {
+        if (newValue === correctWord) {
+          setSpellingLocked2(true);
+        }
+      }
     }
   };
 
@@ -106,28 +118,95 @@ const KlassExercise = () => {
   };
 
   const handleDropdownChange = (value) => {
-    if (!pronounLocked1) setPronounAnswer1(value);
+    if (!pronounLocked1) {
+      setPronounAnswer1(value);
+      if (value === exercise4.correct) {
+        setPronounLocked1(true);
+      }
+    }
   };
 
   const handleDropdownChange2 = (value) => {
-    if (!pronounLocked2) setPronounAnswer2(value);
+    if (!pronounLocked2) {
+      setPronounAnswer2(value);
+      if (value === exercise5.correct) {
+        setPronounLocked2(true);
+      }
+    }
   };
 
-  const handleChoiceClick = (idx, type) => {
+  const handleChoiceClick = (idx, type, correct) => {
     if (type === 1 && !choiceLocked1) {
       setChoiceAnswer1(idx);
-      setChoiceLocked1(true);
+      if (idx === correct) {
+        setChoiceLocked1(true);
+      }
     }
     if (type === 2 && !choiceLocked2) {
       setChoiceAnswer2(idx);
-      setChoiceLocked2(true);
+      if (idx === correct) {
+        setChoiceLocked2(true);
+      }
     }
   };
 
   const handleDropdownFillChange = (slotId, value) => {
     if (!dropdownFillLocked) {
-      setDropdownAnswers(prev => ({ ...prev, [slotId]: value }));
+      const newAnswers = { ...dropdownAnswers, [slotId]: value };
+      setDropdownAnswers(newAnswers);
+      
+      // Проверка на завершение
+      const requiredSlots = ["s1", "s2_0", "s2_1"];
+      const allFilled = requiredSlots.every(slot => newAnswers[slot]);
+      if (allFilled) {
+        const isCorrect = newAnswers["s1"] === exercise3.sentences[0].correct &&
+          newAnswers["s2_0"] === exercise3.sentences[1].correct[0] &&
+          newAnswers["s2_1"] === exercise3.sentences[1].correct[1];
+        if (isCorrect) {
+          setDropdownFillLocked(true);
+        }
+      }
     }
+  };
+
+  // Функции проверки для шаблона
+  const isSpelling1Complete = () => {
+    if (inputWord1.length !== exercise1.correct.length) return null;
+    return inputWord1 === exercise1.correct;
+  };
+
+  const isSpelling2Complete = () => {
+    if (inputWord2.length !== exercise2.correct.length) return null;
+    return inputWord2 === exercise2.correct;
+  };
+
+  const isDropdownFillComplete = () => {
+    const requiredSlots = ["s1", "s2_0", "s2_1"];
+    const allFilled = requiredSlots.every(slot => dropdownAnswers[slot]);
+    if (!allFilled) return null;
+    return dropdownAnswers["s1"] === exercise3.sentences[0].correct &&
+      dropdownAnswers["s2_0"] === exercise3.sentences[1].correct[0] &&
+      dropdownAnswers["s2_1"] === exercise3.sentences[1].correct[1];
+  };
+
+  const isPronoun1Complete = () => {
+    if (!pronounAnswer1) return null;
+    return pronounAnswer1 === exercise4.correct;
+  };
+
+  const isPronoun2Complete = () => {
+    if (!pronounAnswer2) return null;
+    return pronounAnswer2 === exercise5.correct;
+  };
+
+  const isChoice1Complete = () => {
+    if (choiceAnswer1 === null) return null;
+    return choiceAnswer1 === exercise6.correct;
+  };
+
+  const isChoice2Complete = () => {
+    if (choiceAnswer2 === null) return null;
+    return choiceAnswer2 === exercise7.correct;
   };
 
   const getOptionClass = (idx, selected, correct) => {
@@ -135,7 +214,6 @@ const KlassExercise = () => {
     if (selected === idx) {
       return idx === correct ? "quiz-option correct-answer" : "quiz-option wrong-answer";
     }
-    if (idx === correct) return "quiz-option correct-answer";
     return "quiz-option disabled";
   };
 
@@ -166,7 +244,7 @@ const KlassExercise = () => {
                 <button 
                   key={i} 
                   className="letter-chip" 
-                  onClick={() => handleSpellingClick(L, 1, exercise1.correct.length, setSpellingLocked1)} 
+                  onClick={() => handleSpellingClick(L, 1, exercise1.correct, setSpellingLocked1)} 
                   disabled={spellingLocked1}
                 >
                   {L}
@@ -179,12 +257,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        if (inputWord1.length !== exercise1.correct.length) return null;
-        const isCorrect = inputWord1 === exercise1.correct;
-        if (isCorrect && !spellingLocked1) setSpellingLocked1(true);
-        return isCorrect;
-      }
+      checkAnswer: isSpelling1Complete
     },
     {
       banner: exercise2.question,
@@ -203,7 +276,7 @@ const KlassExercise = () => {
                 <button 
                   key={i} 
                   className="letter-chip" 
-                  onClick={() => handleSpellingClick(L, 2, exercise2.correct.length, setSpellingLocked2)} 
+                  onClick={() => handleSpellingClick(L, 2, exercise2.correct, setSpellingLocked2)} 
                   disabled={spellingLocked2}
                 >
                   {L}
@@ -216,12 +289,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        if (inputWord2.length !== exercise2.correct.length) return null;
-        const isCorrect = inputWord2 === exercise2.correct;
-        if (isCorrect && !spellingLocked2) setSpellingLocked2(true);
-        return isCorrect;
-      }
+      checkAnswer: isSpelling2Complete
     },
     {
       banner: exercise3.question,
@@ -271,18 +339,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        const requiredSlots = ["s1", "s2_0", "s2_1"];
-        const allFilled = requiredSlots.every(slot => dropdownAnswers[slot]);
-        if (!allFilled) return null;
-        
-        const isCorrect = dropdownAnswers["s1"] === exercise3.sentences[0].correct &&
-          dropdownAnswers["s2_0"] === exercise3.sentences[1].correct[0] &&
-          dropdownAnswers["s2_1"] === exercise3.sentences[1].correct[1];
-        
-        if (isCorrect && !dropdownFillLocked) setDropdownFillLocked(true);
-        return isCorrect;
-      }
+      checkAnswer: isDropdownFillComplete
     },
     {
       banner: exercise4.question,
@@ -306,12 +363,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        if (!pronounAnswer1) return null;
-        const isCorrect = pronounAnswer1 === exercise4.correct;
-        if (isCorrect && !pronounLocked1) setPronounLocked1(true);
-        return isCorrect;
-      }
+      checkAnswer: isPronoun1Complete
     },
     {
       banner: exercise5.question,
@@ -335,12 +387,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        if (!pronounAnswer2) return null;
-        const isCorrect = pronounAnswer2 === exercise5.correct;
-        if (isCorrect && !pronounLocked2) setPronounLocked2(true);
-        return isCorrect;
-      }
+      checkAnswer: isPronoun2Complete
     },
     {
       banner: exercise6.question,
@@ -355,7 +402,7 @@ const KlassExercise = () => {
               <button 
                 key={idx} 
                 className={getOptionClass(idx, choiceAnswer1, exercise6.correct)} 
-                onClick={() => handleChoiceClick(idx, 1)}
+                onClick={() => handleChoiceClick(idx, 1, exercise6.correct)}
                 disabled={choiceLocked1}
               >
                 {opt}
@@ -364,10 +411,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        if (choiceAnswer1 === null) return null;
-        return choiceAnswer1 === exercise6.correct;
-      }
+      checkAnswer: isChoice1Complete
     },
     {
       banner: exercise7.question,
@@ -382,7 +426,7 @@ const KlassExercise = () => {
               <button 
                 key={idx} 
                 className={getOptionClass(idx, choiceAnswer2, exercise7.correct)} 
-                onClick={() => handleChoiceClick(idx, 2)}
+                onClick={() => handleChoiceClick(idx, 2, exercise7.correct)}
                 disabled={choiceLocked2}
               >
                 {opt}
@@ -391,10 +435,7 @@ const KlassExercise = () => {
           </div>
         </div>
       ),
-      checkAnswer: () => {
-        if (choiceAnswer2 === null) return null;
-        return choiceAnswer2 === exercise7.correct;
-      }
+      checkAnswer: isChoice2Complete
     }
   ];
 

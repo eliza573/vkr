@@ -1,8 +1,18 @@
-.sn-container { display: flex; flex-direction: column; margin-bottom: 2px;  }
-.sn-layout { display: flex; min-height: 100vh; }
-.sn-main-content { flex: 1; padding: 1px 40px; background-color: #fff; text-align: center; }
+.sn-container { display: flex;
+   flex-direction: column;
+   padding: 1px;
+    margin-bottom: 1px;  }
 
-.sn-title { font-size: 36px; margin-bottom: 2px; }
+.sn-layout { display: flex;
+   min-height: 100vh; }
+
+.sn-main-content { flex: 1; 
+  padding: 1px 40px;
+   background-color: #fff; 
+   text-align: center; }
+
+.sn-title { font-size: 36px; 
+  margin-bottom: 2px; }
 
 /* Счетчик */
 .sn-counter-section { margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
@@ -56,3 +66,70 @@
 .sn-dialogue-bubble p { margin: 0; font-size: 18px; }
 .sn-ru-dialog { font-size: 13px; color: #888; display: block; margin-bottom: 8px; }
 .sn-dialog-img { height: 250px; }
+
+/* ... (предыдущие стили для контейнера и заголовка) */
+
+.sn-examples-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Создает две равные колонки */
+  gap: 30px 40px; /* Отступы между рядами и колонками */
+  padding: 20px;
+  align-items: center;
+}
+
+.sn-ex-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.sn-ex-img {
+  width: 130px; /* Фиксированная ширина для картинок, чтобы всё было ровно */
+  height: auto;
+  object-fit: contain;
+}
+
+.sn-ex-label {
+  background-color: #e1f5fe;
+  border-radius: 20px;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 140px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.sn-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sn-kg-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.sn-ru-text {
+  font-size: 15px;
+  color: #78909c; 
+}
+
+.sn-audio-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+/* Стили для активной цифры в сетке */
+.sn-num-bubble.active {
+  background-color: #4fc3f7;
+  color: white;
+}
+
+/* Остальные стили из вашего проекта... */

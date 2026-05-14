@@ -38,18 +38,6 @@ const MektepExercise = () => {
     correctId: "girl"
   };
 
-  const exercise2 = {
-    question: "Тийиштүү сөздөрдү тандаңыз",
-    translation: "Выберите подходящие слова",
-    image: "people.png",
-    sentences: [
-      { text: "Бул эмне? Бул ___", correct: "мектеп" },
-      { text: "Булар кимдер? Булар ___", correct: "окуучулар" },
-      { text: "Бул ким? Бул ___", correct: "мугалим" }
-    ],
-    allOptions: ["мугалим", "мектеп", "окуучулар"]
-  };
-
   const exercise3 = {
     question: "Бул эмне?",
     translation: "Что это?",
@@ -162,7 +150,7 @@ const MektepExercise = () => {
                 className={getImageCardClass(item)} 
                 onClick={() => handleImageClick(item.id)}
               >
-                <img src={`/src/assets/4tema/${item.img}`} alt="choice" />
+                <img src={`/src/assets/4tema/${item.img}`} alt="choice" style={{ height: "200px", width: "auto" }} />
               </div>
             ))}
           </div>
@@ -173,47 +161,13 @@ const MektepExercise = () => {
         return selectedImageId === exercise1.correctId;
       }
     },
-    {
-      banner: exercise2.question,
-      content: (
-        <div className="step-content">
-          <div className="task-image-container">
-            <img src={`/src/assets/4tema/${exercise2.image}`} className="task-img-large" alt="task" />
-          </div>
-          <div className="dropdown-container">
-            {exercise2.sentences.map((sentence, idx) => (
-              <div key={idx} className="sentence-row">
-                <span>{sentence.text.split("___")[0]}</span>
-                <select 
-                  onChange={(e) => handleDropdownChange(idx, e.target.value)}
-                  disabled={dropdownLocked}
-                  className={dropdownLocked && dropdownAnswers[idx] ? 
-                    (dropdownAnswers[idx] === sentence.correct ? "correct-select" : "wrong-select") : ""}
-                  value={dropdownAnswers[idx] || ""}
-                >
-                  <option value="">---</option>
-                  {exercise2.allOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-                <span>{sentence.text.split("___")[1] || ""}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ),
-      checkAnswer: () => {
-        const allFilled = Object.keys(dropdownAnswers).length === exercise2.sentences.length;
-        if (!allFilled) return null;
-        const isCorrect = exercise2.sentences.every((s, idx) => dropdownAnswers[idx] === s.correct);
-        if (isCorrect && !dropdownLocked) setDropdownLocked(true);
-        return isCorrect;
-      }
-    },
+   
     {
       banner: exercise3.question,
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src={`/src/assets/4tema/${exercise3.image}`} className="task-img-large" alt="task" />
+            <img src={`/src/assets/4tema/${exercise3.image}`} className="task-img-large" alt="task" style={{ height: "160px", width: "auto" }} />
           </div>
           <div className={`word-display ${spellingLocked1 ? (inputWord1 === exercise3.correct ? "correct-text" : "wrong-text") : ""}`}>
             {inputWord1 || "______"}
@@ -247,7 +201,7 @@ const MektepExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src={`/src/assets/4tema/${exercise4.image}`} className="task-img-large" alt="task" />
+            <img src={`/src/assets/4tema/${exercise4.image}`} className="task-img-large" alt="task" style={{ height: "350px", width: "auto" }} />
           </div>
           <div className={`word-display ${spellingLocked2 ? (inputWord2 === exercise4.correct ? "correct-text" : "wrong-text") : ""}`}>
             {inputWord2 || "______"}
@@ -281,7 +235,7 @@ const MektepExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src={`/src/assets/4tema/${exercise5.image}`} className="task-img-large" alt="task" />
+            <img src={`/src/assets/4tema/${exercise5.image}`} className="task-img-large" alt="task" style={{ height: "350px", width: "auto" }} />
           </div>
           <div className="question-text">
             <p className="question-kg">{exercise5.question}</p>
@@ -311,7 +265,7 @@ const MektepExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src={`/src/assets/4tema/${exercise6.image}`} className="task-img-large" alt="task" />
+            <img src={`/src/assets/4tema/${exercise6.image}`} className="task-img-large" alt="task" style={{ height: "350px", width: "auto" }} />
           </div>
           <div className="question-text">
             <p className="question-kg">{exercise6.question}</p>
@@ -341,7 +295,7 @@ const MektepExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src={`/src/assets/4tema/${exercise7.image}`} className="task-img-large" alt="task" />
+            <img src={`/src/assets/4tema/${exercise7.image}`} className="task-img-large" alt="task" style={{ height: "350px", width: "auto" }} />
           </div>
           <div className="question-text">
             <p className="question-kg">{exercise7.question}</p>

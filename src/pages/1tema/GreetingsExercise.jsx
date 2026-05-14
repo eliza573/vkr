@@ -20,8 +20,8 @@ const GreetingsExercise = () => {
   // Данные
   const matchingData = {
     left: [
-      { id: 'l1', text: "Саламатсыңарбы балдар?", img: "teacher_eje.png", width: "75px" },
-      { id: 'l2', text: "Салам Айжан", img: "girl1.png", width: "120px" },
+      { id: 'l1', text: "Саламатсыңарбы балдар?", img: "teacher_eje.png", width: "70px" },
+      { id: 'l2', text: "Салам Айжан", img: "girl1.png", width: "115px" },
     ],
     right: [
       { id: 'r1', text: "Саламатсызбы эже?", img: "group_students.png", width: "135px" },
@@ -189,7 +189,7 @@ const GreetingsExercise = () => {
           <div className="images-row">
             {[
               {id: 1, img: "aksakal.png", w: "130px"},
-              {id: 2, img: "girls_shaking_hands.png", w: "140px"},
+              {id: 2, img: "girls_shaking_hands.png", w: "174px"},
               {id: 3, img: "teacher_eje.png", w: "85px"}
             ].map(item => (
               <div key={item.id} className="cap-card">
@@ -254,7 +254,7 @@ const GreetingsExercise = () => {
       content: (
         <>
           <div className="task-image-container">
-            <img src={`/src/assets/1tema/${quizData2.image}`} className="task-img-large" alt="task" />
+            <img src={`/src/assets/1tema/${quizData2.image}`} className="task-img-large" alt="task"  style={{ width: "400px", height: "auto" }}/>
           </div>
           <div className="question-text">
             <p className="question-kg">{quizData2.question}</p>

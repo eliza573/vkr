@@ -30,6 +30,8 @@ const playAudio = (fileName) => {
   };
 };
 
+// ... (начало кода без изменений: импорты и функция playAudio)
+
 function Sandar() {
   const [count, setCount] = useState(1);
 
@@ -75,7 +77,7 @@ function Sandar() {
 
           <div className="sn-numbers-grid">
             {numbers.map((n) => (
-              <div key={n.num} className="sn-num-bubble" onClick={() => setCount(n.num)}>
+              <div key={n.num} className={`sn-num-bubble ${count === n.num ? 'active' : ''}`} onClick={() => setCount(n.num)}>
                 {n.num}
               </div>
             ))}
@@ -83,9 +85,10 @@ function Sandar() {
 
           <hr className="sn-divider" />
 
-          <section className="sn-examples">
+          {/* Сетка примеров в два ряда */}
+          <section className="sn-examples-grid">
             {examples.map((ex, i) => (
-              <div key={i} className="sn-ex-row">
+              <div key={i} className="sn-ex-card">
                 <img src={`/src/assets/31tema/${ex.img}`} alt={ex.kg} className="sn-ex-img" />
                 <div className="sn-ex-label">
                   <div className="sn-text-group">
@@ -96,8 +99,6 @@ function Sandar() {
                 </div>
               </div>
             ))}
-            
-         
           </section>
         </main>
         <RightSidebar 

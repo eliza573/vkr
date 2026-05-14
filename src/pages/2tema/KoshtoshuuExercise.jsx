@@ -99,7 +99,7 @@ const KoshtoshuuExercise = () => {
             <img 
               src={`/src/assets/2tema/${goodbyeImageData.image}`} 
               className="task-img-large" 
-              style={{ width: '500px' }}
+              style={{ width: '580px' }}
               alt="Goodbye scene" 
             />
           </div>

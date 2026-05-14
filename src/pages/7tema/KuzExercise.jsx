@@ -6,14 +6,25 @@ import "./KuzExercise.css";
 const KuzExercise = () => {
   // Состояния для упражнений
   const [seasonAnswer, setSeasonAnswer] = useState("");
+  const [seasonLocked, setSeasonLocked] = useState(false);
+  
   const [weatherAnswer, setWeatherAnswer] = useState("");
+  const [weatherLocked, setWeatherLocked] = useState(false);
+  
   const [wordLetters, setWordLetters] = useState(["", "", ""]);
+  const [wordLocked, setWordLocked] = useState(false);
+  
   const [syllableGroups, setSyllableGroups] = useState({});
   const [constructedWords, setConstructedWords] = useState([]);
+  const [syllableLocked, setSyllableLocked] = useState(false);
+  
   const [selectedLeaf, setSelectedLeaf] = useState(null);
+  const [leafLocked, setLeafLocked] = useState(false);
+  
   const [sentenceOrder, setSentenceOrder] = useState(["", "", "", ""]);
   const [availableWords, setAvailableWords] = useState(["жаан", "Эшикте", "жаап", "жатат"]);
   const [sentenceComplete, setSentenceComplete] = useState(false);
+  const [sentenceLocked, setSentenceLocked] = useState(false);
 
   // Данные
   const seasonOptions = ["кыш", "күз", "жаз"];
@@ -34,29 +45,41 @@ const KuzExercise = () => {
   ];
 
   const leaves = [
-    { id: 1, color: "green", name: "Жашыл жалбырак", isCorrect: false },
-    { id: 2, color: "yellow", name: "Сары жалбырак", isCorrect: true },
-    { id: 3, color: "brown", name: "Күрөң жалбырак", isCorrect: false },
-    { id: 4, color: "orange", name: "Кызгылт сары жалбырак", isCorrect: false },
+    { id: 1, color: "green", name: "", img: "green_leaf.png", isCorrect: false },
+    { id: 2, color: "yellow", name: "", img: "leaf_yellow.png", isCorrect: true },
+    { id: 3, color: "brown", name: "", img: "leaf_red.png", isCorrect: false },
   ];
 
   const correctSentence = ["Эшикте", "жаан", "жаап", "жатат"];
 
-  // Функции для упражнений
-  const handleSeasonChange = (val) => setSeasonAnswer(val);
-  const handleWeatherChange = (val) => setWeatherAnswer(val);
+  // Функции для упражнений с автоматической блокировкой
+  const handleSeasonChange = (val) => {
+    if (!seasonLocked) {
+      setSeasonAnswer(val);
+      if (val === "күз") setSeasonLocked(true);
+    }
+  };
+
+  const handleWeatherChange = (val) => {
+    if (!weatherLocked) {
+      setWeatherAnswer(val);
+      if (val === "салкын") setWeatherLocked(true);
+    }
+  };
 
   const handleLetterClick = (letter) => {
+    if (wordLocked) return;
     const nextIdx = wordLetters.indexOf("");
     if (nextIdx !== -1) {
       const newWord = [...wordLetters];
       newWord[nextIdx] = letter;
       setWordLetters(newWord);
+      if (newWord.join("") === "күз") setWordLocked(true);
     }
   };
 
   const handleLetterRemove = (index) => {
-    if (wordLetters[index]) {
+    if (!wordLocked && wordLetters[index]) {
       const newWord = [...wordLetters];
       newWord[index] = "";
       setWordLetters(newWord);
@@ -64,6 +87,7 @@ const KuzExercise = () => {
   };
 
   const handleSyllableClick = (syllable, groupId) => {
+    if (syllableLocked) return;
     const currentGroup = syllableGroups[groupId] || [];
     if (!currentGroup.includes(syllable.text)) {
       const newGroup = [...currentGroup, syllable.text];
@@ -76,25 +100,38 @@ const KuzExercise = () => {
           setConstructedWords(prev => [...prev, groupId]);
         }
       }
+      // Проверка на завершение всех слов
+      const allWordsComplete = targetWords.every(word => 
+        [...(syllableGroups[word.id] || []), ...(groupId === word.id ? [syllable.text] : [])].length === word.syllables.length
+      );
+      if (allWordsComplete) setSyllableLocked(true);
     }
   };
 
   const handleLeafClick = (leafId) => {
-    if (selectedLeaf === null) setSelectedLeaf(leafId);
+    if (!leafLocked && selectedLeaf === null) {
+      setSelectedLeaf(leafId);
+      if (leafId === 2) setLeafLocked(true);
+    }
   };
 
   const handleWordClick = (word, index) => {
+    if (sentenceLocked) return;
     if (sentenceOrder[index] === "") {
       const newOrder = [...sentenceOrder];
       newOrder[index] = word;
       setSentenceOrder(newOrder);
       setAvailableWords(availableWords.filter(w => w !== word));
-      setSentenceComplete(newOrder.every(slot => slot !== ""));
+      const allFilled = newOrder.every(slot => slot !== "");
+      setSentenceComplete(allFilled);
+      if (allFilled && newOrder.join(" ") === correctSentence.join(" ")) {
+        setSentenceLocked(true);
+      }
     }
   };
 
   const handleSlotRemove = (index) => {
-    if (sentenceOrder[index]) {
+    if (!sentenceLocked && sentenceOrder[index]) {
       const removedWord = sentenceOrder[index];
       const newOrder = [...sentenceOrder];
       newOrder[index] = "";
@@ -107,7 +144,10 @@ const KuzExercise = () => {
   // CSS классы
   const getLetterClass = (char, index) => {
     if (!char) return "letter-box";
-    return char === correctScramble[index] ? "letter-box correct" : "letter-box wrong";
+    if (wordLocked) {
+      return char === correctScramble[index] ? "letter-box correct" : "letter-box wrong";
+    }
+    return "letter-box";
   };
 
   const getSeasonBtnClass = (opt) => {
@@ -115,7 +155,8 @@ const KuzExercise = () => {
     if (seasonAnswer === opt) {
       return opt === "күз" ? "season-btn selected correct" : "season-btn selected wrong";
     }
-    return "season-btn disabled";
+    if (seasonLocked) return "season-btn disabled";
+    return "season-btn";
   };
 
   const getWeatherBtnClass = (opt) => {
@@ -123,7 +164,8 @@ const KuzExercise = () => {
     if (weatherAnswer === opt) {
       return opt === "салкын" ? "weather-btn selected correct" : "weather-btn selected wrong";
     }
-    return "weather-btn disabled";
+    if (weatherLocked) return "weather-btn disabled";
+    return "weather-btn";
   };
 
   const getLeafClass = (leaf) => {
@@ -131,7 +173,11 @@ const KuzExercise = () => {
     if (selectedLeaf === leaf.id) {
       return leaf.isCorrect ? "leaf-card selected correct" : "leaf-card selected wrong";
     }
-    return "leaf-card disabled";
+    return "leaf-card";
+  };
+
+  const isSyllableComplete = () => {
+    return constructedWords.length === targetWords.length;
   };
 
   // Определение шагов
@@ -139,7 +185,7 @@ const KuzExercise = () => {
     {
       banner: "1. Азыр кайсы мезгил?",
       content: (
-        <div className="select-step">
+        <div className="step-content select-step">
           <div className="word-block">
             <img src="/src/assets/31tema/main_kuz.png" className="task-img-large" alt="autumn" />
             <div className="select-container">
@@ -150,7 +196,7 @@ const KuzExercise = () => {
                     key={idx}
                     className={getSeasonBtnClass(opt)}
                     onClick={() => handleSeasonChange(opt)}
-                    disabled={seasonAnswer !== ""}
+                    disabled={seasonLocked}
                   >
                     {opt}
                   </button>
@@ -163,9 +209,9 @@ const KuzExercise = () => {
       checkComplete: () => seasonAnswer === "күз"
     },
     {
-      banner: "2. Күзүндө күн кандай болот?",
+      banner: "2. Туура жоопту танда",
       content: (
-        <div className="select-step">
+        <div className="step-content select-step">
           <div className="word-block">
             <img src="/src/assets/31tema/main_kuz.png" className="task-img-large" alt="weather" />
             <div className="select-container">
@@ -176,7 +222,7 @@ const KuzExercise = () => {
                     key={idx}
                     className={getWeatherBtnClass(opt)}
                     onClick={() => handleWeatherChange(opt)}
-                    disabled={weatherAnswer !== ""}
+                    disabled={weatherLocked}
                   >
                     {opt}
                   </button>
@@ -191,7 +237,7 @@ const KuzExercise = () => {
     {
       banner: "3. Туура жаз",
       content: (
-        <div className="words-step">
+        <div className="step-content words-step">
           <div className="word-block">
             <img src="/src/assets/31tema/weather_compare.png" className="task-img-large" alt="spring" />
             <p className="task-hint">Туура жаз</p>
@@ -203,12 +249,12 @@ const KuzExercise = () => {
               ))}
             </div>
             <div className="letters-pool">
-              {["к", "ү", "з"].map((l, i) => (
+              {[ "ү","к", "з"].map((l, i) => (
                 <button 
                   key={i} 
                   className="letter-btn" 
                   onClick={() => handleLetterClick(l)}
-                  disabled={wordLetters.every(letter => letter !== "")}
+                  disabled={wordLocked || wordLetters.every(letter => letter !== "")}
                 >
                   {l}
                 </button>
@@ -222,7 +268,7 @@ const KuzExercise = () => {
     {
       banner: "4. Муундардан сөздөрдү түзгүлө",
       content: (
-        <div className="syllables-step">
+        <div className="step-content syllables-step">
           <div className="syllables-container">
             <div className="syllables-pool">
               <h3>Муундар:</h3>
@@ -234,7 +280,7 @@ const KuzExercise = () => {
                       key={syllable.id}
                       className={`syllable-card ${isUsed ? "used" : ""}`}
                       onClick={() => {
-                        if (!isUsed) {
+                        if (!isUsed && !syllableLocked) {
                           if (syllable.text === "жа" || syllable.text === "шыл") {
                             handleSyllableClick(syllable, "word1");
                           } else {
@@ -242,7 +288,7 @@ const KuzExercise = () => {
                           }
                         }
                       }}
-                      disabled={isUsed}
+                      disabled={isUsed || syllableLocked}
                     >
                       {syllable.text}
                     </button>
@@ -266,18 +312,18 @@ const KuzExercise = () => {
           </div>
         </div>
       ),
-      checkComplete: () => constructedWords.length === targetWords.length
+      checkComplete: isSyllableComplete
     },
     {
       banner: "5. Сары жалбыракты тапкыла",
       content: (
-        <div className="leaf-step">
+        <div className="step-content leaf-step">
           <div className="leaf-container">
-            <p className="leaf-question">Сары жалбыракты тапкыла</p>
+            <p className="leaf-question"></p>
             <div className="leaves-grid">
               {leaves.map((leaf) => (
                 <div key={leaf.id} className={getLeafClass(leaf)} onClick={() => handleLeafClick(leaf.id)}>
-                  <div className={`leaf-icon leaf-${leaf.color}`}>🍂</div>
+                  <img src={`/src/assets/31tema/${leaf.img}`} className="leaf-img" alt={leaf.name} />
                   <span className="leaf-name">{leaf.name}</span>
                 </div>
               ))}
@@ -287,56 +333,68 @@ const KuzExercise = () => {
       ),
       checkComplete: () => selectedLeaf === 2
     },
-    {
-      banner: "6. Сүйлөмдү туура түзгүлө",
-      content: (
-        <div className="sentence-step">
-          <div className="sentence-container">
-            <p className="sentence-question">Сүйлөмдү туура түзгүлө</p>
-            <div className="sentence-slots">
-              {sentenceOrder.map((word, idx) => (
-                <div key={idx} className="sentence-slot" onClick={() => handleSlotRemove(idx)}>
-                  {word || "___"}
-                </div>
-              ))}
-            </div>
-            <div className="words-pool">
-              {availableWords.map((word, idx) => (
-                <button
-                  key={idx}
-                  className="word-btn"
-                  onClick={() => {
-                    const emptyIndex = sentenceOrder.findIndex(slot => slot === "");
-                    if (emptyIndex !== -1) handleWordClick(word, emptyIndex);
-                  }}
-                >
-                  {word}
-                </button>
-              ))}
-            </div>
-          </div>
+ {
+  banner: "6. Сүйлөмдү туура түзгүлө",
+  content: (
+    <div className="step-content sentence-step">
+      <div className="sentence-container">
+        {/* Добавить картинку */}
+        <div className="task-image-container">
+          <img src="/src/assets/31tema/rain_scene.png" className="sentence-img" alt="rain scene" />
         </div>
-      ),
-      checkComplete: () => sentenceComplete && sentenceOrder.join(" ") === correctSentence.join(" ")
-    }
+        <p className="sentence-question">Сүйлөмдү туура түзгүлө</p>
+        <div className="sentence-slots">
+          {sentenceOrder.map((word, idx) => (
+            <div key={idx} className="sentence-slot" onClick={() => handleSlotRemove(idx)}>
+              {word || "___"}
+            </div>
+          ))}
+        </div>
+        <div className="words-pool">
+          {availableWords.map((word, idx) => (
+            <button
+              key={idx}
+              className="word-btn"
+              onClick={() => {
+                const emptyIndex = sentenceOrder.findIndex(slot => slot === "");
+                if (emptyIndex !== -1 && !sentenceLocked) handleWordClick(word, emptyIndex);
+              }}
+              disabled={sentenceLocked}
+            >
+              {word}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+  checkComplete: () => sentenceLocked
+}
   ];
 
   const handleReset = () => {
     setSeasonAnswer("");
+    setSeasonLocked(false);
     setWeatherAnswer("");
+    setWeatherLocked(false);
     setWordLetters(["", "", ""]);
+    setWordLocked(false);
     setSyllableGroups({});
     setConstructedWords([]);
+    setSyllableLocked(false);
     setSelectedLeaf(null);
+    setLeafLocked(false);
     setSentenceOrder(["", "", "", ""]);
     setAvailableWords(["жаан", "Эшикте", "жаап", "жатат"]);
     setSentenceComplete(false);
+    setSentenceLocked(false);
   };
 
   return (
     <ExerciseTemplate
       title="Күз мезгили / көнүгүү"
       steps={steps}
+      totalSteps={6}
       onReset={handleReset}
       containerClass="kuz-exercise"
     />

@@ -31,7 +31,7 @@ function Dene() {
     { id: 9, kg: "кулак", ru: "ухо", audio: "kulak.mp3", top: "35%", left: "68%", img: "ear.png", side: "right" },
     { id: 10, kg: "алакан", ru: "ладонь", audio: "alakan.mp3", top: "55%", left: "68%", img: "palm.png", side: "right" },
     { id: 11, kg: "кол", ru: "рука", audio: "kol.mp3", top: "80%", left: "70%", img: "arm.png", side: "right" },
-    { id: 6, kg: "тизе", ru: "колено", audio: "tize.mp3", top: "65%", left: "45%", img: "knee.png", side: "right" },
+    { id: 6, kg: "тизе", ru: "колено", audio: "tize.mp3", top: "65%", left: "45%", img: "", side: "right" },
   ];
 
   const sentences = [
@@ -123,7 +123,7 @@ function Dene() {
         </main>
         <RightSidebar 
           words={wordsForRightMenu} 
-          exerciseLink="/dene-exercise" 
+          exerciseLink="/dene_exercise" 
           onWordClick={(audio) => playAudio(audio)} 
         />
       </div>

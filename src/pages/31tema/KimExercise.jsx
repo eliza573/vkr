@@ -190,7 +190,7 @@ const KimExercise = () => {
         <div className="step-content words-step">
           <div className="word-block">
             <h3>Бул эмне?</h3>
-            <img src="/src/assets/31tema/book.png" className="task-img-large" alt="task" />
+            <img src="/src/assets/31tema/book.png" className="task-img-large" alt="task" style={{ height: "160px", width: "auto" }}  />
             <div className="letter-slots">
               {word2.map((l, i) => (
                 <div key={i} className="letter-box" onClick={() => handleLetterRemove(i, 3)}>

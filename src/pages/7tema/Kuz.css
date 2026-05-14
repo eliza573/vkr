@@ -43,11 +43,11 @@
     justify-content: flex-end;
 }
 
-.icon-img { width: 150px; }
-.months-img { width: 280px; }
-.rain-img { width: 350px; border-radius: 10px; }
-.weather-img { width: 380px; border-radius: 10px; }
-.kuz-img-main { width: 390px; display: block; margin: 0 auto; }
+.icon-img { width: 170px !important; }
+.months-img { width: 280px !important; }
+.rain-img { width: 420px !important; border-radius: 10px; }
+.weather-img { width: 380px !important; border-radius: 10px; }
+.kuz-img-main { width: 390px !important; display: block; margin: 0 auto; }
 
 .text-group .kg-text {
     font-size: 20px;
@@ -55,7 +55,7 @@
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1px;
 }
 
 .text-group .ru-text {
@@ -80,4 +80,68 @@
     display: flex;
     gap: 10px;
 }
-.multi-leaves img { width: 90px; }
+.multi-leaves img { width: 130px!important; }
+
+.kuz-grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 3px;
+}
+
+.kuz-row {
+  display: flex;
+  justify-content: space-between; /* Распределяет две карточки по краям */
+  gap: 2px;
+}
+
+.kuz-card {
+  flex: 1; 
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.section-flex {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.kg-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ru-text {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+}
+
+/* Настройки размеров изображений */
+.icon-img { width: 80px; height: auto; }
+.multi-leaves img { width: 50px; height: auto; margin-right: 5px; }
+.months-img { width: 120px; height: auto; }
+.rain-img { width: 100px; height: auto; }
+.weather-img { width: 100px; height: auto; }
+
+/* Кнопка звука */
+.kg-text button, .inline-audio {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  color: #4A90E2;
+}

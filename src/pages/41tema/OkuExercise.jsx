@@ -1,248 +1,284 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// pages/31tema/OkuExercise.jsx
+import React, { useState, useEffect } from 'react';
 import ExerciseTemplate from '../../components/ExerciseTemplate';
-
-import "./OkuExercise.css"; 
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
-import Character from "../../components/Character";
+import '../../components/ExerciseCommon.css';
+import "./OkuExercise.css";
 
 const OkuExercise = () => {
-  const navigate = useNavigate();
-  
-  const [currentStep, setCurrentStep] = useState(0);
-  const [characterState, setCharacterState] = useState("idle");
-  const [quizLocked, setQuizLocked] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
-
+  // Состояния для упражнений
   const [selectedItems, setSelectedItems] = useState([]);
+  const [itemStatus, setItemStatus] = useState({}); // для отслеживания статуса каждой кнопки
+  const [multiChoiceLocked, setMultiChoiceLocked] = useState(false);
+  
   const [matchedPairs, setMatchedPairs] = useState([]);
   const [activeWordId, setActiveWordId] = useState(null);
+  const [matchingLocked, setMatchingLocked] = useState(false);
+  
   const [inputs, setInputs] = useState({});
+  const [fillLettersLocked, setFillLettersLocked] = useState(false);
+  
+  const [dropdownAnswers, setDropdownAnswers] = useState({});
+  const [dropdownLocked, setDropdownLocked] = useState(false);
 
-  const tasks = [
-    {
-      id: 1,
-      type: "multi-choice",
-      question: "Устолдо эмне бар?",
-      translation: "Что есть на столе?",
-      img: "desk_items.png",
-      options: ["Клей", "Кайчы", "Боек", "Калем", "Кагаз", "Сызгыч"],
-      correctItems: ["Клей", "Кайчы", "Боек", "Калем", "Кагаз"] 
-    },
-    {
-      id: 2,
-      type: "matching",
-      question: "Дал келтир",
-      translation: "Сопоставление",
-      pairs: [
-        { id: 1, text: "кайчы", img: "scissors.png" },
-        { id: 2, text: "сызгыч", img: "ruler.png" },
-        { id: 3, text: "боек", img: "paints.png" },
-        { id: 4, text: "жон баштык", img: "backpack.png" },
-        { id: 5, text: "бор", img: "chalks.png" },
-        { id: 6, text: "китеп", img: "book.png" }
-      ]
-    },
-    {
-      id: 3,
-      type: "fill-letters",
-      question: "Сөздөрдү толуктагыла",
-      translation: "Дополните слова",
-      items: [
-        { id: "w1", word: "дептер", missing: [2], correct: "п" },
-        { id: "w2", word: "калемсап", missing: [7], correct: "п" },
-        { id: "w3", word: "учтагыч", missing: [2], correct: "т" },
-        { id: "w4", word: "өчүргүч", missing: [6], correct: "ч" }
-      ]
-    },
-    {
-      id: 4,
-      type: "dropdown-sentence",
-      question: "Сүйлөмдү толуктагыла",
-      translation: "Дополните предложение",
-      img: "backpak_ruler.png", 
-      sentence: ["Бул", "___", "жана", "___"],
-      options: ["жон баштык", "сызгыч", "калем"],
-      correct: { select1: "жон баштык", select2: "сызгыч" }
-    }
-  ];
-
-  const currentTask = tasks[currentStep];
-  const totalSteps = tasks.length;
-  const progress = ((currentStep + 1) / totalSteps) * 100;
-
-  const triggerCharacter = (state) => {
-    setCharacterState(state);
-    setTimeout(() => setCharacterState("idle"), 1500);
+  // Данные упражнений
+  const exercise1 = {
+    type: "multi-choice",
+    question: "Устолдо эмне бар?",
+    translation: "Что есть на столе?",
+    img: "desk_items.png",
+    options: ["Клей", "Кайчы", "Боек", "Сызгыч", "Калем", "Кагаз", "Сызгыч"],
+    correctItems: ["Клей", "Кайчы", "Боек", "Калем", "Кагаз"]
   };
 
-  const checkAndLockAnswer = (isCorrect) => {
-    if (!quizLocked) {
-      triggerCharacter(isCorrect ? "success" : "error");
-      setQuizLocked(true);
+  const exercise2 = {
+    type: "matching",
+    question: "Дал келтир",
+    translation: "Сопоставление",
+    pairs: [
+      { id: 1, text: "кайчы", img: "scissors.png" },
+      { id: 2, text: "сызгыч", img: "ruler.png" },
+      { id: 3, text: "боек", img: "paints.png" },
+      { id: 4, text: "жон баштык", img: "backpack.png" },
+      { id: 5, text: "бор", img: "chalks.png" },
+      { id: 6, text: "китеп", img: "book.png" }
+    ]
+  };
+
+  const exercise3 = {
+    type: "fill-letters",
+    question: "Сөздөрдү толуктагыла",
+    translation: "Дополните слова",
+    items: [
+      { id: "w1", word: "дептер", missing: [2], correct: "п" },
+      { id: "w2", word: "калемсап", missing: [7], correct: "п" },
+      { id: "w3", word: "учтагыч", missing: [2], correct: "т" },
+      { id: "w4", word: "өчүргүч", missing: [6], correct: "ч" }
+    ]
+  };
+
+  const exercise4 = {
+    type: "dropdown-sentence",
+    question: "Сүйлөмдү толуктагыла",
+    translation: "Дополните предложение",
+    img: "backpak_ruler.png",
+    sentence: ["Бул", "___", "жана", "___"],
+    options: ["жон баштык", "сызгыч", "калем"],
+    correct: { select1: "жон баштык", select2: "сызгыч" }
+  };
+
+  // Обработчики для упражнения 1
+  const handleMultiChoiceClick = (opt) => {
+    if (!multiChoiceLocked) {
+      const isCorrect = exercise1.correctItems.includes(opt);
+      const isSelected = selectedItems.includes(opt);
+      
+      // Обновляем статус кнопки
+      setItemStatus(prev => ({
+        ...prev,
+        [opt]: isSelected ? null : (isCorrect ? 'correct' : 'wrong')
+      }));
+      
+      // Обновляем выбранные элементы
+      setSelectedItems(prev => 
+        prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt]
+      );
     }
   };
 
+  // Эффект для проверки завершения упражнения 1
+  useEffect(() => {
+    if (!multiChoiceLocked && selectedItems.length === exercise1.correctItems.length) {
+      const allCorrect = selectedItems.every(val => exercise1.correctItems.includes(val));
+      if (allCorrect) {
+        setMultiChoiceLocked(true);
+      }
+    }
+  }, [selectedItems, multiChoiceLocked]);
+
+ // Обработчики для упражнения 2 (без подсказки и без подсветки)
+const [activeSelection, setActiveSelection] = useState({ type: null, id: null });
+
+const handleMatchingWordClick = (pairId) => {
+  if (!matchingLocked && !matchedPairs.includes(pairId)) {
+    if (activeSelection.type === null) {
+      // Выбрали слово
+      setActiveSelection({ type: 'word', id: pairId });
+    } else if (activeSelection.type === 'word' && activeSelection.id === pairId) {
+      // Отмена выбора
+      setActiveSelection({ type: null, id: null });
+    } else if (activeSelection.type === 'image') {
+      // Проверяем соответствие
+      if (activeSelection.id === pairId) {
+        setMatchedPairs(prev => [...prev, pairId]);
+      }
+      setActiveSelection({ type: null, id: null });
+    } else {
+      setActiveSelection({ type: null, id: null });
+    }
+  }
+};
+
+const handleMatchingImageClick = (pairId) => {
+  if (!matchingLocked && !matchedPairs.includes(pairId)) {
+    if (activeSelection.type === null) {
+      // Выбрали картинку
+      setActiveSelection({ type: 'image', id: pairId });
+    } else if (activeSelection.type === 'image' && activeSelection.id === pairId) {
+      // Отмена выбора
+      setActiveSelection({ type: null, id: null });
+    } else if (activeSelection.type === 'word') {
+      // Проверяем соответствие
+      if (activeSelection.id === pairId) {
+        setMatchedPairs(prev => [...prev, pairId]);
+      }
+      setActiveSelection({ type: null, id: null });
+    } else {
+      setActiveSelection({ type: null, id: null });
+    }
+  }
+};
+
+  // Эффект для проверки завершения упражнения 3
+  useEffect(() => {
+    if (!fillLettersLocked) {
+      const allFilled = exercise3.items.every(item => inputs[item.id] !== undefined && inputs[item.id] !== "");
+      if (allFilled) {
+        const allCorrect = exercise3.items.every(item => inputs[item.id] === item.correct);
+        if (allCorrect) {
+          setFillLettersLocked(true);
+        }
+      }
+    }
+  }, [inputs, fillLettersLocked]);
+
+  const handleDropdownChange = (select, value) => {
+    if (!dropdownLocked) {
+      setDropdownAnswers(prev => ({ ...prev, [select]: value }));
+    }
+  };
+
+  // Эффект для проверки завершения упражнения 4
+  useEffect(() => {
+    if (!dropdownLocked && dropdownAnswers.select1 && dropdownAnswers.select2) {
+      const isCorrect = dropdownAnswers.select1 === exercise4.correct.select1 && 
+                        dropdownAnswers.select2 === exercise4.correct.select2;
+      if (isCorrect) {
+        setDropdownLocked(true);
+      }
+    }
+  }, [dropdownAnswers, dropdownLocked]);
+
+  // Функции проверки для шаблона
   const isMultiChoiceComplete = () => {
-    return selectedItems.length === currentTask.correctItems.length && 
-           selectedItems.every(val => currentTask.correctItems.includes(val));
+    if (selectedItems.length !== exercise1.correctItems.length) return null;
+    return selectedItems.every(val => exercise1.correctItems.includes(val));
   };
 
   const isMatchingComplete = () => {
-    return matchedPairs.length === currentTask.pairs.length;
+    if (matchedPairs.length !== exercise2.pairs.length) return null;
+    return true;
   };
 
   const isFillLettersComplete = () => {
-    return currentTask.items.every(item => inputs[item.id] === item.correct);
+    const allFilled = exercise3.items.every(item => inputs[item.id] !== undefined && inputs[item.id] !== "");
+    if (!allFilled) return null;
+    return exercise3.items.every(item => inputs[item.id] === item.correct);
   };
 
   const isDropdownComplete = () => {
-    return inputs.select1 === currentTask.correct.select1 && 
-           inputs.select2 === currentTask.correct.select2;
+    if (!dropdownAnswers.select1 || !dropdownAnswers.select2) return null;
+    return dropdownAnswers.select1 === exercise4.correct.select1 && 
+           dropdownAnswers.select2 === exercise4.correct.select2;
   };
 
-  const isCurrentTaskComplete = () => {
-    if (currentTask.type === "multi-choice") return isMultiChoiceComplete();
-    if (currentTask.type === "matching") return isMatchingComplete();
-    if (currentTask.type === "fill-letters") return isFillLettersComplete();
-    if (currentTask.type === "dropdown-sentence") return isDropdownComplete();
-    return false;
+  // Получение класса для кнопки (упражнение 1)
+  const getOptionClass = (opt) => {
+    const status = itemStatus[opt];
+    if (status === 'correct') return "quiz-option correct-highlight";
+    if (status === 'wrong') return "quiz-option wrong-highlight";
+    if (selectedItems.includes(opt)) return "quiz-option selected";
+    return "quiz-option";
   };
 
-  const handleNext = () => {
-    if (currentStep < totalSteps - 1) {
-      setCurrentStep(s => s + 1);
-      resetStepStates();
-    } else {
-      setIsFinished(true);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentStep > 0) {
-      setCurrentStep(s => s - 1);
-      resetStepStates();
-    }
-  };
-
-  const resetStepStates = () => {
-    setSelectedItems([]);
-    setMatchedPairs([]);
-    setInputs({});
-    setActiveWordId(null);
-    setQuizLocked(false);
-  };
-
-  const resetQuiz = () => {
-    setCurrentStep(0);
-    setIsFinished(false);
-    resetStepStates();
-  };
-
-  // Автоматическая проверка для multi-choice
-  React.useEffect(() => {
-    if (!quizLocked && currentTask?.type === "multi-choice" && selectedItems.length > 0) {
-      const isComplete = isMultiChoiceComplete();
-      if (selectedItems.length === currentTask.correctItems.length) {
-        checkAndLockAnswer(isComplete);
-      }
-    }
-  }, [selectedItems, currentTask, quizLocked]);
-
-  // Автоматическая проверка для matching
-  React.useEffect(() => {
-    if (!quizLocked && currentTask?.type === "matching" && matchedPairs.length > 0) {
-      if (matchedPairs.length === currentTask.pairs.length) {
-        checkAndLockAnswer(true);
-      }
-    }
-  }, [matchedPairs, currentTask, quizLocked]);
-
-  // Автоматическая проверка для fill-letters
-  React.useEffect(() => {
-    if (!quizLocked && currentTask?.type === "fill-letters") {
-      const allFilled = currentTask.items.every(item => inputs[item.id] !== undefined && inputs[item.id] !== "");
-      if (allFilled) {
-        const isComplete = isFillLettersComplete();
-        checkAndLockAnswer(isComplete);
-      }
-    }
-  }, [inputs, currentTask, quizLocked]);
-
-  // Автоматическая проверка для dropdown-sentence
-  React.useEffect(() => {
-    if (!quizLocked && currentTask?.type === "dropdown-sentence") {
-      if (inputs.select1 && inputs.select2) {
-        const isComplete = isDropdownComplete();
-        checkAndLockAnswer(isComplete);
-      }
-    }
-  }, [inputs, currentTask, quizLocked]);
-
-  const renderTaskBody = () => {
-    switch (currentTask.type) {
-      case "multi-choice":
-        return (
+  // Создание шагов
+  const steps = [
+    // Шаг 1: Multi-choice
+    {
+      banner: exercise1.question,
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={`/src/assets/31tema/${exercise1.img}`} className="task-img-large" alt="task" />
+          </div>
+          <p className="question-translation">{exercise1.translation}</p>
           <div className="quiz-options-horizontal">
-            {currentTask.options.map((opt, i) => (
+            {exercise1.options.map((opt, i) => (
               <button 
                 key={i} 
-                className={`quiz-option ${selectedItems.includes(opt) ? "selected" : ""}`} 
-                onClick={() => {
-                  if (!quizLocked) {
-                    setSelectedItems(prev => prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt]);
-                  }
-                }}
-                disabled={quizLocked}
+                className={getOptionClass(opt)} 
+                onClick={() => handleMultiChoiceClick(opt)}
+                disabled={multiChoiceLocked}
               >
                 {opt}
               </button>
             ))}
           </div>
-        );
-case "matching":
-        return (
-          <div className="matching-container-horizontal">
-            {/* Верхний ряд: Слова */}
-            <div className="matching-row-words">
-              {currentTask.pairs.map(pair => (
-                <button
-                  key={pair.id}
-                  className={`match-item ${activeWordId === pair.id ? "active" : ""} ${matchedPairs.includes(pair.id) ? "matched" : ""}`}
-                  onClick={() => !quizLocked && !matchedPairs.includes(pair.id) && setActiveWordId(pair.id)}
-                  disabled={quizLocked || matchedPairs.includes(pair.id)}
-                >
-                  {pair.text} 🔊
-                </button>
-              ))}
-            </div>
+        </div>
+      ),
+      checkAnswer: () => {
+        const result = isMultiChoiceComplete();
+        return result;
+      }
+    },
+  // Шаг 2: Matching 
+{
+  banner: exercise2.question,
+  content: (
+    <div className="step-content">
+      <p className="question-translation">{exercise2.translation}</p>
+      <div className="matching-container-horizontal">
+        {/* Верхний ряд: Слова */}
+        <div className="matching-row-words">
+          {exercise2.pairs.map(pair => (
+            <button
+              key={pair.id}
+              className={`match-item ${matchedPairs.includes(pair.id) ? "matched" : ""}`}
+              onClick={() => handleMatchingWordClick(pair.id)}
+              disabled={matchingLocked || matchedPairs.includes(pair.id)}
+            >
+              {pair.text}
+            </button>
+          ))}
+        </div>
 
-            {/* Нижний ряд: Картинки */}
-            <div className="matching-row-images">
-              {currentTask.pairs.map(pair => (
-                <div 
-                  key={pair.id} 
-                  className={`match-image-item ${matchedPairs.includes(pair.id) ? "matched-img" : ""} ${activeWordId === pair.id ? "active-match" : ""}`}
-                  onClick={() => {
-                    if (!quizLocked && !matchedPairs.includes(pair.id) && activeWordId === pair.id) {
-                      setMatchedPairs(prev => [...prev, pair.id]);
-                      setActiveWordId(null);
-                    } else if (!quizLocked && activeWordId !== null && activeWordId !== pair.id && !matchedPairs.includes(pair.id)) {
-                      setActiveWordId(null);
-                    }
-                  }}
-                >
-                  <img src={`/src/assets/31tema/${pair.img}`} alt="item" />
-                </div>
-              ))}
+        {/* Нижний ряд: Картинки */}
+        <div className="matching-row-images">
+          {exercise2.pairs.map(pair => (
+            <div 
+              key={pair.id} 
+              className={`match-image-item ${matchedPairs.includes(pair.id) ? "matched-img" : ""}`}
+              onClick={() => handleMatchingImageClick(pair.id)}
+            >
+              <img src={`/src/assets/31tema/${pair.img}`} alt="item" />
             </div>
-          </div>
-        );
-      case "fill-letters":
-        return (
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+  checkAnswer: () => {
+    const result = isMatchingComplete();
+    return result;
+  }
+},
+    // Шаг 3: Fill letters
+    {
+      banner: exercise3.question,
+      content: (
+        <div className="step-content">
+          <p className="question-translation">{exercise3.translation}</p>
           <div className="fill-letters-container">
-            {currentTask.items.map((item) => (
+            {exercise3.items.map((item) => (
               <div key={item.id} className="word-row">
                 {item.word.split('').map((char, charIdx) => (
                   <span key={charIdx} className={`char-box ${inputs[item.id] && inputs[item.id] === item.correct ? "correct" : inputs[item.id] ? "wrong" : ""}`}>
@@ -251,8 +287,8 @@ case "matching":
                         type="text" 
                         maxLength="1" 
                         value={inputs[item.id] || ""}
-                        onChange={(e) => !quizLocked && setInputs(prev => ({...prev, [item.id]: e.target.value.toLowerCase()}))}
-                        disabled={quizLocked}
+                        onChange={(e) => handleFillLettersChange(item.id, e.target.value)}
+                        disabled={fillLettersLocked}
                       />
                     ) : char}
                   </span>
@@ -260,110 +296,76 @@ case "matching":
               </div>
             ))}
           </div>
-        );
-      case "dropdown-sentence":
-        return (
+        </div>
+      ),
+      checkAnswer: () => {
+        const result = isFillLettersComplete();
+        return result;
+      }
+    },
+    // Шаг 4: Dropdown sentence
+    {
+      banner: exercise4.question,
+      content: (
+        <div className="step-content">
+          <div className="task-image-container">
+            <img src={`/src/assets/31tema/${exercise4.img}`} className="task-img-large" alt="task" />
+          </div>
+          <p className="question-translation">{exercise4.translation}</p>
           <div className="dropdown-container">
             <div className="sentence-row">
-              <span className="sentence-word">{currentTask.sentence[0]}</span>
+              <span className="sentence-word">{exercise4.sentence[0]}</span>
               <select 
-                className={`sentence-select ${inputs.select1 === currentTask.correct.select1 ? "correct-select" : inputs.select1 ? "wrong-select" : ""}`}
-                value={inputs.select1 || ""} 
-                onChange={(e) => !quizLocked && setInputs(prev => ({...prev, select1: e.target.value}))}
-                disabled={quizLocked}
+                className={`sentence-select ${dropdownAnswers.select1 === exercise4.correct.select1 ? "correct-select" : dropdownAnswers.select1 ? "wrong-select" : ""}`}
+                value={dropdownAnswers.select1 || ""} 
+                onChange={(e) => handleDropdownChange("select1", e.target.value)}
+                disabled={dropdownLocked}
               >
                 <option value="">___</option>
-                {currentTask.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                {exercise4.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
-              <span className="sentence-word">{currentTask.sentence[2]}</span>
+              <span className="sentence-word">{exercise4.sentence[2]}</span>
               <select 
-                className={`sentence-select ${inputs.select2 === currentTask.correct.select2 ? "correct-select" : inputs.select2 ? "wrong-select" : ""}`}
-                value={inputs.select2 || ""} 
-                onChange={(e) => !quizLocked && setInputs(prev => ({...prev, select2: e.target.value}))}
-                disabled={quizLocked}
+                className={`sentence-select ${dropdownAnswers.select2 === exercise4.correct.select2 ? "correct-select" : dropdownAnswers.select2 ? "wrong-select" : ""}`}
+                value={dropdownAnswers.select2 || ""} 
+                onChange={(e) => handleDropdownChange("select2", e.target.value)}
+                disabled={dropdownLocked}
               >
                 <option value="">___</option>
-                {currentTask.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                {exercise4.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
             </div>
           </div>
-        );
-      default: return null;
+        </div>
+      ),
+      checkAnswer: () => {
+        const result = isDropdownComplete();
+        return result;
+      }
     }
+  ];
+
+  const handleReset = () => {
+    setSelectedItems([]);
+    setItemStatus({});
+    setMultiChoiceLocked(false);
+    setMatchedPairs([]);
+    setActiveWordId(null);
+    setMatchingLocked(false);
+    setInputs({});
+    setFillLettersLocked(false);
+    setDropdownAnswers({});
+    setDropdownLocked(false);
   };
 
-  if (isFinished) {
-    return (
-      <div className="oku-ex-page">
-        <Navbar />
-        <div className="oku-ex-layout">
-          <div className="sidebar-wrapper">
-            <Sidebar />
-          </div>
-          <div className="oku-ex-content">
-            <div className="finish-screen">
-              <div className="finish-icon">🏆</div>
-              <h2>Азаматсың!</h2>
-              <p>Бардык көнүгүүлөрдү ийгиликтүү аяктадың!</p>
-              <div className="finish-buttons">
-                <button className="btn-retry" onClick={resetQuiz}>Кайра аткаруу</button>
-                <button className="btn-home" onClick={() => navigate("/")}>Башкы бет</button>
-              </div>
-            </div>
-            <Character state={characterState} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="oku-ex-page">
-      <Navbar />
-      <div className="oku-ex-layout">
-        <div className="sidebar-wrapper">
-          <Sidebar />
-        </div>
-        <div className="oku-ex-content">
-          <h2 className="ex1-title">Окуу куралдары / көнүгүү</h2>
-
-          <div className="progress-container">
-            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-          </div>
-
-          <div className="ex-header-banner">
-            {currentTask.question}
-          </div>
-
-          <div className="exercise-scroll-container">
-            <div className="step-content">
-              {currentTask.img && (
-                <div className="task-image-container">
-                  <img src={`/src/assets/31tema/${currentTask.img}`} alt="task" className="task-img-large" />
-                </div>
-              )}
-              <p className="question-translation">{currentTask.translation}</p>
-              {renderTaskBody()}
-            </div>
-          </div>
-
-          <div className="nav-controls">
-            <button className="nav-btn back" onClick={handlePrev} disabled={currentStep === 0}>
-              Артка
-            </button>
-            <button 
-              className="nav-btn next" 
-              onClick={handleNext}
-              disabled={!quizLocked}
-            >
-              {currentStep === totalSteps - 1 ? "Аяктоо" : "Кийинки"}
-            </button>
-          </div>
-
-          <Character state={characterState} />
-        </div>
-      </div>
-    </div>
+    <ExerciseTemplate
+      title="Окуу куралдары / көнүгүү"
+      steps={steps}
+      totalSteps={4}
+      onReset={handleReset}
+      containerClass="oku-exercise"
+    />
   );
 };
 

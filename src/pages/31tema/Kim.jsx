@@ -111,6 +111,8 @@ function Kim() {
           {kimSections.map((section, index) => (
             <section key={index} className="kim-section">
 
+               {index === 2 && <hr className="section-divider" />}
+
               {/* Заголовок */}
               <div className={`question-header ${section.color}`}>
                 {section.title}

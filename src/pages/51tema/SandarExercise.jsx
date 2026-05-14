@@ -28,7 +28,6 @@ const SandarExercise = () => {
   // Данные для сопоставления чисел (Шаг 1)
   const matchingNumbers = {
     left: [
-      
       { id: 'l3', text: "Үч", value: 3, width: "80px" },
       { id: 'l4', text: "Төрт", value: 4, width: "80px" },
       { id: 'l5', text: "Беш", value: 5, width: "80px" },
@@ -36,10 +35,8 @@ const SandarExercise = () => {
       { id: 'l7', text: "Жети", value: 7, width: "80px" },
       { id: 'l8', text: "Сегиз", value: 8, width: "80px" },
       { id: 'l9', text: "Тогуз", value: 9, width: "80px" },
-      { id: 'l10', text: "Он", value: 10, width: "80px" },
     ],
     right: [
-   
       { id: 'r3', text: "5", value: 5, width: "60px" },
       { id: 'r4', text: "4", value: 4, width: "60px" },
       { id: 'r5', text: "3", value: 3, width: "60px" },
@@ -47,41 +44,39 @@ const SandarExercise = () => {
       { id: 'r7', text: "6", value: 6, width: "60px" },
       { id: 'r8', text: "10", value: 10, width: "60px" },
       { id: 'r9', text: "9", value: 9, width: "60px" },
-      { id: 'r10', text: "8", value: 8, width: "60px" },
     ],
     correct: { 
-     'l3': 'r5', 'l4': 'r4', 'l5': 'r3',
-      'l6': 'r7', 'l7': 'r6', 'l8': 'r10', 'l9': 'r9', 'l10': 'r8'
+      'l3': 'r5', 'l4': 'r4', 'l5': 'r3',
+      'l6': 'r7', 'l7': 'r6', 'l8': 'r9', 'l9': 'r8'
     }
   };
 
-  // Данные для упражнения 2 - Цветы (3 цветка)
+  // Данные для упражнения 2 - Цветы (7 цветков)
   const flowerOptions = [
-    { id: 1, value: "Бир", correct: "Бир", count: 1 },
-    { id: 2, value: "Эки", correct: "Эки", count: 2 },
-    { id: 3, value: "Үч", correct: "Үч", count: 3 }
+    { id: 1, value: "Жети", correct: "Жети", count: 7 },
+    { id: 2, value: "Беш", correct: "Беш", count: 5 },
+    { id: 3, value: "Тогуз", correct: "Тогуз", count: 9 }
   ];
 
-  // Данные для упражнения 3 - Стулья (4 стула)
+  // Данные для упражнения 3 - Стулья (8 стульев)
   const chairOptions = [
-    { id: 1, value: "Бир", correct: "Бир", count: 1 },
-    { id: 2, value: "Эки", correct: "Эки", count: 2 },
-    { id: 3, value: "Үч", correct: "Үч", count: 3 },
-    { id: 4, value: "Төрт", correct: "Төрт", count: 4 }
+    { id: 1, value: "Сегиз", correct: "Сегиз", count: 8 },
+    { id: 2, value: "Беш", correct: "Беш", count: 5 },
+    { id: 3, value: "Алты", correct: "Алты", count: 6 }
   ];
 
   // Данные для упражнения 4 - Лимоны (5 лимонов)
   const lemonOptions = [
-    { id: 1, value: "Беш лимон", correct: "Беш лимон", count: 5 },
-    { id: 2, value: "Сегиз лимон", correct: "Сегиз лимон", count: 8 },
-    { id: 3, value: "Алты лимон", correct: "Алты лимон", count: 6 }
+    { id: 1, value: "Үч", correct: "Үч", count: 3 },
+    { id: 2, value: "Беш", correct: "Беш", count: 5 },
+    { id: 3, value: "Төрт", correct: "Төрт", count: 4 }
   ];
 
   // Данные для упражнения 5 - Бананы (3 банана)
   const bananaOptions = [
-    { id: 1, value: "беш банан", correct: "беш банан", count: 5 },
-    { id: 2, value: "Эки банан", correct: "Эки банан", count: 2 },
-    { id: 3, value: "Үч банан", correct: "Үч банан", count: 3 }
+    { id: 1, value: "Эки", correct: "Эки", count: 2 },
+    { id: 2, value: "Үч", correct: "Үч", count: 3 },
+    { id: 3, value: "Бир", correct: "Бир", count: 1 }
   ];
 
   // Функции для matching
@@ -133,6 +128,38 @@ const SandarExercise = () => {
     return "quiz-option disabled";
   };
 
+  // Функция для отображения множества предметов
+  const renderItems = (count, imgName, type) => {
+    const items = [];
+    const maxPerRow = 5;
+    const rows = Math.ceil(count / maxPerRow);
+    
+    for (let row = 0; row < rows; row++) {
+      const rowItems = [];
+      const startIdx = row * maxPerRow;
+      const endIdx = Math.min(startIdx + maxPerRow, count);
+      
+      for (let i = startIdx; i < endIdx; i++) {
+        rowItems.push(
+          <img 
+            key={i} 
+            src={`/src/assets/2tema/${imgName}`} 
+            className="item-img" 
+            alt={type} 
+          />
+        );
+      }
+      
+      items.push(
+        <div key={row} className="items-row">
+          {rowItems}
+        </div>
+      );
+    }
+    
+    return <div className="items-container">{items}</div>;
+  };
+
   // Шаги упражнения
   const steps = [
     // Шаг 1: Сандарды туура көрсөткүлө (Matching)
@@ -173,13 +200,13 @@ const SandarExercise = () => {
         return allCorrect && connections.length > 0 ? true : (connections.length > 0 ? false : null);
       }
     },
-    // Шаг 2: Канча гүл бар?
+    // Шаг 2: Канча гүл бар? (7 цветков)
     {
       banner: "Канча гүл бар?",
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/flowers.png" className="task-img-large" alt="flowers" />
+            {renderItems(7, "flower.png", "flower")}
           </div>
           <p className="question-kg">Канча гүл бар?</p>
           <div className="quiz-options-horizontal">
@@ -198,16 +225,18 @@ const SandarExercise = () => {
       ),
       checkAnswer: () => {
         if (!flowerAnswer) return null;
-        return flowerAnswer === "Үч";
+        const isCorrect = flowerAnswer === "Жети";
+        if (isCorrect && !flowerLocked) setFlowerLocked(true);
+        return isCorrect;
       }
     },
-    // Шаг 3: Канча отургуч бар?
+    // Шаг 3: Канча отургуч бар? (8 стульев)
     {
       banner: "Канча отургуч бар?",
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/chairs.png" className="task-img-large" alt="chairs" />
+            {renderItems(8, "chair.png", "chair")}
           </div>
           <p className="question-kg">Канча отургуч бар?</p>
           <div className="quiz-options-horizontal">
@@ -226,16 +255,18 @@ const SandarExercise = () => {
       ),
       checkAnswer: () => {
         if (!chairAnswer) return null;
-        return chairAnswer === "Төрт";
+        const isCorrect = chairAnswer === "Сегиз";
+        if (isCorrect && !chairLocked) setChairLocked(true);
+        return isCorrect;
       }
     },
-    // Шаг 4: Бул канча? (Лимоны)
+    // Шаг 4: Бул канча? (5 лимонов)
     {
       banner: "Бул канча?",
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/lemons.png" className="task-img-large" alt="lemons" />
+            {renderItems(5, "lemon.png", "lemon")}
           </div>
           <p className="question-kg">Бул канча?</p>
           <div className="quiz-options-horizontal">
@@ -254,36 +285,41 @@ const SandarExercise = () => {
       ),
       checkAnswer: () => {
         if (!lemonAnswer) return null;
-        return lemonAnswer === "Беш лимон";
+        const isCorrect = lemonAnswer === "Беш";
+        if (isCorrect && !lemonLocked) setLemonLocked(true);
+        return isCorrect;
       }
     },
-    // Шаг 5: Бул канча? (Бананы)
-    {
-      banner: "Бул канча?",
-      content: (
-        <div className="step-content">
-          <div className="task-image-container">
-            <img src="/src/assets/31tema/bananas.png" className="task-img-large" alt="bananas" />
-          </div>
-          <p className="question-kg">Бул канча?</p>
-          <div className="quiz-options-horizontal">
-            {bananaOptions.map(opt => (
-              <button 
-                key={opt.id}
-                className={getOptionClass(opt.value, bananaAnswer, opt.correct)}
-                onClick={() => !bananaLocked && setBananaAnswer(opt.value)}
-                disabled={bananaLocked}
-              >
-                {opt.value}
-              </button>
-            ))}
-          </div>
-        </div>
-      ),
-      checkAnswer: () => {
-        if (!bananaAnswer) return null;
-        return bananaAnswer === "Үч банан";
-      }
+    // Шаг 4: Бул канча? (Лимоны - 5 штук)
+{
+  banner: "Бул канча?",
+  content: (
+    <div className="step-content">
+      <div className="task-image-container">
+        {renderItems(5, "lemon.png", "lemon")}
+      </div>
+      <p className="question-kg">Бул канча?</p>
+      <div className="quiz-options-horizontal">
+        {lemonOptions.map(opt => (
+          <button 
+            key={opt.id}
+            className={getOptionClass(opt.value, lemonAnswer, "Беш")}  // correct = "Беш"
+            onClick={() => !lemonLocked && setLemonAnswer(opt.value)}
+            disabled={lemonLocked}
+          >
+            {opt.value}
+          </button>
+        ))}
+      </div>
+    </div>
+  ),
+  checkAnswer: () => {
+    if (!lemonAnswer) return null;
+    const isCorrect = lemonAnswer === "Беш";
+    if (isCorrect && !lemonLocked) setLemonLocked(true);
+    return isCorrect;
+  }
+
     }
   ];
 

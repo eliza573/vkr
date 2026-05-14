@@ -103,7 +103,8 @@ function Tus() {
                   </div>
                 </div>
                 <div className="tus-ex-image">
-                  <img src={`/src/assets/31tema/${ex.img}`} alt={ex.kg} />
+                  <img src={`/src/assets/31tema/${ex.img}`}  alt={ex.kg}
+        style={ex.id === "e3" ? { width: "100px", height: "100px", objectFit: "contain" } : {}} />
                 </div>
               </div>
             ))}

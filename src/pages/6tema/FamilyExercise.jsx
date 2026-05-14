@@ -19,7 +19,6 @@ const FamilyExercise = () => {
   
   const [inlineAnswers, setInlineAnswers] = useState({});
   const [inlineLocked, setInlineLocked] = useState({});
-  const [openSelect, setOpenSelect] = useState(null);
   
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [selectedRight, setSelectedRight] = useState(null);
@@ -54,7 +53,6 @@ const FamilyExercise = () => {
     },
     {
       type: "spelling-grid",
-     
       translation: "Дополните слова",
       letters: ["Ң", "Я", "Е", "Р", "Э"]
     },
@@ -76,15 +74,15 @@ const FamilyExercise = () => {
     },
     {
       type: "inline-select",
-      question: "Биздин уй-булоодо ___ адам бар.",
-      translation: "В нашей семье ___ человек.",
+      question: "Биздин үй-бүлөдө",
+      translation: "В нашей семье",
       img: "big_family.png",
       options: ["4", "9", "7"],
-      correct: "9"
+      correct: "9",
+      suffix: "адам бар."
     },
     {
       type: "matching-translation",
-   
       translation: "Найди правильный перевод",
       pairs: [
         { left: "менин апам", right: "моя мама" },
@@ -94,27 +92,12 @@ const FamilyExercise = () => {
     },
     {
       type: "inline-select",
-      question: "Бул менин ___ .",
-      translation: "Это мой ___.",
+      question: "Бул менин",
+      translation: "Это мой",
       img: "brother_big.png",
       options: ["эжем", "байке", "байкем"],
-      correct: "байкем"
-    },
-    {
-      type: "inline-select",
-      question: "Сенин апаңдын апасы — ___",
-      translation: "Мама твоей мамы — кто?",
-      img: "all_family.png",
-      options: ["таята", "таене", "чоң апа"],
-      correct: "таене"
-    },
-    {
-      type: "inline-select",
-      question: "Сенин атаңдын апасы — ___",
-      translation: "Мама твоей папы — кто?",
-      img: "all_family.png",
-      options: ["таята", "таене", "чоң апа"],
-      correct: "чоң апа"
+      correct: "байкем",
+      suffix: "."
     }
   ];
 
@@ -147,17 +130,16 @@ const FamilyExercise = () => {
     if (!inlineLocked[idx]) {
       setInlineAnswers(prev => ({ ...prev, [idx]: value }));
       setInlineLocked(prev => ({ ...prev, [idx]: true }));
-      setOpenSelect(null);
     }
   };
 
-  const handleLeftClick = (leftText, stepIdx) => {
+  const handleLeftClick = (leftText) => {
     if (!matchingLocked && !matchedPairs.includes(leftText)) {
       setSelectedLeft(leftText);
     }
   };
 
-  const handleRightClick = (rightText, stepIdx, pairs) => {
+  const handleRightClick = (rightText, pairs) => {
     if (!matchingLocked) {
       setSelectedRight(rightText);
       
@@ -165,12 +147,9 @@ const FamilyExercise = () => {
         const isMatch = pairs.some(p => p.left === selectedLeft && p.right === rightText);
         if (isMatch) {
           setMatchedPairs(prev => [...prev, selectedLeft]);
-          setSelectedLeft(null);
-          setSelectedRight(null);
-        } else {
-          setSelectedLeft(null);
-          setSelectedRight(null);
         }
+        setSelectedLeft(null);
+        setSelectedRight(null);
       }
     }
   };
@@ -197,10 +176,10 @@ const FamilyExercise = () => {
   };
 
   const getInlineSelectClass = (idx, selected, correct) => {
-    if (!inlineLocked[idx]) return "select-trigger";
-    if (selected === correct) return "select-trigger correct-select";
-    if (selected && selected !== correct) return "select-trigger wrong-select";
-    return "select-trigger";
+    if (!inlineLocked[idx]) return "inline-select";
+    if (selected === correct) return "inline-select correct-select";
+    if (selected && selected !== correct) return "inline-select wrong-select";
+    return "inline-select";
   };
 
   const isSpellingComplete = () => {
@@ -215,7 +194,9 @@ const FamilyExercise = () => {
       checkAnswerFn = () => {
         const answer = choiceAnswers[idx];
         if (!answer) return null;
-        return answer === ex.correct;
+        const isCorrect = answer === ex.correct;
+        if (isCorrect && !choiceLocked[idx]) setChoiceLocked(prev => ({ ...prev, [idx]: true }));
+        return isCorrect;
       };
     } else if (ex.type === "spelling-grid") {
       checkAnswerFn = () => {
@@ -228,7 +209,9 @@ const FamilyExercise = () => {
       checkAnswerFn = () => {
         const answer = inlineAnswers[idx];
         if (!answer) return null;
-        return answer === ex.correct;
+        const isCorrect = answer === ex.correct;
+        if (isCorrect && !inlineLocked[idx]) setInlineLocked(prev => ({ ...prev, [idx]: true }));
+        return isCorrect;
       };
     } else if (ex.type === "matching-translation") {
       checkAnswerFn = () => {
@@ -251,10 +234,12 @@ const FamilyExercise = () => {
             </div>
           )}
           
-          <div className="question-text">
-            <p className="question-kg">{ex.question}</p>
-            <p className="question-ru">{ex.translation}</p>
-          </div>
+          {ex.type !== "inline-select" && (
+            <div className="question-text">
+              <p className="question-kg">{ex.question}</p>
+              <p className="question-ru">{ex.translation}</p>
+            </div>
+          )}
 
           {ex.type === "choice" && (
             <div className="quiz-options-horizontal">
@@ -294,33 +279,18 @@ const FamilyExercise = () => {
 
           {ex.type === "inline-select" && (
             <div className="inline-select-container">
-              <div className="sentence-bubble">
-                <p className="sentence-text">
-                  {ex.question.split("___")[0]}
-                  <span className="custom-select-wrapper">
-                    <button 
-                      className={getInlineSelectClass(idx, inlineAnswers[idx], ex.correct)}
-                      onClick={() => !inlineLocked[idx] && setOpenSelect(openSelect === idx ? null : idx)}
-                      disabled={inlineLocked[idx]}
-                    >
-                      {inlineAnswers[idx] || "тандаңыз"}
-                    </button>
-                    {!inlineLocked[idx] && openSelect === idx && (
-                      <div className="select-options-list">
-                        {ex.options.map(opt => (
-                          <div 
-                            key={opt} 
-                            className="select-item"
-                            onClick={() => handleInlineSelect(idx, opt)}
-                          >
-                            {opt}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </span>
-                  {ex.question.split("___")[1]}
-                </p>
+              <div className="sentence-row-simple">
+                <span>{ex.question}</span>
+                <select 
+                  className={getInlineSelectClass(idx, inlineAnswers[idx], ex.correct)}
+                  value={inlineAnswers[idx] || ""} 
+                  onChange={(e) => handleInlineSelect(idx, e.target.value)}
+                  disabled={inlineLocked[idx]}
+                >
+                  <option value="">---</option>
+                  {ex.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+                <span>{ex.suffix || ""}</span>
               </div>
             </div>
           )}
@@ -332,7 +302,7 @@ const FamilyExercise = () => {
                   <button 
                     key={i} 
                     className={`match-item kg ${selectedLeft === p.left ? 'active' : ''} ${matchedPairs.includes(p.left) ? 'matched' : ''}`}
-                    onClick={() => handleLeftClick(p.left, idx)}
+                    onClick={() => handleLeftClick(p.left)}
                     disabled={matchingLocked || matchedPairs.includes(p.left)}
                   >
                     {p.left}
@@ -344,7 +314,7 @@ const FamilyExercise = () => {
                   <button 
                     key={i} 
                     className={`match-item ru ${selectedRight === p.right ? 'active' : ''} ${matchedPairs.includes(ex.pairs.find(pair => pair.right === p.right)?.left) ? 'matched' : ''}`}
-                    onClick={() => handleRightClick(p.right, idx, ex.pairs)}
+                    onClick={() => handleRightClick(p.right, ex.pairs)}
                     disabled={matchingLocked}
                   >
                     {p.right}
@@ -372,7 +342,6 @@ const FamilyExercise = () => {
     setSpellingLocked(false);
     setInlineAnswers({});
     setInlineLocked({});
-    setOpenSelect(null);
     setSelectedLeft(null);
     setSelectedRight(null);
     setMatchedPairs([]);
@@ -383,7 +352,7 @@ const FamilyExercise = () => {
     <ExerciseTemplate
       title="Үй-бүлө / көнүгүү"
       steps={steps}
-      totalSteps={10}
+      totalSteps={exercises.length}
       onReset={handleReset}
       containerClass="family-exercise"
     />

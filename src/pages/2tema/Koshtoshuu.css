@@ -103,3 +103,52 @@
 }
 
 
+/* Стили для аудиокнопок в диалогах */
+.ks-line {
+  margin-bottom: 2px;
+}
+
+.ks-line:last-child {
+  margin-bottom: 0;
+}
+
+.ks-line-text {
+  display: flex;
+  justify-content: space-between;
+  gap: 1px;
+  flex-wrap: wrap;
+}
+
+.ks-audio-btn {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1px;
+}
+
+.ks-audio-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+/* Для лучшего отображения текста в баблах */
+.ks-bubble {
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 2px;
+  max-width: 280px;
+}
+
+.ks-bubble.ks-blue {
+  background-color: #e1f5fe;
+  border-bottom-left-radius: 5px;
+}

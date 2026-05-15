@@ -1,16 +1,48 @@
 /* Общая структура */
 .de-container { display: flex; flex-direction: column; }
-.de-layout { display: flex; min-height: 100vh; background-color: #fff; }
-.de-main-content { flex: 1; padding: 20px 40px; }
-.de-title { text-align: center; font-size: 42px; margin-bottom: 20px; font-weight: 400; }
+.de-layout { display: flex;
+   min-height: 100vh;
+    background-color: #fff; }
+
+    .de-container,
+.de-layout,
+.de-main-content,
+.de-title {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.de-main-content {
+  padding-top: 0 !important;
+}
+
+.de-main-content { flex: 1;
+   padding: 2px 40px; }
+
+.de-title { text-align: center;
+   font-size: 42px; 
+   margin-bottom: 2px;
+    font-weight: 400; }
 
 /* Карта тела */
-.de-body-map { position: relative; height: 600px; display: flex; justify-content: center; margin-bottom: 30px; }
-.de-image-wrapper { position: relative; height: 100%; width: 850px; }
-.de-main-girl { height: 90%; width: auto; display: block; margin: 0 auto; }
+.de-body-map { position: relative;
+   height: 500px; 
+   display: flex; 
+   justify-content: center;
+    margin-bottom: 3px; }
+
+.de-image-wrapper { position: relative;
+   height: 100%; width: 650px; }
+
+.de-main-girl { height: 90%; 
+  width: auto; display: block; 
+  margin: 0 auto; }
 
 /* Контейнеры элементов (баббл + картинка) */
-.de-item-container { position: absolute; display: flex; align-items: center; gap: 12px; z-index: 5; }
+.de-item-container { position: absolute;
+   display: flex;
+    align-items: center;
+     gap: 12px; z-index: 5; }
 
 .side-left { flex-direction: row; } 
 .side-right { flex-direction: row-reverse; } 
@@ -34,40 +66,39 @@
 /* Средняя секция */
 .de-divider { border: none; border-top: 2px solid #333; margin: 20px 0; }
 .de-middle-section { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-.de-poem-box { background-color: #d1f3fb; padding: 20px; border-radius: 15px; width: 150px; font-size: 15px; line-height: 1.4; }
+.de-poem-box { background-color: #d1f3fb; padding: 2px; border-radius: 15px; width: 150px; font-size: 15px; line-height: 1.4; }
 
-.de-sentence-list { display: flex; flex-direction: column; gap: 10px; flex: 1; }
-.de-s-item { background-color: #d1f3fb; padding: 12px 25px; border-radius: 40px; display: flex; justify-content: space-between; align-items: center; }
-.de-kg-text { font-size: 24px; margin: 0; }
+.de-sentence-list { display: flex; flex-direction: column; gap: 1px; flex: 1; }
+.de-s-item { background-color: #d1f3fb; padding: 2px 25px; border-radius: 40px; display: flex; justify-content: space-between; align-items: center; }
+.de-kg-text { font-size: 20px; margin: 0; }
 
 /* Нижняя секция */
 .de-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
 .de-desc-card { display: flex; align-items: flex-start; gap: 15px; }
-.de-avatar { height: 180px; width: auto; }
+.de-avatar { height: 280px; width: auto; }
 .de-desc-bubble { background-color: #d1e9f5; padding: 20px; border-radius: 30px; flex: 1; position: relative; }
-.de-desc-bubble p { margin: 5px 0; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+.de-desc-bubble p { margin: 5px 0; font-size: 20px; display: flex; justify-content: space-between; align-items: center; }
 .de-desc-bubble button { background: none; border: none; cursor: pointer; opacity: 0.5; }
 
 /* Адаптив для мелких иконок аудио */
-.de-audio-btn-small { background: none; border: none; cursor: pointer; font-size: 18px; }
+.de-audio-btn-small { background: none; border: none; cursor: pointer; font-size: 20px; }
 
-/* Карта тела - уменьшаем общую высоту */
 .de-body-map { 
   position: relative; 
-  height: 450px; /* Было 600px */
+  height: 380px; 
   display: flex; 
   justify-content: center; 
-  margin-bottom: 20px; 
+  margin-bottom: 2px; 
 }
 
 .de-image-wrapper { 
   position: relative; 
   height: 100%; 
-  width: 600px; /* Было 850px */
+  width: 900px; 
 }
 
 .de-main-girl { 
-  height: 100%; /* Занимает всю высоту обертки (450px) */
+  height: 100%; 
   width: auto; 
   display: block; 
   margin: 0 auto; 
@@ -75,18 +106,18 @@
 
 /* Уменьшаем иконки частей тела */
 .de-part-img { 
-  width: 60px; /* Было 90px */
-  height: 60px; 
+  width: 80px; 
+  height: 80px; 
   object-fit: contain; 
 }
 
 /* Стили для стихотворения (левый блок на картинке) */
 .de-poem-box { 
   background-color: #e0f7fa; 
-  padding: 25px; 
+  padding: 5px; 
   border-radius: 20px; 
-  width: 250px; /* Увеличил ширину для читаемости */
-  font-size: 16px; 
+  width: 280px; 
+  font-size: 20px; 
   line-height: 1.6;
   box-shadow: none;
 }
@@ -101,22 +132,22 @@
 
 .de-s-item { 
   background-color: #e0f7fa; 
-  padding: 10px 20px; 
-  border-radius: 50px; /* Делаем овальными */
+  padding: 3px 20px; 
+  border-radius: 50px; 
   display: flex; 
-  flex-direction: row-reverse; /* Звук слева от текста или наоборот */
-  gap: 10px;
+  flex-direction: row-reverse; 
+  gap: 1px;
   width: fit-content;
   border: 1px solid #b2ebf2;
 }
 
 .de-kg-text { 
-  font-size: 18px; /* Немного уменьшил для аккуратности */
+  font-size: 20px; 
   margin: 0; 
 }
 
 /* Уменьшаем картинку мальчика в средней секции */
 .de-boy-img {
-  height: 400px; /* Регулировка размера центрального персонажа */
+  height: 300px; /* Регулировка размера центрального персонажа */
   width: auto;
 }

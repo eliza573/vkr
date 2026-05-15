@@ -63,26 +63,22 @@ const DeneExercise = () => {
   const matchingBodyParts = {
     left: [
       { id: 'l1', img: "head.png", text: "Баш", width: "80px" },
-      { id: 'l2', img: "hand.png", text: "Кол", width: "80px" },
-      { id: 'l3', img: "leg.png", text: "Бут", width: "80px" },
+      { id: 'l2', img: "arm.png", text: "Кол", width: "80px" },
+      { id: 'l3', img: "legs.png", text: "Бут", width: "80px" },
       { id: 'l4', img: "eye.png", text: "Көз", width: "80px" },
-      { id: 'l5', img: "ear.png", text: "Кулак", width: "80px" },
-      { id: 'l6', img: "nose.png", text: "Мурун", width: "80px" },
-      { id: 'l7', img: "mouth.png", text: "Ооз", width: "80px" },
-      { id: 'l8', img: "hair.png", text: "Чач", width: "80px" },
+      
+     
     ],
     right: [
       { id: 'r1', text: "Баш", audio: "bash.mp3" },
-      { id: 'r2', text: "Кол", audio: "kol.mp3" },
+      { id: 'r2', text: "Көз", audio: "koz.mp3" },
       { id: 'r3', text: "Бут", audio: "but.mp3" },
-      { id: 'r4', text: "Көз", audio: "koz.mp3" },
-      { id: 'r5', text: "Кулак", audio: "kulak.mp3" },
-      { id: 'r6', text: "Мурун", audio: "murun.mp3" },
-      { id: 'r7', text: "Ооз", audio: "ooz.mp3" },
-      { id: 'r8', text: "Чач", audio: "chach.mp3" },
+      { id: 'r4', text: "Кол", audio: "kol.mp3" },
+  
+     
     ],
     correct: { 
-      'l1': 'r1', 'l2': 'r2', 'l3': 'r3', 'l4': 'r4',
+      'l1': 'r1', 'l2': 'r4', 'l3': 'r3', 'l4': 'r2',
       'l5': 'r5', 'l6': 'r6', 'l7': 'r7', 'l8': 'r8'
     }
   };
@@ -90,28 +86,28 @@ const DeneExercise = () => {
   // Данные для упражнения 2 - Бул эмне? (Кол, Бут, Тизе)
   const bodyOptions1 = [
     { id: 1, value: "Кол", correct: "Кол" },
-    { id: 2, value: "Бут", correct: "Бут" },
-    { id: 3, value: "тизе", correct: "тизе" }
+    { id: 2, value: "Бут" },
+    { id: 3, value: "тизе" }
   ];
 
   // Данные для упражнения 3 - Бул эмне? (Кол, Кирпик, ооз,тиш)
   const bodyOptions2 = [
-    { id: 1, value: "Кол", correct: "Кол" },
-    { id: 2, value: "Кирпик", correct: "Кирпик" },
+    { id: 1, value: "Кол" },
+    { id: 2, value: "Кирпик"},
     { id: 3, value: "ооз,тиш", correct: "ооз,тиш" }
   ];
 
   // Данные для упражнения 4 - Кыздын чачы кандай?
   const hairOptions = [
     { id: 1, value: "Узун", correct: "Узун" },
-    { id: 2, value: "кыска", correct: "кыска" },
-    { id: 3, value: "кичинекей", correct: "кичинекей" }
+    { id: 2, value: "кыска" },
+    { id: 3, value: "кичинекей" }
   ];
 
   // Данные для упражнения 5 - Толуктагыла
   const fillOptions = [
-    { id: 1, value: "чачым", correct: "чачым" },
-    { id: 2, value: "мурдум", correct: "мурдум" },
+    { id: 1, value: "чачым" },
+    { id: 2, value: "мурдум"},
     { id: 3, value: "кулагым", correct: "кулагым" }
   ];
 
@@ -182,7 +178,7 @@ const DeneExercise = () => {
             <div className="items-column">
               {matchingBodyParts.left.map(item => (
                 <div key={item.id} className={`match-row left ${isMatched(item.id) ? 'matched' : ''}`}>
-                  <img src={`/src/assets/31tema/${item.img}`} className="body-part-img" alt={item.text} />
+                  <img src={`/src/assets/body/${item.img}`} className="body-part-img" alt={item.text} />
                   <div className={`dot ${activeStart?.id === item.id ? 'active' : ''} ${wrongDots.includes(item.id) ? 'wrong-dot' : ''} ${correctDots.includes(item.id) ? 'correct-dot' : ''}`} 
                        onClick={(e) => handlePointClick(item.id, 'left', e)}></div>
                 </div>
@@ -227,7 +223,7 @@ const DeneExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/knee.png" className="task-img-large" alt="body part" />
+            <img src="/src/assets/body/arm.png" className="task-img-large" alt="body part" />
           </div>
           <p className="question-kg">Бул эмне?</p>
           <div className="quiz-options-horizontal">
@@ -255,7 +251,7 @@ const DeneExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/eyelash.png" className="task-img-large" alt="body part" />
+            <img src="/src/assets/body/mouth.png" className="task-img-large" alt="body part" />
           </div>
           <p className="question-kg">Бул эмне?</p>
           <div className="quiz-options-horizontal">
@@ -283,7 +279,7 @@ const DeneExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/girl_hair.png" className="task-img-large" alt="girl with long hair" />
+            <img src="/src/assets/body/head.png" className="task-img-large" alt="girl with long hair" />
           </div>
           <p className="question-kg">Кыздын чачы кандай?</p>
           <div className="quiz-options-horizontal">
@@ -311,7 +307,7 @@ const DeneExercise = () => {
       content: (
         <div className="step-content">
           <div className="task-image-container">
-            <img src="/src/assets/31tema/face.png" className="task-img-large" alt="face" />
+            <img src="/src/assets/body/head.png" className="task-img-large" alt="face" />
           </div>
           <p className="question-kg">Менин эки ___ бар</p>
           <div className="quiz-options-horizontal">

@@ -5,7 +5,7 @@ import Sidebar from "../../components/Sidebar";
 import RightSidebar from "../../components/RightSidebar";
 
 // Импорт изображений
-import studentImg from "../../assets/5tema/student_boy.png"; // Ученик в центре
+import studentImg from "../../assets/5tema/student_boy.png";
 import backpackImg from "../../assets/31tema/backpack.png";
 import bookImg from "../../assets/31tema/book.png";
 import pencilImg from "../../assets/31tema/pencil.png";
@@ -27,7 +27,6 @@ let currentFile = null;
 const playAudio = (fileName) => {
   if (!fileName) return;
 
-  // если нажали ту же кнопку — СТОП
   if (currentAudio && currentFile === fileName) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
@@ -36,13 +35,11 @@ const playAudio = (fileName) => {
     return;
   }
 
-  // если другой звук — остановить старый
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
   }
 
-  // новый звук
   const audio = new Audio(`/audio/${fileName}`);
   currentAudio = audio;
   currentFile = fileName;
@@ -55,42 +52,34 @@ const playAudio = (fileName) => {
   };
 };
 
-  const AudioIcon = ({ file }) => (
-    <span className="audio-icon" onClick={() => playAudio(file)}>
-      🔊
-    </span>
-  );
-
-
 const Okuu = () => {
   // Слова для правого сайдбара
   const wordsForRightMenu = [
     { kg: "Окуу куралдары", ru: "Учебные принадлежности", audio: "Okuukuraldary.mp3" },
     { kg: "Китеп", ru: "Книга", audio: "Kitep.mp3" },
-    { kg: "Дептер", ru: "Тетрадь", audio: "Menin.mp3" },
+    { kg: "Дептер", ru: "Тетрадь", audio: "Depter.mp3" },
     { kg: "Калем", ru: "Карандаш", audio: "Kalem1.mp3" },
     { kg: "Өчүргүч", ru: "Ластик", audio: "Ochurguch.mp3" },
     { kg: "Сызгыч", ru: "Линейка", audio: "Syzgych.mp3" },
     { kg: "Жон баштык", ru: "Рюкзак", audio: "Jonbashtyk.mp3" },
   ];
 
-  // Данные предметов для кругового расположения
-  // Угол (angle) указан в градусах, 0 - это верх, далее по часовой стрелке
+  // Данные предметов для кругового расположения с аудио
   const supplies = [
-    { id: 1, kg: "Китеп", ru: "Книга", img: bookImg, angle: 8 },
-    { id: 2, kg: "Сызгыч", ru: "Линейка", img: rulerImg, angle: 30 },
-    { id: 3, kg: "Боёк", ru: "Краски", img: paintsImg, angle: 53 },
-    { id: 4, kg: "Дептер", ru: "Тетрадь", img: notebookImg, angle: 81 },
-    { id: 5, kg: "Учтагыч", ru: "Точилка", img: sharpenerImg, angle: 110 },
-    { id: 6, kg: "Өчүргүч", ru: "Ластик", img: eraserImg, angle: 137 },
-    { id: 7, kg: "Кыл калем", ru: "Кисть", img: brushImg, angle: 160 },
-    { id: 8, kg: "Такта", ru: "Доска", img: boardImg, angle: 185 },
-    { id: 9, kg: "Үстөл", ru: "Стол", img: deskImg, angle: 210 },
-    { id: 10, kg: "Бор", ru: "Мел", img: chalkImg, angle: 235 }, // Чуть сдвинут
-    { id: 11, kg: "Отургуч", ru: "Стул", img: chairImg, angle: 266 }, // Чуть сдвинут
-    { id: 12, kg: "Калем", ru: "Карандаш", img: pencilImg, angle: 298 },
-    { id: 13, kg: "Кайчы", ru: "Ножницы", img: scissorsImg, angle: 324 },
-    { id: 14, kg: "Жон баштык", ru: "Рюкзак", img: backpackImg, angle: 347 },
+    { id: 1, kg: "Китеп", ru: "Книга", img: bookImg, angle: 8, audio: "Kitep.mp3" },
+    { id: 2, kg: "Сызгыч", ru: "Линейка", img: rulerImg, angle: 30, audio: "Syzgych.mp3" },
+    { id: 3, kg: "Боёк", ru: "Краски", img: paintsImg, angle: 53, audio: "Boyok.mp3" },
+    { id: 4, kg: "Дептер", ru: "Тетрадь", img: notebookImg, angle: 81, audio: "Depter.mp3" },
+    { id: 5, kg: "Учтагыч", ru: "Точилка", img: sharpenerImg, angle: 110, audio: "Uchtagych.mp3" },
+    { id: 6, kg: "Өчүргүч", ru: "Ластик", img: eraserImg, angle: 137, audio: "Ochurguch.mp3" },
+    { id: 7, kg: "Кыл калем", ru: "Кисть", img: brushImg, angle: 160, audio: "Kylkalem.mp3" },
+    { id: 8, kg: "Такта", ru: "Доска", img: boardImg, angle: 185, audio: "Takta.mp3" },
+    { id: 9, kg: "Үстөл", ru: "Стол", img: deskImg, angle: 210, audio: "Ustol.mp3" },
+    { id: 10, kg: "Бор", ru: "Мел", img: chalkImg, angle: 235, audio: "Bor.mp3" },
+    { id: 11, kg: "Отургуч", ru: "Стул", img: chairImg, angle: 266, audio: "Orturguch.mp3" },
+    { id: 12, kg: "Калем", ru: "Карандаш", img: pencilImg, angle: 298, audio: "Kalem1.mp3" },
+    { id: 13, kg: "Кайчы", ru: "Ножницы", img: scissorsImg, angle: 324, audio: "Kaichy.mp3" },
+    { id: 14, kg: "Жон баштык", ru: "Рюкзак", img: backpackImg, angle: 347, audio: "Jonbashtyk.mp3" },
   ];
 
   return (
@@ -110,11 +99,10 @@ const Okuu = () => {
 
             {/* Предметы вокруг */}
             {supplies.map((item) => {
-              // Расчет координат для круга (радиус ~280px)
               const radius = 305;
-              const angleRad = (item.angle - 90) * (Math.PI / 180); // Коррекция угла
-              const left = 50 + (radius * Math.cos(angleRad)) / 7; // В процентах от контейнера (800px)
-              const top = 50 + (radius * Math.sin(angleRad)) / 6; // В процентах от контейнера (600px)
+              const angleRad = (item.angle - 90) * (Math.PI / 180);
+              const left = 50 + (radius * Math.cos(angleRad)) / 7;
+              const top = 50 + (radius * Math.sin(angleRad)) / 6;
 
               return (
                 <div 
@@ -129,7 +117,16 @@ const Okuu = () => {
                     <img src={item.img} alt={item.kg} className="ok-supply-img" />
                   </div>
                   <div className="ok-text-block">
-                    <span className="ok-kg-word">{item.kg} <button className="ok-audio-btn">🔊</button></span>
+                    <span className="ok-kg-word">
+                      {item.kg} 
+                      <button 
+                        className="ok-audio-btn" 
+                        onClick={() => playAudio(item.audio)}
+                        aria-label="Аудио"
+                      >
+                        🔊
+                      </button>
+                    </span>
                     <span className="ok-ru-word">{item.ru}</span>
                   </div>
                 </div>
@@ -138,10 +135,10 @@ const Okuu = () => {
           </div>
         </main>
 
-        <RightSidebar words={wordsForRightMenu} 
-        exerciseLink="/okuu-exercise"
-                    onWordClick={(audioName) => playAudio(audioName)}
-
+        <RightSidebar 
+          words={wordsForRightMenu} 
+          exerciseLink="/okuu-exercise"
+          onWordClick={(audioName) => playAudio(audioName)}
         />
       </div>
     </div>

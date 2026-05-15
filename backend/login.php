@@ -12,16 +12,9 @@ if (empty($email) || empty($password)) {
     exit();
 }
 
-$sql = "SELECT id, first_name, last_name, school, class, email, password, role FROM users WHERE email = ?";
-$params = array($email);
-$stmt = sqlsrv_query($conn, $sql, $params);
-
-if ($stmt === false) {
-    echo json_encode(["success" => false, "message" => "SQL error"]);
-    exit();
-}
-
-$user = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+$stmt = $pdo->prepare("SELECT id, first_name, last_name, school, class, email, password, role FROM users WHERE email = ?");
+$stmt->execute([$email]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user['password'])) {
     $_SESSION['user_id'] = $user['id'];
@@ -46,7 +39,4 @@ if ($user && password_verify($password, $user['password'])) {
 } else {
     echo json_encode(["success" => false, "message" => "Электрондук почта же сырсөз туура эмес"]);
 }
-
-sqlsrv_free_stmt($stmt);
-sqlsrv_close($conn);
 ?>

@@ -67,17 +67,54 @@ const ExerciseTemplate = ({
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [currentStep, isFinished]);
+  }, [currentStep, isFinished, totalSteps]);
 
   // Проверка ответов для каждого шага
   useEffect(() => {
     if (stepInitialized && steps[currentStep]?.checkComplete) {
       const isComplete = steps[currentStep].checkComplete();
-      if (isComplete) {
+      if (isComplete === true) {
         checkAnswerWithCharacter(true);
+      } else if (isComplete === false) {
+        checkAnswerWithCharacter(false);
       }
     }
   }, [steps, currentStep, stepInitialized]);
+
+  // Сохранение результатов при завершении
+  useEffect(() => {
+    if (isFinished) {
+      const saveResult = async () => {
+        try {
+          // Подсчет правильных ответов
+          let correctCount = 0;
+          for (let i = 0; i < steps.length; i++) {
+            if (steps[i].checkComplete) {
+              const result = steps[i].checkComplete();
+              if (result === true) correctCount++;
+            }
+          }
+          
+          const response = await fetch('http://localhost:8000/save_result.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              exercise_name: title,
+              score: correctCount,
+              total_questions: steps.length
+            })
+          });
+          const data = await response.json();
+          console.log('Result saved:', data);
+        } catch (error) {
+          console.error('Error saving result:', error);
+        }
+      };
+      saveResult();
+      if (onComplete) onComplete();
+    }
+  }, [isFinished, title, steps, onComplete]);
 
   const currentContent = steps[currentStep]?.content;
 

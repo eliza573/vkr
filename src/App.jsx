@@ -25,6 +25,7 @@ import Sandar from "./pages/51tema/Sandar";
 import SandarExercise from "./pages/51tema/SandarExercise";
 import Dene from "./pages/62tema/Dene";
 import DeneExercise from "./pages/62tema/DeneExercise";
+import Results from "./pages/Results";
 
 import AnimalsExercise from "./pages/animals/AnimalsExercise";
 import BirdsExercise from "./pages/animals/BirdsExercise";
@@ -58,6 +59,8 @@ function App() {
             <Route path="/san_exercise" element={<SandarExercise/>}/>
             <Route path="/dene" element={<Dene/>}/>
             <Route path="/dene_exercise" element={<DeneExercise/>}/>
+            <Route path="/results" element={<Results/>}/>
+
 
 
     <Route path="/animals_aidana"  element={<AnimalsExercise />} />

@@ -101,16 +101,16 @@ const playAudio = (fileName) => {
               <div className="bubble top-left">
                 <div className="bubble-content">
                   <span className="kg-word">
-                    Саламатчылык <AudioIcon file="Salamatchylyk.mp3" />
+                    Саламатчылык <AudioIcon file="Salamatchylyk2.mp3" />
                   </span>
-                  <span className="ru-word">Ответ</span>
+                  <span className="ru-word">Здравствуй</span>
                 </div>
               </div>
 
               <div className="bubble bottom-right">
                 <div className="bubble-content">
                   <span className="kg-word">
-                    Саламатсызбы <AudioIcon file="Salamatsyzby.mp3" />
+                    Саламатсызбы <AudioIcon file="Salamatsyzby2.mp3" />
                   </span>
                   <span className="ru-word">Здравствуйте</span>
                 </div>
@@ -136,7 +136,7 @@ const playAudio = (fileName) => {
                 <div className="bubble pos-top">
                   <div className="bubble-content">
                     <span className="kg-word">
-                      Салам Айдай <AudioIcon file="Aidai.mp3" />
+                      Салам Айдай <AudioIcon file="Salam_aidai.mp3" />
                     </span>
                     <span className="ru-word">Привет Айдай</span>
                   </div>
@@ -152,7 +152,7 @@ const playAudio = (fileName) => {
               <div className="bubble teacher-left">
                 <div className="bubble-content">
                   <span className="kg-word">
-                    Саламатсыңарбы балдар? <AudioIcon file="Baldar.mp3" />
+                    Саламатсыңарбы балдар? <AudioIcon file="Salamatsynarby_baldar.mp3" />
                   </span>
                   <span className="ru-word">Здравствуйте дети?</span>
                 </div>
@@ -161,7 +161,7 @@ const playAudio = (fileName) => {
               <div className="bubble teacher-right">
                 <div className="bubble-content">
                   <span className="kg-word">
-                    Саламатсызбы эже? <AudioIcon file="Salamatsyzby.mp3" />
+                    Саламатсызбы эже? <AudioIcon file="Salamatsyzby_ejei.mp3" />
                   </span>
                   <span className="ru-word">Здравствуйте учительница?</span>
                 </div>
@@ -174,7 +174,7 @@ const playAudio = (fileName) => {
               <div className="bubble bektur-left">
                 <div className="bubble-content">
                   <span className="kg-word">
-                    Кандайсыз? <AudioIcon file="Kandaisyn.mp3" />
+                    Кандайсыз? <AudioIcon file="Kandaisyz.mp3" />
                   </span>
                   <span className="ru-word">Как вы?</span>
                 </div>
@@ -183,7 +183,7 @@ const playAudio = (fileName) => {
               <div className="bubble bektur-right">
                 <div className="bubble-content">
                   <span className="kg-word">
-                    Жакшы <AudioIcon file="Jakshy.mp3" />
+                    Жакшы <AudioIcon file="Jakshy2.mp3" />
                   </span>
                   <span className="ru-word">Хорошо</span>
                 </div>

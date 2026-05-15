@@ -12,7 +12,13 @@
    text-align: center; }
 
 .sn-title { font-size: 36px; 
-  margin-bottom: 2px; }
+  margin-bottom: 2px;
+ }
+
+ .sn-title {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 
 /* Счетчик */
 .sn-counter-section { margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }

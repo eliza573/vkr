@@ -19,7 +19,11 @@
   font-size: 36px;
   margin-bottom: 2px;
   color: #333;
+
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
+
 
 /* Сетка карандашей */
 .tus-pencils-grid {

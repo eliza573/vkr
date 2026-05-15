@@ -204,3 +204,78 @@
   height: 330px; 
   object-fit: contain;
 }
+
+/* Аудио кнопки */
+.kz-audio-btn {
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.kz-audio-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+.kz-audio-btn-small {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.kz-audio-btn-small:hover {
+  background: rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+/* Для лучшего отображения кнопок в баблах */
+.kz-bubble {
+  position: relative;
+}
+
+.kz-bubble .kz-audio-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.kz-bubble .kz-audio-btn:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Для списка имен */
+.kz-names-list p {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* Для желтых баблов */
+.kz-bubble.yellow,
+.kz-bubble.yellow-pale,
+.kz-bubble.blue-light {
+  position: relative;
+  padding-right: 45px;
+}
